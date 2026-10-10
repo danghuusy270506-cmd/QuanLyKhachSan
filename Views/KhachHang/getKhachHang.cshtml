@@ -1,0 +1,13 @@
+@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<h3>Thông tin tài khoản</h3>
+
+<p>Mã khách hàng: @Model.MaKhachHang</p>
+<p>Tên: @Model.HoTen</p>
+<p>Tài khoản: @Model.Username</p>
+<p>Mật khẩu: @Model.Password</p>
+<p>Email: @Model.Email</p>
+<p>CCCD: @Model.Cccd</p>
+<p>Số điện thoại: @Model.Sdt</p>
+
+<a asp-controller="KhachHang" asp-action="getKhachHangS">Quay lại danh sách</a>

@@ -1,0 +1,42 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<h2>Cập Nhật Thông Tin Khách Hàng</h2>
+
+<form asp-controller="KhachHang" asp-action="updateKhachHang" method="post">
+    <!-- Bắt buộc có input hidden này để gửi ID về Controller -->
+    <input type="hidden" asp-for="MaKhachHang" />
+
+    <div>
+        <label asp-for="HoTen">Họ và tên:</label>
+        <input asp-for="HoTen" />
+    </div>
+
+    <div>
+        <label asp-for="Cccd">CCCD / CMND:</label>
+        <input asp-for="Cccd" />
+    </div>
+
+    <div>
+        <label asp-for="Sdt">Số điện thoại:</label>
+        <input asp-for="Sdt" />
+    </div>
+
+    <div>
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" />
+    </div>
+
+    <div>
+        <label asp-for="Username">Tên đăng nhập:</label>
+        <input asp-for="Username" />
+    </div>
+
+    <div>
+        <label asp-for="Password">Mật khẩu mới (để trống nếu không đổi):</label>
+        <input asp-for="Password" type="password" value="" />
+    </div>
+
+    <br />
+    <button type="submit">Cập nhật</button>
+    <a asp-controller="KhachHang" asp-action="getKhachHangS">Hủy / Quay lại</a>
+</form>

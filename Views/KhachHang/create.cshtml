@@ -1,0 +1,30 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<form asp-controller="KhachHang" asp-action="Create" method="post">
+    <div>
+        <label asp-for="HoTen">Họ và tên:</label>
+        <input asp-for="HoTen" />
+    </div>
+    <div>
+        <label asp-for="Cccd">CCCD / CMND:</label>
+        <input asp-for="Cccd" />
+    </div>
+    <div>
+        <label asp-for="Sdt">Số điện thoại:</label>
+        <input asp-for="Sdt" />
+    </div>
+    <div>
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label asp-for="Username">Tên đăng nhập:</label>
+        <input asp-for="Username" />
+    </div>
+    <div>
+        <label asp-for="Password">Mật khẩu:</label>
+        <input asp-for="Password" type="password" />
+    </div>
+    
+    <button type="submit">Thêm mới</button>
+</form>

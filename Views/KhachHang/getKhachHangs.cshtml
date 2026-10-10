@@ -1,0 +1,16 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.KhachHang>
+
+@foreach (var khachHang in Model)
+{
+    <div>
+        <h3>Thông tin tài khoản</h3>
+        <p>Mã khách hàng: @khachHang.MaKhachHang</p>
+        <p>Tên: @khachHang.HoTen</p>
+        <p>Tài khoản: @khachHang.Username</p>
+        <p>Mật khẩu: @khachHang.Password</p>
+        <p>Email: @khachHang.Email</p>
+        <p>CCCD: @khachHang.Cccd</p>
+        <p>Số điện thoại: @khachHang.Sdt</p>
+    </div>
+    <hr />
+}

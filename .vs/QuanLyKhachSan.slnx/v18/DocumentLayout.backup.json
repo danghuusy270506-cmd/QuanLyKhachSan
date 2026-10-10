@@ -1,0 +1,397 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\khachhang\\updatekhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\khachhang\\updatekhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\khachhang\\getkhachhangs.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\khachhang\\getkhachhangs.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\khachhang\\getkhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\khachhang\\getkhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\khachhang\\deletekhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\khachhang\\deletekhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\khachhang\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\khachhang\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\khachhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\khachhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\chitietxepphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\chitietxepphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\controllers\\dichvuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\dichvuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\chitietxepphong_dichvu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\chitietxepphong_dichvu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\phong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\phong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\data\\qlkhachsancontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\data\\qlkhachsancontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\nhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\nhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\dichvu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\dichvu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\hoadon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\hoadon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\phieudatphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\phieudatphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\models\\entities\\loaiphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:models\\entities\\loaiphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\admin\\source\\repos\\quanlykhachsan\\quanlykhachsan.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:quanlykhachsan.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "create.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\create.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\create.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\create.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-10T06:59:43.636Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "deleteKhachHang.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\deleteKhachHang.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\deleteKhachHang.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\deleteKhachHang.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\deleteKhachHang.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-10T06:52:49.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "KhachHangController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Controllers\\KhachHangController.cs",
+              "RelativeDocumentMoniker": "Controllers\\KhachHangController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Controllers\\KhachHangController.cs",
+              "RelativeToolTip": "Controllers\\KhachHangController.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAkwHcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T05:39:43.647Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "getKhachHang.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\getKhachHang.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\getKhachHang.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\getKhachHang.cshtml*",
+              "RelativeToolTip": "Views\\KhachHang\\getKhachHang.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-10T06:12:43.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "getKhachHangs.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\getKhachHangs.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\getKhachHangs.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\getKhachHangs.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\getKhachHangs.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-10T06:13:43.553Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "updateKhachHang.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\updateKhachHang.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\updateKhachHang.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\KhachHang\\updateKhachHang.cshtml*",
+              "RelativeToolTip": "Views\\KhachHang\\updateKhachHang.cshtml*",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAkwCkAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-10T06:58:45.878Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:46:52.456Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "KhachHang.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\KhachHang.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\KhachHang.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\KhachHang.cs",
+              "RelativeToolTip": "Models\\Entities\\KhachHang.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:37:33.157Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ChiTietXepPhong.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\ChiTietXepPhong.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\ChiTietXepPhong.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\ChiTietXepPhong.cs",
+              "RelativeToolTip": "Models\\Entities\\ChiTietXepPhong.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAkwBkAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:40:47.177Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T15:48:38.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ChiTietXepPhong_DichVu.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\ChiTietXepPhong_DichVu.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\ChiTietXepPhong_DichVu.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\ChiTietXepPhong_DichVu.cs",
+              "RelativeToolTip": "Models\\Entities\\ChiTietXepPhong_DichVu.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wBYAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T17:43:09.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "QLKhachSanContext.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Data\\QLKhachSanContext.cs",
+              "RelativeDocumentMoniker": "Models\\Data\\QLKhachSanContext.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Data\\QLKhachSanContext.cs",
+              "RelativeToolTip": "Models\\Data\\QLKhachSanContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:43:37.548Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Phong.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\Phong.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\Phong.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\Phong.cs",
+              "RelativeToolTip": "Models\\Entities\\Phong.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:38:41.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "NhanVien.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\NhanVien.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\NhanVien.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\NhanVien.cs",
+              "RelativeToolTip": "Models\\Entities\\NhanVien.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:37:57.01Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DichVusController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Controllers\\DichVusController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DichVusController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Controllers\\DichVusController.cs",
+              "RelativeToolTip": "Controllers\\DichVusController.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAkwDgAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T02:17:33.5Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T12:38:56.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T12:39:00.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "HoaDon.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\HoaDon.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\HoaDon.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\HoaDon.cs",
+              "RelativeToolTip": "Models\\Entities\\HoaDon.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:40:19.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DichVu.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\DichVu.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\DichVu.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\DichVu.cs",
+              "RelativeToolTip": "Models\\Entities\\DichVu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:39:01.252Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "PhieuDatPhong.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\PhieuDatPhong.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\PhieuDatPhong.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\PhieuDatPhong.cs",
+              "RelativeToolTip": "Models\\Entities\\PhieuDatPhong.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:39:16.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "LoaiPhong.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\LoaiPhong.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\LoaiPhong.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\Models\\Entities\\LoaiPhong.cs",
+              "RelativeToolTip": "Models\\Entities\\LoaiPhong.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T15:38:17.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "QuanLyKhachSan",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\QuanLyKhachSan.csproj",
+              "RelativeDocumentMoniker": "QuanLyKhachSan.csproj",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\QuanLyKhachSan.csproj",
+              "RelativeToolTip": "QuanLyKhachSan.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-09T15:48:45.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\QuanLyKhachSan\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAACKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-09T15:48:24.03Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
