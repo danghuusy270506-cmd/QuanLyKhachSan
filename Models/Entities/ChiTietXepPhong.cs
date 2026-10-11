@@ -9,6 +9,7 @@ namespace QuanLyKhachSan.Models.Entities
     public class ChiTietXepPhong
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaChiTiet { get; set; }
 
         public DateTime? NgayNhanPhongThucTe { get; set; }
@@ -24,7 +25,7 @@ namespace QuanLyKhachSan.Models.Entities
         public virtual PhieuDatPhong? PhieuDatPhong { get; set; }
 
         // FK Xếp Phong
-        public string MaPhong { get; set; }
+        public int MaPhong { get; set; }
 
         [ForeignKey(nameof(MaPhong))]
         public virtual Phong? Phong { get; set; }

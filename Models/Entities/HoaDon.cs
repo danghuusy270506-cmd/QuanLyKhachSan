@@ -8,6 +8,7 @@ namespace QuanLyKhachSan.Models.Entities
     public class HoaDon
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string MaHoaDon { get; set; }
         
         public int TongTien { get; set; }

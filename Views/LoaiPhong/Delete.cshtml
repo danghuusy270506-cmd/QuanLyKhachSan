@@ -1,0 +1,38 @@
+@model QuanLyKhachSan.Models.Entities.LoaiPhong
+
+@{
+    ViewData["Title"] = "Xóa Loại Phòng";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-3 border-danger">
+                <div class="card-header bg-danger text-white py-3">
+                    <h4 class="card-title mb-0 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Xác Nhận Xóa Loại Phòng</h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Anh))
+                    {
+                        <img src="@Model.Anh" alt="@Model.TenLoaiPhong" class="rounded border mb-3" style="max-height: 150px; object-fit: cover;" />
+                    }
+                    <h4 class="fw-bold text-dark mb-1">@Model.TenLoaiPhong</h4>
+                    <p class="text-primary fw-semibold mb-3">@Model.GiaPhong.ToString("N0") VNĐ / đêm</p>
+
+                    <div class="alert alert-warning text-start" role="alert">
+                        <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa loại phòng này? Hành động này không thể hoàn tác và ảnh đại diện cũng sẽ bị xóa khỏi server.
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="MaLoaiPhong" />
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Hủy Bỏ</a>
+                            <button type="submit" class="btn btn-danger px-4 fw-semibold">Xác Nhận Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

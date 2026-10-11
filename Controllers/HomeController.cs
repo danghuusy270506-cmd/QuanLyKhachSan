@@ -21,5 +21,12 @@ namespace QuanLyKhachSan.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult TestBCrypt()
+        {
+            string password = "123456";
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+            bool kketqua = BCrypt.Net.BCrypt.Verify(password, passwordHash);
+            return Content($"Password: {password} | Hash: {passwordHash} | KetQua: {kketqua}");
+        }
     }
 }

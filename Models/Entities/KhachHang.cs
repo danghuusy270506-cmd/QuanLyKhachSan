@@ -7,6 +7,7 @@ namespace QuanLyKhachSan.Models.Entities
     public class KhachHang
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaKhachHang { get; set; }
 
         [Required]

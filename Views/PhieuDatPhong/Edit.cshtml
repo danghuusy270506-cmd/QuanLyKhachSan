@@ -1,0 +1,84 @@
+@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+
+@{
+    ViewData["Title"] = "Cập Nhật Phiếu Đặt Phòng";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="card-title mb-0 fw-bold"><i class="bi bi-pencil-square me-2"></i>Cập Nhật Phiếu Đặt Phòng #@Model.MaPhieu</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="MaPhieu" />
+                        <input type="hidden" asp-for="NgayDat" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="MaKhachHang" class="form-label fw-semibold">Khách Hàng</label>
+                                <select asp-for="MaKhachHang" class="form-select" asp-items="ViewBag.MaKhachHang"></select>
+                                <span asp-validation-for="MaKhachHang" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="MaLoaiPhong" class="form-label fw-semibold">Loại Phòng</label>
+                                <select asp-for="MaLoaiPhong" class="form-select" asp-items="ViewBag.MaLoaiPhong"></select>
+                                <span asp-validation-for="MaLoaiPhong" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="NgayDen" class="form-label fw-semibold">Ngày Đến</label>
+                                <input asp-for="NgayDen" type="date" class="form-control" />
+                                <span asp-validation-for="NgayDen" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="NgayDi" class="form-label fw-semibold">Ngày Đi</label>
+                                <input asp-for="NgayDi" type="date" class="form-control" />
+                                <span asp-validation-for="NgayDi" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="SoNguoi" class="form-label fw-semibold">Số Người</label>
+                                <input asp-for="SoNguoi" class="form-control" />
+                                <span asp-validation-for="SoNguoi" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="TienCoc" class="form-label fw-semibold">Tiền Cọc (VNĐ)</label>
+                                <input asp-for="TienCoc" class="form-control" />
+                                <span asp-validation-for="TienCoc" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="TrangThai" class="form-label fw-semibold">Trạng Thái</label>
+                                <select asp-for="TrangThai" class="form-select">
+                                    <option value="Chờ xác nhận">Chờ xác nhận</option>
+                                    <option value="Đã xác nhận">Đã xác nhận</option>
+                                    <option value="Đã hủy">Đã hủy</option>
+                                    <option value="Hoàn thành">Hoàn thành</option>
+                                </select>
+                                <span asp-validation-for="TrangThai" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Quay Lại</a>
+                            <button type="submit" class="btn btn-warning px-4 fw-semibold">Lưu Thay Đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -79,6 +79,14 @@
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.24.2-preview.1, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[6.3.1, )"
             }
           },
           "imports": [

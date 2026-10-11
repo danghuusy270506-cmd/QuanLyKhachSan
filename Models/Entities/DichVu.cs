@@ -7,6 +7,7 @@ namespace QuanLyKhachSan.Models.Entities
     public class DichVu
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string MaDichVu { get; set; }
 
         [Required]

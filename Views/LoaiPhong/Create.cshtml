@@ -1,0 +1,84 @@
+@model QuanLyKhachSan.Models.Entities.LoaiPhong
+
+@{
+    ViewData["Title"] = "Thêm Loại Phòng Mới";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="card-title mb-0 fw-bold"><i class="bi bi-plus-square me-2"></i>Thêm Loại Phòng Mới</h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- BẮT BUỘC có enctype="multipart/form-data" để upload file -->
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="TenLoaiPhong" class="form-label fw-semibold">Tên Loại Phòng</label>
+                                <input asp-for="TenLoaiPhong" class="form-control" placeholder="Ví dụ: Phòng Deluxe Hướng Biển..." />
+                                <span asp-validation-for="TenLoaiPhong" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="GiaPhong" class="form-label fw-semibold">Giá Phòng (VNĐ / Đêm)</label>
+                                <input asp-for="GiaPhong" type="number" step="10000" class="form-control" placeholder="Ví dụ: 500000" />
+                                <span asp-validation-for="GiaPhong" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="SucChua" class="form-label fw-semibold">Sức Chứa (Người)</label>
+                                <input asp-for="SucChua" type="number" min="1" max="20" class="form-control" placeholder="Ví dụ: 2" />
+                                <span asp-validation-for="SucChua" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="MoTa" class="form-label fw-semibold">Mô Tả Loại Phòng</label>
+                                <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Nhập các tiện ích, đặc điểm của loại phòng..."></textarea>
+                                <span asp-validation-for="MoTa" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Hình Ảnh Minh Họa</label>
+                                <input type="file" name="anhFile" id="anhFileInput" class="form-control" accept="image/*" onchange="previewImage(this);" />
+                                <div class="mt-2 text-center">
+                                    <img id="imagePreview" src="#" alt="Xem trước ảnh" class="img-thumbnail d-none" style="max-height: 200px; object-fit: cover;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Hủy Bỏ</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">Lưu Loại Phòng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "#";
+                preview.classList.add('d-none');
+            }
+        }
+    </script>
+}

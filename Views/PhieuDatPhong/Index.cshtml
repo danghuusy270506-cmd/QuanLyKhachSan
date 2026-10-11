@@ -1,0 +1,85 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.PhieuDatPhong>
+
+@{
+    ViewData["Title"] = "Danh Sách Phiếu Đặt Phòng";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold text-primary mb-0"><i class="bi bi-journal-bookmark-fill me-2"></i>Danh Sách Phiếu Đặt Phòng</h3>
+        <a asp-action="Create" class="btn btn-success fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> Tạo Phiếu Đặt Mới
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-3">Mã Phíếu</th>
+                            <th>Khách Hàng</th>
+                            <th>Loại Phòng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Ngày Đến / Đi</th>
+                            <th>Số Người</th>
+                            <th>Tiền Cọc</th>
+                            <th>Trạng Thái</th>
+                            <th class="text-center">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-muted">Chưa có phiếu đặt phòng nào trong hệ thống.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-3 fw-bold">#@item.MaPhieu</td>
+                                    <td class="fw-semibold text-dark">@(item.KhachHang?.HoTen ?? "N/A")</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">@(item.LoaiPhong?.TenLoaiPhong ?? "Chưa xếp")</span>
+                                    </td>
+                                    <td>@item.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        <small class="d-block text-success">Đến: @item.NgayDen.ToString("dd/MM/yyyy")</small>
+                                        <small class="d-block text-danger">Đi: @item.NgayDi.ToString("dd/MM/yyyy")</small>
+                                    </td>
+                                    <td class="text-center">@item.SoNguoi</td>
+                                    <td class="fw-bold text-primary">@item.TienCoc.ToString("N0") VNĐ</td>
+                                    <td>
+                                        @if (item.TrangThai == "Chờ xác nhận")
+                                        {
+                                            <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                        }
+                                        else if (item.TrangThai == "Đã xác nhận")
+                                        {
+                                            <span class="badge bg-success">Đã xác nhận</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.TrangThai</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="Details" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-info" title="Chi tiết"><i class="bi bi-eye"></i> Xem</a>
+                                            <a asp-action="Edit" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-warning" title="Sửa"><i class="bi bi-pencil"></i> Sửa</a>
+                                            <a asp-action="Delete" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-danger" title="Xóa"><i class="bi bi-trash"></i> Xóa</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

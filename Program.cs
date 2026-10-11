@@ -9,6 +9,18 @@ builder.Services.AddControllersWithViews();
 //cấu hình kết nối với SQL Server
 builder.Services.AddDbContext<QLKhachSanContext>(Options =>
 Options.UseSqlServer(builder.Configuration.GetConnectionString("QuanLyKhachSan")));
+// Đăng ký class Authentication để Controller có thể Inject vào
+
+
+// Thêm bộ nhớ đệm cho Session
+builder.Services.AddDistributedMemoryCache();
+// Đăng ký dịch vụ Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian sống của Session (30 phút)
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 var app = builder.Build();
@@ -29,8 +41,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
@@ -38,7 +53,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=KhachHang}/{action=create}/{id?}")
     .WithStaticAssets();
 
 

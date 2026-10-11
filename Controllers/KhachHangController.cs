@@ -1,120 +1,150 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuanLyKhachSan.Models.Entities;
 using QuanLyKhachSan.Models.Data;
+using QuanLyKhachSan.Models.Entities;
+using System.Threading.Tasks;
 
-public class KhachHangController : Controller
+namespace QuanLyKhachSan.Controllers
 {
-    private readonly QLKhachSanContext context;
-
-    public KhachHangController(QLKhachSanContext context)
+    public class KhachHangController : Controller
     {
-        this.context = context;
-    }
+        private readonly QLKhachSanContext _context;
 
-    // 1. Lấy chi tiết 1 khách hàng
-    public IActionResult getKhachHang(int maKhachHang)
-    {
-        if (maKhachHang <= 0)
+        public KhachHangController(QLKhachSanContext context)
         {
-            return BadRequest("ID không hợp lệ!");
+            _context = context;
         }
 
-        var khachHang = context.KhachHangs.Find(maKhachHang);
-
-        if (khachHang == null)
+        // 1. Danh sách khách hàng
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return NotFound("Không tìm thấy khách hàng có ID này!"); // Đã sửa chữ sinh viên
+            var khachHangs = await _context.KhachHangs.ToListAsync();
+            return View(khachHangs);
         }
 
-        return View(khachHang);
-    }
-
-    // 2. Lấy danh sách tất cả khách hàng
-    public IActionResult getKhachHangS()
-    {
-        List<KhachHang> khachHangs = context.KhachHangs.ToList();
-        return View(khachHangs);
-    }
-
-    // 3. Hiển thị trang Thêm mới
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // 4. Xử lý Thêm mới
-    [HttpPost]
-    public IActionResult Create(string hoten, string cccd, string sdt, string email, string username, string password)
-    {
-        var khachhang = new KhachHang();
-
-        khachhang.HoTen = hoten;
-        khachhang.Cccd = cccd;
-        khachhang.Sdt = sdt;
-        khachhang.Email = email;
-        khachhang.Username = username;
-        khachhang.Password = BCrypt.Net.BCrypt.HashPassword(password);
-
-        context.KhachHangs.Add(khachhang);
-        context.SaveChanges();
-
-        return RedirectToAction("getKhachHang", new { maKhachHang = khachhang.MaKhachHang });
-    }
-
-    // 5. Xóa khách hàng (Sửa return Ok -> Redirect)
-    [HttpPost]
-    public IActionResult deleteKhachHang(int maKhachHang)
-    {
-        var khachHang = context.KhachHangs.Find(maKhachHang);
-        if (khachHang == null)
+        // 2. Chi tiết 1 khách hàng
+        [HttpGet]
+        public async Task<IActionResult> Details(int maKhachHang)
         {
-            return NotFound("Không tìm thấy khách hàng có ID này!");
+            if (maKhachHang <= 0)
+            {
+                return BadRequest("ID không hợp lệ!");
+            }
+
+            var khachHang = await _context.KhachHangs.FindAsync(maKhachHang);
+
+            if (khachHang == null)
+            {
+                return NotFound("Không tìm thấy khách hàng có ID này!");
+            }
+
+            return View(khachHang);
         }
 
-        context.KhachHangs.Remove(khachHang);
-        context.SaveChanges();
-
-        return RedirectToAction("getKhachHangS"); // Sửa chỗ này để về lại trang danh sách
-    }
-
-    // 6. Hiển thị trang Cập nhật (Bổ sung hàm GET)
-    [HttpGet]
-    public IActionResult updateKhachHang(int maKhachHang)
-    {
-        var khachHang = context.KhachHangs.Find(maKhachHang);
-        if (khachHang == null)
+        // 3. Hiển thị trang Thêm mới
+        [HttpGet]
+        public IActionResult Create()
         {
-            return NotFound("Không tìm thấy khách hàng có ID này!");
+            return View();
         }
 
-        return View(khachHang);
-    }
-
-    // 7. Xử lý Cập nhật
-    [HttpPost]
-    public IActionResult updateKhachHang(int maKhachHang, string hoten, string cccd, string sdt, string email, string username, string password)
-    {
-        var khachHang = context.KhachHangs.Find(maKhachHang);
-        if (khachHang == null)
+        // 4. Xử lý Thêm mới
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(KhachHang khachHang)
         {
-            return NotFound("Không tìm thấy khách hàng có ID này!");
+            // 1. Kiểm tra các trường thông tin duy nhất (Unique)
+            if (await _context.KhachHangs.AnyAsync(k => k.Email == khachHang.Email))
+            {
+                ModelState.AddModelError("Email", "Email này đã được đăng ký.");
+            }
+
+            if (await _context.KhachHangs.AnyAsync(k => k.Cccd == khachHang.Cccd)) // Đổi Cccd thành tên thuộc tính thực tế của bạn
+            {
+                ModelState.AddModelError("Cccd", "Số CCCD này đã tồn tại trong hệ thống.");
+            }
+
+            if (await _context.KhachHangs.AnyAsync(k => k.Username == khachHang.Username)) // Đổi TenTaiKhoan thành tên thuộc tính thực tế
+            {
+                ModelState.AddModelError("Username", "Tên tài khoản này đã được sử dụng.");
+            }
+
+            // 2. Kiểm tra ModelState sau khi đã thêm các lỗi kiểm tra thủ công
+            if (ModelState.IsValid)
+            {
+                // Băm mật khẩu trước khi lưu
+                if (!string.IsNullOrEmpty(khachHang.Password))
+                {
+                    khachHang.Password = BCrypt.Net.BCrypt.HashPassword(khachHang.Password);
+                }
+
+                _context.KhachHangs.Add(khachHang);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Details), new { maKhachHang = khachHang.MaKhachHang });
+            }
+
+            return View(khachHang);
         }
 
-        khachHang.HoTen = hoten;
-        khachHang.Cccd = cccd;
-        khachHang.Sdt = sdt;
-        khachHang.Email = email;
-        khachHang.Username = username;
-
-        // Chỉ băm lại mật khẩu nếu người dùng có nhập mật khẩu mới
-        if (!string.IsNullOrEmpty(password))
+        // 5. Hiển thị trang Cập nhật
+        [HttpGet]
+        public async Task<IActionResult> Edit(int maKhachHang)
         {
-            khachHang.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            var khachHang = await _context.KhachHangs.FindAsync(maKhachHang);
+            if (khachHang == null)
+            {
+                return NotFound("Không tìm thấy khách hàng có ID này!");
+            }
+
+            return View(khachHang);
         }
 
-        context.SaveChanges();
+        // 6. Xử lý Cập nhật
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int maKhachHang, KhachHang model, string? newPassword)
+        {
+            var khachHang = await _context.KhachHangs.FindAsync(maKhachHang);
+            if (khachHang == null)
+            {
+                return NotFound("Không tìm thấy khách hàng có ID này!");
+            }
 
-        return RedirectToAction("getKhachHang", new { maKhachHang = khachHang.MaKhachHang });
+            // Cập nhật các thông tin cơ bản
+            khachHang.HoTen = model.HoTen;
+            khachHang.Cccd = model.Cccd;
+            khachHang.Sdt = model.Sdt;
+            khachHang.Email = model.Email;
+            khachHang.Username = model.Username;
+
+            // Chỉ cập nhật băm mật khẩu nếu người dùng nhập mật khẩu mới
+            if (!string.IsNullOrWhiteSpace(newPassword))
+            {
+                khachHang.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { maKhachHang = khachHang.MaKhachHang });
+        }
+
+        // 7. Xử lý Xóa khách hàng
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int maKhachHang)
+        {
+            var khachHang = await _context.KhachHangs.FindAsync(maKhachHang);
+            if (khachHang == null)
+            {
+                return NotFound("Không tìm thấy khách hàng có ID này!");
+            }
+
+            _context.KhachHangs.Remove(khachHang);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

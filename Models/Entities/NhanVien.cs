@@ -7,6 +7,7 @@ namespace QuanLyKhachSan.Models.Entities
     public class NhanVien
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaNhanVien { get; set; }
 
         [Required]

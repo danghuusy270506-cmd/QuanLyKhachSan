@@ -8,18 +8,21 @@ namespace QuanLyKhachSan.Models.Entities
     public class Phong
     {
         [Key]
-        public string MaPhong { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MaPhong { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Số phòng không được để trống")]
         [StringLength(50)]
         public string SoPhong { get; set; } = string.Empty;
 
-        public int Tang { get; set; }
+        [Range(1, 100, ErrorMessage = "Tầng phải lớn hơn 0")]
+        public int Tang { get; set; } = 1;
 
         [StringLength(50)]
-        public string TrangThai { get; set; } = string.Empty;
+        public string TrangThai { get; set; } = "Trống";
 
         // FK đến LoaiPhong
+        [Required(ErrorMessage = "Vui lòng chọn loại phòng")]
         public int MaLoaiPhong { get; set; }
 
         [ForeignKey(nameof(MaLoaiPhong))]
