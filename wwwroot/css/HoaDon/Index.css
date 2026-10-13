@@ -1,0 +1,265 @@
+﻿
+/* ===== Trang danh sách hóa đơn ===== */
+.hoa-don-page {
+    padding: 14px;
+    color: #111;
+    font-size: 16px;
+}
+
+/* ===== Bộ lọc ===== */
+.hoa-don-filter {
+    margin-bottom: 20px;
+}
+
+    .hoa-don-filter .form-label {
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 6px;
+    }
+
+    .hoa-don-filter .form-control,
+    .hoa-don-filter .form-select {
+        min-height: 36px;
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+    }
+
+    .hoa-don-filter .btn {
+        min-height: 36px;
+        border-radius: 7px;
+        white-space: nowrap;
+    }
+
+/* ===== Khung bảng ===== */
+.hoa-don-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 7px 7px 0 0;
+    background: #fff;
+}
+
+.hoa-don-table {
+    width: 100%;
+    min-width: 1000px;
+    margin-bottom: 0;
+    border-collapse: collapse;
+    color: #111;
+    vertical-align: middle;
+}
+
+    /* Tiêu đề nền đen giống ảnh */
+    .hoa-don-table thead th {
+        background-color: #212529;
+        color: #fff;
+        font-weight: 700;
+        padding: 17px 18px;
+        border: 1px solid #212529;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    /* Nội dung bảng */
+    .hoa-don-table tbody td {
+        padding: 15px 18px;
+        border: 1px solid #dee2e6;
+        height: 70px;
+        vertical-align: middle;
+    }
+
+    /* Các dòng xen kẽ trắng và xám */
+    .hoa-don-table tbody tr:nth-child(odd) {
+        background-color: #f1f1f1;
+    }
+
+    .hoa-don-table tbody tr:nth-child(even) {
+        background-color: #fff;
+    }
+
+    /* Hiệu ứng rê chuột */
+    .hoa-don-table tbody tr:hover {
+        background-color: #e8eef5;
+        transition: background-color 0.15s ease;
+    }
+
+    /* Mã hóa đơn */
+    .hoa-don-table .ma-hoa-don {
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* Các cột tiền */
+    .hoa-don-table .tien-te {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+/* ===== Nút thao tác ===== */
+.hoa-don-actions {
+    white-space: nowrap;
+}
+
+    .hoa-don-actions .btn {
+        border-radius: 0;
+        padding: 8px 11px;
+        font-size: 14px;
+        background: transparent;
+        box-shadow: none;
+    }
+
+        .hoa-don-actions .btn:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .hoa-don-actions .btn:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+    .hoa-don-actions .btn-info {
+        color: #0dcaf0;
+        border-color: #0dcaf0;
+    }
+
+        .hoa-don-actions .btn-info:hover {
+            background-color: #0dcaf0;
+            color: #fff;
+        }
+
+    .hoa-don-actions .btn-danger {
+        color: #ff3045;
+        border-color: #ff3045;
+    }
+
+        .hoa-don-actions .btn-danger:hover {
+            background-color: #ff3045;
+            color: #fff;
+        }
+
+/* ===== Trạng thái thanh toán ===== */
+.hoa-don-page .badge {
+    padding: 6px 9px;
+    font-size: 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+/* ===== Phân trang ===== */
+.hoa-don-pagination {
+    margin-top: 20px;
+}
+
+    .hoa-don-pagination .page-link {
+        color: #212529;
+        border-color: #dee2e6;
+        padding: 8px 14px;
+    }
+
+    .hoa-don-pagination .page-item.active .page-link {
+        background-color: #212529;
+        border-color: #212529;
+        color: #fff;
+    }
+
+    .hoa-don-pagination .page-link:hover {
+        background-color: #e9ecef;
+    }
+
+    .hoa-don-pagination .page-item.active .page-link:hover {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+.hoa-don-page .thong-tin-phan-trang {
+    color: #6c757d;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+/* ===== Màn hình nhỏ ===== */
+@media (max-width: 768px) {
+    .hoa-don-page {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .hoa-don-filter .row {
+        flex-wrap: wrap !important;
+    }
+
+    .hoa-don-table thead th,
+    .hoa-don-table tbody td {
+        padding: 12px;
+    }
+}
+
+
+/* Thu gọn giao diện trang hóa đơn */
+.hoa-don-page {
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Thu gọn bộ lọc */
+.hoa-don-filter {
+    margin-bottom: 12px;
+}
+
+    .hoa-don-filter .form-label {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .hoa-don-filter .form-control,
+    .hoa-don-filter .form-select {
+        min-height: 32px;
+        padding: 4px 8px;
+        font-size: 13px;
+    }
+
+/* Bảng gọn hơn */
+.hoa-don-table {
+    min-width: 0;
+    width: 100%;
+    font-size: 13px;
+}
+
+    .hoa-don-table thead th {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+
+    .hoa-don-table tbody td {
+        padding: 10px;
+        height: 52px;
+    }
+
+/* Nút thao tác nhỏ hơn */
+.hoa-don-actions .btn {
+    padding: 5px 7px;
+    font-size: 12px;
+}
+
+/* Badge trạng thái */
+.hoa-don-page .badge {
+    padding: 4px 6px;
+    font-size: 11px;
+}
+
+/* Phân trang */
+.hoa-don-pagination {
+    margin-top: 12px;
+}
+
+    .hoa-don-pagination .page-link {
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+
+.thong-tin-phan-trang {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+/* Giảm khoảng cách giữa các trường lọc */
+.hoa-don-filter .row {
+    column-gap: 4px;
+}

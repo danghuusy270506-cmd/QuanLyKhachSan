@@ -1,0 +1,77 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top">
+                    <h4 class="card-title mb-0 fw-bold">Thêm Mới Khách Hàng</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-controller="KhachHang" asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Thông báo lỗi tổng hợp -->
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <!-- Cấu trúc Grid 2 cột -->
+                        <div class="row g-3">
+                            <!-- Cột 1: Thông tin cá nhân -->
+                            <div class="col-md-6">
+                                <label asp-for="HoTen" class="form-label fw-semibold">Họ và tên</label>
+                                <input asp-for="HoTen" class="form-control" placeholder="Nhập họ và tên..." />
+                                <span asp-validation-for="HoTen" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Cccd" class="form-label fw-semibold">CCCD / CMND</label>
+                                <input asp-for="Cccd" class="form-control" placeholder="Nhập số CCCD/CMND..." />
+                                <span asp-validation-for="Cccd" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Cột 2: Thông tin liên hệ -->
+                            <div class="col-md-6">
+                                <label asp-for="Sdt" class="form-label fw-semibold">Số điện thoại</label>
+                                <input asp-for="Sdt" class="form-control" placeholder="Nhập số điện thoại..." />
+                                <span asp-validation-for="Sdt" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                                <input asp-for="Email" class="form-control" placeholder="example@domain.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Cột 3: Tài khoản đăng nhập -->
+                            <div class="col-md-6">
+                                <label asp-for="Username" class="form-label fw-semibold">Tên đăng nhập</label>
+                                <input asp-for="Username" class="form-control" placeholder="Nhập tên đăng nhập..." />
+                                <span asp-validation-for="Username" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label fw-semibold">Mật khẩu</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu..." />
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+                      
+
+                        <!-- Nút thao tác -->
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                Thêm Mới Khách Hàng
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

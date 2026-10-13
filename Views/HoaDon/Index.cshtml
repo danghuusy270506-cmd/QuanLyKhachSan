@@ -1,0 +1,149 @@
+@model IEnumerable<QuanLyKhachSan.Models.ViewModels.HoaDonDanhSachViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách hóa đơn";
+}
+
+<link rel="stylesheet" href="~/css/HoaDon/Index.css" asp-append-version="true" />
+
+<div class="container-fluid hoa-don-page">
+    @* <h2 class="mb-4">Danh sách hóa đơn</h2> *@
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Bộ lọc hóa đơn -->
+    <form id="formLocHoaDon" asp-controller="HoaDon" asp-action="Index" method="get" class="hoa-don-filter mb-3">
+        <div class="row g-2 align-items-end flex-nowrap">
+
+            <!-- Mã hóa đơn / mã phiếu -->
+            <div class="col" style="flex: 0 0 210px;">
+                <label class="form-label">Mã hóa đơn / mã phiếu</label>
+                <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control form-control-sm" placeholder="Nhập mã..." maxlength="10" />
+            </div>
+            <!-- Ngày -->
+            <div class="col-auto" style="width: 90px;">
+                <label class="form-label">Ngày</label>
+                <input type="number" name="ngay" value="@ViewBag.NgayLoc" class="form-control form-control-sm" placeholder="Ngày" min="1" max="31" />
+            </div>
+
+            <!-- Tháng -->
+            <div class="col-auto" style="width: 115px;">
+                <label class="form-label">Tháng</label>
+                <select name="thang" class="form-select">
+                    <option value="">Tất cả</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i" selected="@(ViewBag.ThangLoc != null && (int)ViewBag.ThangLoc == i)">Tháng @i</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Năm -->
+            <div class="col-auto" style="width: 110px;">
+                <label class="form-label">Năm</label>
+                <input type="number" name="nam" value="@ViewBag.NamLoc" class="form-control form-control-sm" placeholder="Năm" min="2000" max="2100" />
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="col-auto" style="width: 180px;">
+                <label class="form-label">Trạng thái</label>
+                <select name="trangThai" class="form-select form-select-sm">
+                    <option value="" selected="@(string.IsNullOrEmpty(ViewBag.TrangThaiLoc as string))">Tất cả</option>
+                    <option value="ChuaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "ChuaThanhToan")">Chưa thanh toán</option>
+                    <option value="DaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "DaThanhToan")">Đã thanh toán</option>
+                </select>
+            </div>
+            <!-- Nút lọc -->
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
+            </div>
+            <!-- Nút xóa lọc -->
+            <div class="col-auto">
+                <button type="button" id="btnXoaLoc" class="btn btn-secondary btn-sm">Xóa lọc</button>
+            </div>
+
+        </div>
+    </form>
+
+    <!-- Bảng và phân trang được tải bằng AJAX -->
+    <div id="danhSachHoaDon">
+        @await Html.PartialAsync("_DanhSachHoaDon", Model)
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            // Tải lại bảng hóa đơn bằng AJAX
+            function taiDanhSachHoaDon(page) {
+                const duLieu = $("#formLocHoaDon").serializeArray();
+
+                duLieu.push({
+                    name: "page",
+                    value: page
+                });
+
+                $.ajax({
+                    url: '@Url.Action("Index", "HoaDon")',
+                    type: "GET",
+                    data: $.param(duLieu),
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    success: function(html) {
+                        $("#danhSachHoaDon").html(html);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
+                    }
+                });
+            }
+
+            // Lọc hoặc tìm kiếm: quay về trang đầu tiên
+            $("#formLocHoaDon").on("submit", function(e) {
+                e.preventDefault();
+                taiDanhSachHoaDon(1);
+            });
+
+            // Bấm nút xóa lọc
+            $("#btnXoaLoc").on("click", function() {
+                $("#formLocHoaDon")[0].reset();
+                taiDanhSachHoaDon(1);
+            });
+
+            // Phân trang: dùng sự kiện delegation vì bảng được thay bằng AJAX
+            $(document).on(
+                "click",
+                "#danhSachHoaDon .ajax-trang",
+                function(e) {
+                    e.preventDefault();
+
+                    const page = parseInt($(this).attr("data-page"));
+
+                    if (!page ||
+                        $(this).closest(".page-item").hasClass("disabled")) {
+                        return;
+                    }
+
+                    taiDanhSachHoaDon(page);
+                }
+            );
+
+        });
+    </script>
+}

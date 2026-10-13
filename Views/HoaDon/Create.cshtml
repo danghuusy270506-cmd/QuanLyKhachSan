@@ -1,0 +1,209 @@
+@model QuanLyKhachSan.Models.Entities.HoaDon
+
+@{
+    ViewData["Title"] = "Tạo hóa đơn";
+}
+
+<div class="container mt-4 mb-4">
+    <h2 class="mb-4">Tạo hóa đơn</h2>
+
+    @if (TempData["ThongBao"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show">
+            @TempData["ThongBao"]
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            Thông tin hóa đơn
+        </div>
+
+        <div class="card-body">
+            <form asp-controller="HoaDon"
+                  asp-action="Create"
+                  method="post"
+                  id="formHoaDon">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="maPhieu"
+                       value="@ViewBag.MaPhieu" />
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Mã phiếu đặt phòng
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               value="@ViewBag.MaPhieu"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tiền phòng (VNĐ)</label>
+                        <input type="text"
+                               id="TienPhong"
+                               class="form-control"
+                               value="@(((decimal)(ViewBag.TienPhong ?? 0m)).ToString("N0"))"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tiền dịch vụ (VNĐ)</label>
+                        <input type="text"
+                               id="TienDichVu"
+                               class="form-control"
+                               value="@(((decimal)(ViewBag.TienDichVu ?? 0m)).ToString("N0"))"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tiền cọc (VNĐ)</label>
+                        <input type="text"
+                               id="TienCoc"
+                               class="form-control"
+                               value="@(((decimal)(ViewBag.TienCoc ?? 0m)).ToString("N0"))"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="GiamGia" class="form-label">
+                            Giảm giá (VNĐ)
+                        </label>
+                        <input type="number"
+                               id="GiamGia"
+                               name="giamGia"
+                               class="form-control"
+                               value="0"
+                               min="0"
+                               step="1000"
+                               required />
+                        <div class="form-text">
+                            Nhập số tiền giảm giá.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Tổng tiền cần thanh toán (VNĐ)
+                        </label>
+                        <input type="text"
+                               id="TongTienHienThi"
+                               class="form-control fw-bold text-danger"
+                               value="@(((decimal)(ViewBag.TongTien ?? 0m)).ToString("N0"))"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="KieuThanhToan" class="form-label">
+                            Kiểu thanh toán
+                        </label>
+                        <select id="KieuThanhToan"
+                                name="kieuThanhToan"
+                                class="form-select"
+                                required>
+                            <option value="">
+                                -- Chọn kiểu thanh toán --
+                            </option>
+                            <option value="Tiền mặt">Tiền mặt</option>
+                            <option value="Chuyển khoản">Chuyển khoản</option>
+                        </select>
+
+                        <span id="loiThanhToan"
+                              class="text-danger small"
+                              style="display:none;">
+                            Vui lòng chọn kiểu thanh toán.
+                        </span>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-success">
+                        Tạo hóa đơn
+                    </button>
+
+                    <a asp-controller="PhieuDatPhong"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+                        Quay lại
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tienPhong = Number(@Html.Raw(
+                        Convert.ToDecimal(ViewBag.TienPhong ?? 0m).ToString(
+                                System.Globalization.CultureInfo.InvariantCulture)));
+
+    const tienDichVu = Number(@Html.Raw(
+                        Convert.ToDecimal(ViewBag.TienDichVu ?? 0m).ToString(
+                                System.Globalization.CultureInfo.InvariantCulture)));
+
+    const tienCoc = Number(@Html.Raw(
+                        Convert.ToDecimal(ViewBag.TienCoc ?? 0m).ToString(
+                                System.Globalization.CultureInfo.InvariantCulture)));
+
+    const inputGiamGia = document.getElementById("GiamGia");
+    const tongTienHienThi = document.getElementById("TongTienHienThi");
+    const kieuThanhToan = document.getElementById("KieuThanhToan");
+    const loiThanhToan = document.getElementById("loiThanhToan");
+
+    function capNhatTongTien() {
+        const giamGia = Number(inputGiamGia.value) || 0;
+
+        const tongTien =
+            tienPhong + tienDichVu - tienCoc - giamGia;
+
+        tongTienHienThi.value =
+            tongTien.toLocaleString("vi-VN") + " VNĐ";
+    }
+
+    inputGiamGia.addEventListener("input", capNhatTongTien);
+
+    kieuThanhToan.addEventListener("change", function() {
+        loiThanhToan.style.display =
+            kieuThanhToan.value === "" ? "block" : "none";
+    });
+
+    document.getElementById("formHoaDon").addEventListener(
+        "submit",
+        function(e) {
+            const giamGia = Number(inputGiamGia.value);
+
+            const tongTien =
+                tienPhong + tienDichVu - tienCoc - giamGia;
+
+            if (kieuThanhToan.value === "") {
+                e.preventDefault();
+                loiThanhToan.style.display = "block";
+                kieuThanhToan.focus();
+                return;
+            }
+
+            if (
+                !Number.isFinite(giamGia) ||
+                giamGia < 0 ||
+                tongTien < 0
+            ) {
+                e.preventDefault();
+                alert("Giảm giá không hợp lệ hoặc tổng tiền nhỏ hơn 0.");
+                inputGiamGia.focus();
+            }
+        }
+    );
+
+    capNhatTongTien();
+</script>

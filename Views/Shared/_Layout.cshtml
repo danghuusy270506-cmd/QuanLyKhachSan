@@ -1,0 +1,149 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Tổng quan";
+    var isHome = string.IsNullOrEmpty(controller) || controller == "Home";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle - Hotel Management</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="app-sidebar" id="appSidebar">
+            <a class="brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-icon"><i class="bi bi-buildings"></i></span>
+                <span class="brand-text">
+                    <strong>Hotel Manager</strong>
+                    <small>HỆ THỐNG QUẢN LÝ</small>
+                </span>
+            </a>
+
+            <div class="sidebar-label">MENU CHÍNH</div>
+            <nav class="sidebar-nav" aria-label="Điều hướng chính">
+                <a class="sidebar-link @(isHome ? "active" : "")"
+                   asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-grid-1x2"></i><span>Tổng quan</span>
+                </a>
+
+                <div class="sidebar-label">NGHIỆP VỤ</div>
+
+                <a class="sidebar-link @(controller == "PhieuDatPhong" ? "active" : "")"
+                   asp-controller="PhieuDatPhong" asp-action="Index">
+                    <i class="bi bi-calendar-check"></i><span>Phiếu đặt phòng</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "ChiTietXepPhong" ? "active" : "")"
+                   asp-controller="ChiTietXepPhong" asp-action="Index">
+                    <i class="bi bi-door-open"></i><span>Xếp phòng / Check-in</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "Phong" ? "active" : "")"
+                   asp-controller="Phong" asp-action="Index">
+                    <i class="bi bi-hospital"></i><span>Phòng</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "LoaiPhong" ? "active" : "")"
+                   asp-controller="LoaiPhong" asp-action="Index">
+                    <i class="bi bi-layers"></i><span>Loại phòng</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "KhachHang" ? "active" : "")"
+                   asp-controller="KhachHang" asp-action="Index">
+                    <i class="bi bi-people"></i><span>Khách hàng</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "NhanVien" ? "active" : "")"
+                   asp-controller="NhanVien" asp-action="Index">
+                    <i class="bi bi-person-badge"></i><span>Nhân viên</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "DichVu" ? "active" : "")"
+                   asp-controller="DichVu" asp-action="Index">
+                    <i class="bi bi-cup-hot"></i><span>Dịch vụ</span>
+                </a>
+
+                <a class="sidebar-link @(controller == "HoaDon" ? "active" : "")"
+                   asp-controller="HoaDon" asp-action="Index">
+                    <i class="bi bi-receipt"></i><span>Hóa đơn</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="sidebar-footer-icon"><i class="bi bi-shield-check"></i></span>
+                <span><strong>Quản trị hệ thống</strong><small>Hotel Management</small></span>
+            </div>
+        </aside>
+
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <div class="app-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button type="button" class="icon-button menu-toggle"
+                            id="menuToggle" aria-label="Mở hoặc đóng menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="breadcrumb-title">
+                        <span class="breadcrumb-caption">QUẢN LÝ KHÁCH SẠN</span>
+                        <h1>@pageTitle</h1>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <span class="today-label"><i class="bi bi-calendar3"></i> @DateTime.Now.ToString("dd/MM/yyyy")</span>
+                    <div class="user-avatar" title="Tài khoản"><i class="bi bi-person-fill"></i></div>
+                </div>
+            </header>
+
+            <main class="page-content">
+                @RenderBody()
+            </main>
+
+            <footer class="app-footer">
+                <span>© @DateTime.Now.Year Hotel Management</span>
+                <span>Hệ thống quản lý khách sạn</span>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (() => {
+            const sidebar = document.getElementById("appSidebar");
+            const toggle = document.getElementById("menuToggle");
+            const backdrop = document.getElementById("sidebarBackdrop");
+
+            if (!sidebar || !toggle || !backdrop) return;
+
+            const closeSidebar = () => {
+                sidebar.classList.remove("sidebar-open");
+                backdrop.classList.remove("show");
+                document.body.classList.remove("sidebar-visible");
+            };
+
+            toggle.addEventListener("click", () => {
+                const isOpen = sidebar.classList.toggle("sidebar-open");
+                backdrop.classList.toggle("show", isOpen);
+                document.body.classList.toggle("sidebar-visible", isOpen);
+            });
+
+            backdrop.addEventListener("click", closeSidebar);
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 900) closeSidebar();
+            });
+        })();
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
