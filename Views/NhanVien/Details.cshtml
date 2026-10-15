@@ -1,0 +1,50 @@
+@model QuanLyKhachSan.Models.Entities.NhanVien
+
+@{
+    ViewData["Title"] = "Chi tiết nhân viên";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Thông tin chi tiết nhân viên</h4>
+            <span class="badge bg-light text-dark">ID: #@Model.MaNhanVien</span>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Họ và tên:</strong>
+                    <p class="text-muted">@Model.HoTen</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Tên tài khoản:</strong>
+                    <p class="text-muted">@Model.Username</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Số CCCD/CMND:</strong>
+                    <p class="text-muted">@(Model.Cccd ?? "Chưa cập nhật")</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Số điện thoại:</strong>
+                    <p class="text-muted">@(Model.Sdt ?? "Chưa cập nhật")</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Địa chỉ Email:</strong>
+                    <p class="text-muted">@(Model.Email ?? "Chưa cập nhật")</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Trạng thái:</strong>
+                    <p><span class="badge @(Model.TrangThai == "Đang làm việc" ? "bg-success" : "bg-danger")">@(Model.TrangThai ?? "Chưa cập nhật")</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer d-flex gap-2">
+            <a asp-controller="NhanVien" asp-action="Edit" asp-route-maNhanVien="@Model.MaNhanVien" class="btn btn-warning">
+                Sửa thông tin
+            </a>
+            <a asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
+                Quay lại danh sách
+            </a>
+        </div>
+    </div>
+</div>

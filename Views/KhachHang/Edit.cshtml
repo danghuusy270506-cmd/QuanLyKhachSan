@@ -1,0 +1,68 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+@{
+    ViewData["Title"] = "Cập nhật thông tin khách hàng";
+}
+
+<div class="container mt-4" style="max-width: 650px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Cập Nhật Thông Tin Khách Hàng</h4>
+        </div>
+        <div class="card-body">
+            <!-- asp-action="Edit" hoặc "updateKhachHang" tùy thuộc tên Action trong Controller của bạn -->
+            <form asp-controller="KhachHang" asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- Bắt buộc có input hidden này để gửi ID về Controller -->
+                <input type="hidden" asp-for="MaKhachHang" />
+
+                <div class="mb-3">
+                    <label asp-for="HoTen" class="form-label">Họ và tên:</label>
+                    <input asp-for="HoTen" class="form-control" placeholder="Nhập họ và tên" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Cccd" class="form-label">CCCD / CMND:</label>
+                    <input asp-for="Cccd" class="form-control" placeholder="Nhập số CCCD/CMND" />
+                    <span asp-validation-for="Cccd" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Sdt" class="form-label">Số điện thoại:</label>
+                    <input asp-for="Sdt" class="form-control" placeholder="Nhập số điện thoại" />
+                    <span asp-validation-for="Sdt" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email:</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="example@gmail.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label">Tên đăng nhập:</label>
+                    <input asp-for="Username" class="form-control" placeholder="Nhập tên đăng nhập" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Mật khẩu mới:</label>
+                    <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu" />
+                    <small class="form-text text-muted">Chỉ nhập nếu bạn muốn thay đổi mật khẩu hiện tại.</small>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <!-- Đổi asp-action thành "Index" nếu bạn đổi tên action trong Controller -->
+                    <a asp-controller="KhachHang" asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Hủy / Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Lưu cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

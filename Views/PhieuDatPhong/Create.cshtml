@@ -1,0 +1,67 @@
+@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+
+@{
+    ViewData["Title"] = "Đặt Phòng Mới";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="card-title mb-0 fw-bold"><i class="bi bi-calendar-plus me-2"></i>Đăng Ký Đặt Phòng</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="MaLoaiPhong" class="form-label fw-semibold">Chọn Loại Phòng</label>
+                                <select asp-for="MaLoaiPhong" class="form-select" asp-items="ViewBag.MaLoaiPhong">
+                                    <option value="">-- Chọn loại phòng --</option>
+                                </select>
+                                <span asp-validation-for="MaLoaiPhong" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="NgayDen" class="form-label fw-semibold">Ngày Đến (Check-in)</label>
+                                <input asp-for="NgayDen" type="date" class="form-control" />
+                                <span asp-validation-for="NgayDen" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="NgayDi" class="form-label fw-semibold">Ngày Đi (Check-out)</label>
+                                <input asp-for="NgayDi" type="date" class="form-control" />
+                                <span asp-validation-for="NgayDi" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="SoNguoi" class="form-label fw-semibold">Số Lượng Khách</label>
+                                <input asp-for="SoNguoi" type="number" min="1" max="10" class="form-control" placeholder="Nhập số người..." />
+                                <span asp-validation-for="SoNguoi" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="TienCoc" class="form-label fw-semibold">Tiền Đặt Cọc (VNĐ)</label>
+                                <input asp-for="TienCoc" type="number" step="50000" class="form-control" placeholder="Nhập tiền cọc..." />
+                                <span asp-validation-for="TienCoc" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Hủy Bỏ</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">Xác Nhận Đặt Phòng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

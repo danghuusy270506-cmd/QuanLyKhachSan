@@ -1,0 +1,53 @@
+@model QuanLyKhachSan.Models.Entities.HoaDon
+
+@{
+    ViewData["Title"] = "Xóa hóa đơn";
+}
+<div class="container mt-4 mb-4">
+    <h2 class="mb-4">Xóa hóa đơn</h2>
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">Xác nhận xóa hóa đơn</div>
+
+        <div class="card-body">
+            <div class="alert alert-warning" role="alert">
+                <strong>Cảnh báo!</strong>
+                Bạn có chắc chắn muốn xóa hóa đơn này không?
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="table-light" style="width: 35%;">Mã hóa đơn</th>
+                            <td>@Model.MaHoaDon</td>
+                        </tr
+                        <tr>
+                            <th class="table-light">Mã phiếu đặt phòng</th>
+                            <td>@Model.MaPhieu</td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Tổng tiền</th>
+                            <td class="text-danger">
+                                <strong>@Model.TongTien.ToString("N0") VNĐ</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex flex-wrap gap-2">
+            <form asp-controller="HoaDon"
+                  asp-action="Delete"
+                  method="post"
+                  class="m-0"
+                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?');">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="maHoaDon" value="@Model.MaHoaDon" />
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+            </form>
+
+            <a asp-controller="HoaDon" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</div>

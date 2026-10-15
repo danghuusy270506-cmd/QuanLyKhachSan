@@ -1,0 +1,30 @@
+﻿<form asp-controller="DangNhap" asp-action="Authentication" method="post">
+    @Html.AntiForgeryToken()
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Tên đăng nhập</label>
+        <input type="text" name="username" class="form-control" 
+               value="@Context.Request.Cookies["SavedUsername"]" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Mật khẩu</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+
+    <!-- Checkbox Cookies Remember Me -->
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="rememberMe" value="true" id="rememberMeCheck" 
+               @(Context.Request.Cookies["SavedUsername"] != null ? "checked" : "") />
+        <label class="form-check-label" for="rememberMeCheck">
+            Ghi nhớ tên đăng nhập
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 fw-bold">Đăng Nhập</button>
+</form>

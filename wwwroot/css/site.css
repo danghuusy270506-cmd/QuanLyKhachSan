@@ -1,0 +1,734 @@
+/* ===== Nền tảng layout ===== */
+:root {
+    --sidebar-bg: #172554;
+    --sidebar-bg-deep: #101b40;
+    --sidebar-text: #cbd5e1;
+    --sidebar-muted: #94a3b8;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --page-bg: #f3f6fb;
+    --surface: #ffffff;
+    --text-main: #172033;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 18px rgba(15, 23, 42, .05);
+}
+
+html {
+    min-height: 100%;
+    font-size: 14px;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text-main);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.app-shell {
+    min-height: 100vh;
+}
+
+/* ===== Sidebar ===== */
+.app-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    width: 258px;
+    overflow-y: auto;
+    background: linear-gradient(180deg, var(--sidebar-bg), var(--sidebar-bg-deep));
+    color: white;
+    transition: transform .25s ease;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 86px;
+    padding: 18px 22px;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.brand:hover {
+    color: #fff;
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 43px;
+    width: 43px;
+    height: 43px;
+    border-radius: 13px;
+    background: #3b82f6;
+    font-size: 23px;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.brand-text strong {
+    font-size: 16px;
+    letter-spacing: .1px;
+}
+
+.brand-text small {
+    color: #a5b4fc;
+    font-size: 9px;
+    letter-spacing: 1.25px;
+}
+
+.sidebar-label {
+    padding: 22px 22px 9px;
+    color: var(--sidebar-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.sidebar-nav {
+    padding: 0 12px 18px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 44px;
+    margin: 3px 0;
+    padding: 10px 13px;
+    border-radius: 9px;
+    color: var(--sidebar-text);
+    font-size: 13px;
+    text-decoration: none;
+    transition: background .18s ease, color .18s ease;
+}
+
+.sidebar-link i {
+    width: 20px;
+    color: #a5b4fc;
+    font-size: 17px;
+    text-align: center;
+}
+
+.sidebar-link:hover {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+}
+
+.sidebar-link.active {
+    background: #2563eb;
+    color: #fff;
+    box-shadow: 0 5px 14px rgba(37, 99, 235, .25);
+}
+
+.sidebar-link.active i {
+    color: #fff;
+}
+
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: auto 14px 16px;
+    padding: 13px 12px;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .045);
+}
+
+.sidebar-footer-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: rgba(96, 165, 250, .18);
+    color: #bfdbfe;
+    font-size: 17px;
+}
+
+.sidebar-footer strong,
+.sidebar-footer small {
+    display: block;
+}
+
+.sidebar-footer strong {
+    font-size: 11px;
+}
+
+.sidebar-footer small {
+    margin-top: 3px;
+    color: var(--sidebar-muted);
+    font-size: 10px;
+}
+
+/* ===== Khu vực nội dung ===== */
+.app-main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-left: 258px;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 82px;
+    padding: 14px 30px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(10px);
+}
+
+.topbar-left,
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.breadcrumb-caption {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.breadcrumb-title h1 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.icon-button {
+    display: grid;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: #334155;
+    font-size: 22px;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.today-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.user-avatar {
+    display: grid;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 20px;
+}
+
+.page-content {
+    flex: 1;
+    width: 100%;
+    padding: 28px 30px;
+}
+
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 17px 30px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* ===== Chuẩn hóa thành phần Bootstrap ===== */
+.page-content > .container,
+.page-content > .container-fluid {
+    max-width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.page-content h2 {
+    color: var(--text-main);
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    padding: 14px 18px;
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 22px;
+}
+
+.card-footer {
+    padding: 15px 22px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+}
+
+.table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.table thead th {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.table td,
+.table th {
+    padding: 12px 14px;
+}
+
+.table-hover tbody tr:hover {
+    --bs-table-bg: #f8fafc;
+}
+
+.form-label {
+    margin-bottom: 7px;
+    color: #334155;
+    font-weight: 600;
+}
+
+.form-control,
+.form-select {
+    min-height: 40px;
+    border-color: #cbd5e1;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .12);
+}
+
+.btn {
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-sm {
+    font-size: 12px;
+}
+
+.alert {
+    border-radius: 9px;
+}
+
+.pagination {
+    gap: 4px;
+}
+
+.page-link {
+    border-radius: 6px;
+}
+
+/* ===== Responsive ===== */
+.sidebar-backdrop {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .page-content {
+        padding: 24px 20px;
+    }
+
+    .topbar {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .app-sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    .app-main {
+        margin-left: 0;
+    }
+
+    .menu-toggle {
+        display: grid;
+    }
+
+    .sidebar-backdrop.show {
+        position: fixed;
+        inset: 0;
+        z-index: 1030;
+        display: block;
+        background: rgba(15, 23, 42, .45);
+    }
+
+    body.sidebar-visible {
+        overflow: hidden;
+    }
+
+    .topbar {
+        min-height: 72px;
+    }
+}
+
+@media (max-width: 576px) {
+    .topbar {
+        padding: 12px 14px;
+    }
+
+    .breadcrumb-title h1 {
+        font-size: 17px;
+    }
+
+    .breadcrumb-caption {
+        font-size: 8px;
+    }
+
+    .topbar-left,
+    .topbar-right {
+        gap: 9px;
+    }
+
+    .today-label {
+        display: none;
+    }
+
+    .page-content {
+        padding: 20px 14px;
+    }
+
+    .page-content h2 {
+        font-size: 20px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-footer {
+        padding: 13px 15px;
+    }
+
+    .app-footer {
+        flex-direction: column;
+        padding: 14px;
+    }
+
+    .table td,
+    .table th {
+        padding: 10px;
+    }
+}
+
+
+
+/* Trang danh sách hóa đơn */
+.page-content {
+    padding-top: 10px !important;
+}
+
+    /* Trang hóa đơn dùng toàn bộ chiều ngang */
+    .page-content:has(.hoa-don-page) {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-bottom: 16px !important;
+        padding-top: 8px !important;
+    }
+
+/* Bỏ khoảng cách thừa phía trên nội dung hóa đơn */
+.hoa-don-page {
+    width: 100%;
+    max-width: none;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+
+
+/* ===== Giao dien sidebar icon-only, mo rong khi hover/focus ===== */
+.topbar {
+    color: #fff;
+    background: #111827;
+    border-bottom-color: #1f2937;
+}
+
+.breadcrumb-caption {
+    color: #9ca3af;
+}
+
+.breadcrumb-title h1 {
+    color: #fff;
+}
+
+.today-label {
+    color: #d1d5db;
+}
+
+.today-label i {
+    color: #cbd5e1;
+}
+
+.user-avatar {
+    background: #374151;
+    color: #fff;
+}
+
+.icon-button {
+    border-color: #374151;
+    background: #1f2937;
+    color: #fff;
+}
+
+.icon-button:hover {
+    background: #374151;
+    color: #fff;
+}
+
+@media (min-width: 901px) {
+    .app-sidebar {
+        width: 76px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #111827;
+        box-shadow: 3px 0 16px rgba(15, 23, 42, .12);
+        transition: width .22s ease, box-shadow .22s ease;
+    }
+
+    .app-sidebar:hover,
+    .app-sidebar:focus-within {
+        width: 258px;
+        box-shadow: 8px 0 24px rgba(15, 23, 42, .18);
+    }
+
+    .brand {
+        justify-content: center;
+        gap: 12px;
+        min-width: 258px;
+        min-height: 78px;
+        padding: 16px;
+        background: #111827;
+        border-bottom-color: #263244;
+    }
+
+    .brand-icon {
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        background: #2563eb;
+    }
+
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span,
+    .sidebar-footer > span:last-child {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .12s ease;
+    }
+
+    .brand-text {
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .app-sidebar:hover .brand,
+    .app-sidebar:focus-within .brand {
+        justify-content: flex-start;
+        padding-left: 18px;
+    }
+
+    .app-sidebar:hover .brand-text,
+    .app-sidebar:focus-within .brand-text {
+        width: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-label {
+        display: block;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .app-sidebar:hover .sidebar-label,
+    .app-sidebar:focus-within .sidebar-label {
+        height: auto;
+        padding: 20px 22px 8px;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-nav {
+        min-width: 258px;
+        padding: 10px 10px 18px;
+    }
+
+    .sidebar-link {
+        justify-content: flex-start;
+        gap: 14px;
+        min-width: 236px;
+        min-height: 46px;
+        margin: 4px 0;
+        padding: 10px 17px;
+        border-radius: 10px;
+        color: #cbd5e1;
+    }
+
+    .sidebar-link i {
+        flex: 0 0 22px;
+        width: 22px;
+        color: #cbd5e1;
+        font-size: 19px;
+    }
+
+    .sidebar-link span {
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    .app-sidebar:hover .sidebar-link span,
+    .app-sidebar:focus-within .sidebar-link span {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-link:hover {
+        background: #263244;
+        color: #fff;
+    }
+
+    .sidebar-link.active {
+        background: #2563eb;
+        color: #fff;
+        box-shadow: none;
+    }
+
+    .sidebar-footer {
+        display: flex;
+        justify-content: flex-start;
+        min-width: 230px;
+        margin: auto 14px 16px;
+        padding: 12px;
+        overflow: hidden;
+        border-color: #263244;
+        background: #1f2937;
+        white-space: nowrap;
+    }
+
+    .sidebar-footer-icon {
+        flex: 0 0 34px;
+    }
+
+    .app-sidebar:not(:hover):not(:focus-within) .sidebar-footer {
+        display: none;
+    }
+
+    .app-sidebar:hover .sidebar-footer > span:last-child,
+    .app-sidebar:focus-within .sidebar-footer > span:last-child {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .app-main {
+        margin-left: 76px;
+        transition: margin-left .22s ease;
+    }
+}
+
+/* Mobile: sidebar remains a full drawer opened by the menu button. */
+@media (max-width: 900px) {
+    .app-sidebar {
+        width: 258px;
+        background: #111827;
+    }
+
+    .brand {
+        justify-content: flex-start;
+    }
+
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span,
+    .sidebar-footer > span:last-child {
+        width: auto;
+        height: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-label {
+        padding: 22px 22px 9px;
+    }
+
+    .sidebar-link {
+        min-width: 0;
+    }
+
+    .topbar {
+        background: #111827;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-sidebar,
+    .app-main,
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span {
+        transition: none !important;
+    }
+}
