@@ -1,0 +1,44 @@
+@model QuanLyKhachSan.Models.Entities.TaiKhoan
+
+@{
+    ViewData["Title"] = "Xác nhận xóa tài khoản";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Xác nhận xóa tài khoản</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể hoàn tác!</p>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Mã Tài Khoản:</dt>
+                        <dd class="col-sm-8">#@Model.MaTaiKhoan</dd>
+
+                        <dt class="col-sm-4">Tên Đăng Nhập:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Username</dd>
+
+                        <dt class="col-sm-4">Quyền Hạn:</dt>
+                        <dd class="col-sm-8">@Model.Role</dd>
+
+                        <dt class="col-sm-4">Trạng Thái:</dt>
+                        <dd class="col-sm-8">@Model.TrangThai</dd>
+                    </dl>
+                </div>
+                <div class="card-footer bg-light d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Hủy bỏ
+                    </a>
+                    <form asp-action="Delete" asp-route-mataikhoan="@Model.MaTaiKhoan" method="post">
+                        <button type="submit" class="btn btn-danger fw-bold">
+                            <i class="bi bi-trash me-1"></i> Xác Nhận Xóa
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

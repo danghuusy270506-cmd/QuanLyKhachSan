@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
+using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
@@ -18,7 +20,7 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
-        // 1. DSN PHIẾU ĐẶT PHÒNG (Nối bảng lấy thông tin Tên Khách, Loại Phòng)
+        // 1. DSN PHIẾU ĐẶT PHÒNG
         public async Task<IActionResult> Index()
         {
             var dsPhieu = _context.PhieuDatPhongs
@@ -48,13 +50,6 @@ namespace QuanLyKhachSan.Controllers
         // 3. GIAO DIỆN ĐẶT PHÒNG (GET: Create)
         public IActionResult Create()
         {
-            // Kiểm tra khách hàng đã đăng nhập chưa
-            int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
-            if (maKhachHang == null)
-            {
-                return RedirectToAction("Authentication", "DangNhap");
-            }
-
             // Nạp danh sách Loại phòng ra DropDownList
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong");
             return View();
@@ -63,18 +58,19 @@ namespace QuanLyKhachSan.Controllers
         // 4. XỬ LÝ ĐẶT PHÒNG (POST: Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // ĐÃ SỬA: Bỏ các navigation properties khỏi [Bind] để không bị lỗi ModelState.IsValid
         public async Task<IActionResult> Create([Bind("NgayDen,NgayDi,TienCoc,SoNguoi,MaLoaiPhong")] PhieuDatPhong phieudatphong)
         {
-            int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
-            if (maKhachHang == null)
+            // Lấy ID tài khoản đang đăng nhập từ JWT Cookie Claims
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int maTaiKhoan))
             {
                 return RedirectToAction("Authentication", "DangNhap");
             }
 
             // Tự động gán các thông tin mặc định
-            phieudatphong.MaKhachHang = maKhachHang.Value;
-            phieudatphong.NgayDat = System.DateTime.Now;
+            phieudatphong.MaKhachHang = maTaiKhoan;
+            phieudatphong.NgayDat = DateTime.Now;
             phieudatphong.TrangThai = "Chờ xác nhận";
 
             // Validate logic ngày đến & ngày đi

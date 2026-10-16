@@ -23,7 +23,7 @@ namespace QuanLyKhachSan.Controllers
         }
         public IActionResult TestBCrypt()
         {
-            string password = "123456";
+            string password = "ADMIN";
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             bool kketqua = BCrypt.Net.BCrypt.Verify(password, passwordHash);
             return Content($"Password: {password} | Hash: {passwordHash} | KetQua: {kketqua}");

@@ -8,7 +8,7 @@ namespace QuanLyKhachSan.test
        
         public void TestHashPassword()
         {
-            string password = "123456";
+            string password = "ADMIN";
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
             System.Diagnostics.Debug.WriteLine($"Password: {password}");

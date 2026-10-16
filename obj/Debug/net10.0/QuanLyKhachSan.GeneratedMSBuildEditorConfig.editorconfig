@@ -71,8 +71,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGNyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/admin/source/repos/QuanLyKhachSan/Views/KhachHang/deleteKhachHang.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGRlbGV0ZUtoYWNoSGFuZy5jc2h0bWw=
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/KhachHang/delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGRlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/admin/source/repos/QuanLyKhachSan/Views/KhachHang/Details.cshtml]
@@ -173,6 +173,30 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/admin/source/repos/QuanLyKhachSan/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admin/source/repos/QuanLyKhachSan/Views/TaiKhoan/Indexx.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cSW5kZXh4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/admin/source/repos/QuanLyKhachSan/Views/_ViewImports.cshtml]
