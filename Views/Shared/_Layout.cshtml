@@ -3,7 +3,18 @@
     var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var pageTitle = ViewData["Title"]?.ToString() ?? "Tổng quan";
     var isHome = string.IsNullOrEmpty(controller) || controller == "Home";
+
+    //kiem tra quyyen
+    // var isADMIN = User.IsInRole("ADMIN");
+    // if (!isADMIN)
+    // {
+    //     Context.Response.Redirect("/DangNhap/Authentication");
+    //     return; 
+    // }
 }
+
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -142,3 +153,13 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<!-- Hiện ra ko đủ quyền -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            alert("@Html.Raw(TempData["ErrorMessage"])");
+        });
+    </script>
+}

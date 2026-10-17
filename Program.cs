@@ -23,7 +23,6 @@ builder.Services.AddDbContext<QLKhachSanContext>(options =>
 
 // 3. CẤU HÌNH JWT BEARER ĐỌC TOKEN TỪ HTTPONLY COOKIE
 var secretKey = "Chuoi_Secret_Key_Bao_Mat_Khach_San_123456789";
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -38,7 +37,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
 
-        // Lấy Token từ Cookie "AccessToken" ở mỗi Request
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -49,16 +47,37 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 }
                 return Task.CompletedTask;
             },
-            // Trả về JSON 401 nếu gọi API chưa đăng nhập
+
+            // XỬ LÝ LỖI 401 (CHƯA ĐĂNG NHẬP / TOKEN HẾT HẠN)
             OnChallenge = context =>
             {
+                // BẮT BỘC: Báo cho framework biết ta tự xử lý response
+                context.HandleResponse();
+
                 if (context.Request.Path.StartsWithSegments("/api"))
                 {
-                    context.HandleResponse();
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     context.Response.ContentType = "application/json";
                     return context.Response.WriteAsync("{\"message\": \"Bạn chưa đăng nhập!\"}");
                 }
+
+                // Chuyển hướng về Login nếu là View
+                context.Response.Redirect("/DangNhap/Authentication");
+                return Task.CompletedTask;
+            },
+
+            // XỬ LÝ LỖI 403 (ĐÃ ĐĂNG NHẬP NHƯNG KHÔNG ĐỦ QUYỀN)
+            OnForbidden = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    context.Response.ContentType = "application/json";
+                    return context.Response.WriteAsync("{\"message\": \"Bạn không có quyền truy cập!\"}");
+                }
+
+                // Chuyển hướng sang HandleController để lưu TempData & về trang cũ
+                context.Response.Redirect("/Handle/AccessDenied");
                 return Task.CompletedTask;
             }
         };
@@ -82,24 +101,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// BẬT XÁC THỰC VÀ PHÂN QUYỀN (Không còn UseSession)
+// BẬT XÁC THỰC VÀ PHÂN QUYỀN
 app.UseAuthentication();
 app.UseAuthorization();
 
-// TỰ ĐỘNG REDIRECT VỀ DANGNHAP NẾU CHƯA XÁC THỰC (Dành cho View)
-app.UseStatusCodePages(async context =>
-{
-    var response = context.HttpContext.Response;
-    var request = context.HttpContext.Request;
-
-    if (response.StatusCode == StatusCodes.Status401Unauthorized && !request.Path.StartsWithSegments("/api"))
-    {
-        response.Redirect("/DangNhap/Authentication");
-    }
-});
+// (ĐÃ XÓA app.UseStatusCodePages BỊ TRÙNG LẶP Ở ĐÂY)
 
 app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=KhachHang}/{action=create}/{id?}")

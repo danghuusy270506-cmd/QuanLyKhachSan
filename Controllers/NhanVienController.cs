@@ -7,6 +7,7 @@ using QuanLyKhachSan.Models.Entities;
 namespace QuanLyKhachSan.Controllers
 {
     [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class NhanVienController : Controller
     {
         private readonly QLKhachSanContext _context;
@@ -16,7 +17,7 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "ADMIN")]
+        
 
         public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
