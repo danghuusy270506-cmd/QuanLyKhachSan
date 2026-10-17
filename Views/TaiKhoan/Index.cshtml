@@ -1,101 +1,125 @@
 @model IEnumerable<QuanLyKhachSan.Models.Entities.TaiKhoan>
 
 @{
-    ViewData["Title"] = "Quản lý Tài Khoản";
+    ViewData["Title"] = "Danh sách tài khoản";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int totalCount = ViewBag.TotalCount ?? 0;
+    string? keyword = ViewBag.Keyword;
+    string? role = ViewBag.Role;
+    string? trangThai = ViewBag.TrangThai;
+    var roleList = ViewBag.RoleList as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+    var trangThaiList = ViewBag.TrangThaiList as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
 }
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="text-primary fw-bold mb-0">
-            <i class="bi bi-people-fill me-2"></i>Danh Sách Tài Khoản
-        </h3>
-        <a asp-action="Create" class="btn btn-success fw-bold">
-            <i class="bi bi-plus-circle me-1"></i> Tạo tài khoản mới
-        </a>
+<h2>Danh sách tài khoản</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="keyword" value="@keyword"
+               class="form-control" placeholder="Tìm theo Username..." />
     </div>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ps-3">Mã TK</th>
-                            <th>Tên đăng nhập</th>
-                            <th>Quyền (Role)</th>
-                            <th>Trạng thái</th>
-                            <th class="text-end pe-3">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (!Model.Any())
-                        {
-                            <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">Chưa có tài khoản nào trong hệ thống.</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td class="ps-3 fw-bold">#@item.MaTaiKhoan</td>
-                                    <td>
-                                        <span class="fw-bold text-dark">@item.Username</span>
-                                    </td>
-                                    <td>
-                                        @if (item.Role == "ADMIN")
-                                        {
-                                            <span class="badge bg-danger">ADMIN</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-info text-dark">CUSTOMER</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (item.TrangThai == "HoatDong")
-                                        {
-                                            <span class="badge bg-success">Hoạt động</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">Bị khóa</span>
-                                        }
-                                    </td>
-                                    <td class="text-end pe-3">
-                                        <a asp-action="Details" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-outline-info me-1" title="Chi tiết">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a asp-action="Edit" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-outline-warning me-1" title="Sửa">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-outline-danger" title="Xóa">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="col-md-3">
+        <select name="role" class="form-select">
+            <option value="">-- Tất cả vai trò --</option>
+            @foreach (var r in roleList ?? new())
+            {
+                <option value="@r.Value" selected="@(r.Value == role)">@r.Text</option>
+            }
+        </select>
     </div>
-</div>
+    <div class="col-md-3">
+        <select name="trangThai" class="form-select">
+            <option value="">-- Tất cả trạng thái --</option>
+            @foreach (var t in trangThaiList ?? new())
+            {
+                <option value="@t.Value" selected="@(t.Value == trangThai)">@t.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Tìm / Lọc</button>
+        <a asp-action="Index" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<p>Tổng: <strong>@totalCount</strong> tài khoản — Trang @pageNumber / @totalPages</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã</th>
+            <th>Username</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr><td colspan="5" class="text-center">Không có dữ liệu.</td></tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaTaiKhoan</td>
+                    <td>@item.Username</td>
+                    <td>@item.Role</td>
+                    <td>@item.TrangThai</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-warning">Sửa</a>
+                        <a asp-action="Details" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-info">Chi tiết</a>
+                        <a asp-action="Delete" asp-route-mataikhoan="@item.MaTaiKhoan" class="btn btn-sm btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@* Phân trang *@
+<nav>
+    <ul class="pagination">
+        <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-keyword="@keyword"
+               asp-route-role="@role"
+               asp-route-trangThai="@trangThai"
+               asp-route-page="@(pageNumber - 1)">«</a>
+        </li>
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == pageNumber ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-keyword="@keyword"
+                   asp-route-role="@role"
+                   asp-route-trangThai="@trangThai"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-keyword="@keyword"
+               asp-route-role="@role"
+               asp-route-trangThai="@trangThai"
+               asp-route-page="@(pageNumber + 1)">»</a>
+        </li>
+    </ul>
+</nav>

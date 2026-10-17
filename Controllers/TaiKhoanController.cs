@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
 {
-    [AllowAnonymous] // Cho phép người dùng chưa đăng nhập tự đăng ký
+     // Cho phép người dùng chưa đăng nhập tự đăng ký
     public class TaiKhoanController : Controller
     {
         private readonly QLKhachSanContext _context;
@@ -25,9 +25,79 @@ namespace QuanLyKhachSan.Controllers
         // ==========================================
         // GET: TaiKhoan
         // ==========================================
-        public async Task<IActionResult> Index()
+        // ==========================================
+        // GET: TaiKhoan/Index?keyword=&role=&trangThai=&page=1
+        // ==========================================
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> Index(
+            string? keyword,
+            string? role,
+            string? trangThai,
+            int? page)
         {
-            return View(await _context.TaiKhoans.ToListAsync());
+            const int pageSize = 5;
+            int pageNumber = (page ?? 1) < 1 ? 1 : (page ?? 1);
+
+            // 1. Khởi tạo query
+            var query = _context.TaiKhoans.AsQueryable();
+
+            // 2. Tìm kiếm theo Username (hoặc thêm các trường khác nếu muốn)
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+                query = query.Where(t => t.Username.Contains(keyword));
+            }
+
+            // 3. Lọc theo Role
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                query = query.Where(t => t.Role == role);
+            }
+
+            // 4. Lọc theo Trạng thái
+            if (!string.IsNullOrWhiteSpace(trangThai))
+            {
+                query = query.Where(t => t.TrangThai == trangThai);
+            }
+
+            // 5. Sắp xếp cố định để phân trang ổn định
+            query = query.OrderBy(t => t.MaTaiKhoan);
+
+            // 6. Đếm tổng & phân trang
+            int totalCount = await query.CountAsync();
+            var taiKhoans = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            // 7. Truyền dữ liệu qua ViewBag
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.TotalPages = totalPages;
+
+            // Giữ lại giá trị filter để View hiển thị đúng
+            ViewBag.Keyword = keyword;
+            ViewBag.Role = role;
+            ViewBag.TrangThai = trangThai;
+
+            // Nạp danh sách cho dropdown lọc
+            ViewBag.RoleList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "Admin",     Text = "Admin" },
+        new SelectListItem { Value = "NhanVien",  Text = "Nhân viên" },
+        new SelectListItem { Value = "USER", Text = "Khách hàng" }
+    };
+
+            ViewBag.TrangThaiList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "HoatDong", Text = "Hoạt động" },
+        new SelectListItem { Value = "Khoa",     Text = "Khóa" }
+    };
+
+            return View(taiKhoans);
         }
 
         public async Task<IActionResult> Indexx(int? page)
@@ -75,10 +145,13 @@ namespace QuanLyKhachSan.Controllers
         // ==========================================
         // GET: TaiKhoan/Create
         // ==========================================
+        // ==========================================
+        // GET: TaiKhoan/Create
+        // ==========================================
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Create()
         {
-            // Kiểm tra Role Admin không phân biệt chữ hoa/thường (Admin/ADMIN)
             bool isAdmin = User.Identity?.IsAuthenticated == true &&
                            (User.IsInRole("Admin") || User.IsInRole("ADMIN"));
 
@@ -87,10 +160,10 @@ namespace QuanLyKhachSan.Controllers
             if (isAdmin)
             {
                 ViewBag.RoleList = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
-                    new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
-                };
+        {
+            new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
+            new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
+        };
             }
 
             return View();
@@ -117,25 +190,18 @@ namespace QuanLyKhachSan.Controllers
             // 2. Validate Data Annotations từ ViewModel
             if (!ModelState.IsValid)
             {
-                if (isAdmin)
-                {
-                    ViewBag.RoleList = new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
-                        new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
-                    };
-                }
+                LoadRoleListIfAdmin(isAdmin);
                 return View(model);
             }
 
-            // 3. Phân quyền thiết lập Role: Nếu không phải Admin thì ép cố định là "KhachHang"
+            // 3. Phân quyền: không phải Admin thì ép "KhachHang"
             string assignedRole = isAdmin ? (model.Role ?? "KhachHang") : "KhachHang";
 
-            // 4. Mở Transaction để lưu 2 bảng Atomic
+            // 4. Mở Transaction lưu 2 bảng atomic
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // BƯỚC A: Tạo và lưu TaiKhoan
+                // BƯỚC A: Tạo TaiKhoan
                 var taiKhoan = new TaiKhoan
                 {
                     Username = model.Username,
@@ -145,22 +211,37 @@ namespace QuanLyKhachSan.Controllers
                 };
 
                 _context.TaiKhoans.Add(taiKhoan);
-                await _context.SaveChangesAsync(); // SQL sinh MaTaiKhoan
+                await _context.SaveChangesAsync(); // sinh MaTaiKhoan
 
-                // BƯỚC B: Tạo và lưu KhachHang kết nối MaTaiKhoan
-                var khachHang = new KhachHang
+                // BƯỚC B: Lưu vào bảng tương ứng với Role
+                if (assignedRole == "NhanVien")
                 {
-                    HoTen = model.HoTen,
-                    Sdt = model.Sdt,
-                    Email = model.Email,
-                    Cccd = model.Cccd,
-                    MaTaiKhoan = taiKhoan.MaTaiKhoan
-                };
+                    var nhanVien = new NhanVien
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                        // Nếu entity NhanVien có Cccd thì thêm: Cccd = model.Cccd,
+                    };
+                    _context.NhanViens.Add(nhanVien);
+                }
+                else // "KhachHang" (hoặc mặc định)
+                {
+                    var khachHang = new KhachHang
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        Cccd = model.Cccd,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                    };
+                    _context.KhachHangs.Add(khachHang);
+                }
 
-                _context.KhachHangs.Add(khachHang);
                 await _context.SaveChangesAsync();
 
-                // BƯỚC C: Commit Transaction
+                // BƯỚC C: Commit
                 await transaction.CommitAsync();
 
                 if (isAdmin)
@@ -178,21 +259,26 @@ namespace QuanLyKhachSan.Controllers
             {
                 await transaction.RollbackAsync();
                 ModelState.AddModelError("", "Đã xảy ra lỗi hệ thống: " + (ex.InnerException?.Message ?? ex.Message));
-
-                if (isAdmin)
-                {
-                    ViewBag.RoleList = new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
-                        new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
-                    };
-                }
+                LoadRoleListIfAdmin(isAdmin);
                 return View(model);
             }
         }
-    
 
-        
+        // ==========================================
+        // Helper: nạp lại RoleList khi trả về View
+        // ==========================================
+        private void LoadRoleListIfAdmin(bool isAdmin)
+        {
+            if (!isAdmin) return;
+
+            ViewBag.RoleList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
+        new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
+    };
+        }
+
+
 
         // ==========================================
         // GET: TaiKhoan/Edit/5

@@ -49,6 +49,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 }
                 return Task.CompletedTask;
             },
+
             // Trả về JSON 401 nếu gọi API chưa đăng nhập
             OnChallenge = context =>
             {
@@ -60,9 +61,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     return context.Response.WriteAsync("{\"message\": \"Bạn chưa đăng nhập!\"}");
                 }
                 return Task.CompletedTask;
-            }
+            },  
+            // BỔ SUNG SỰ KIỆN NÀY ĐỂ BẮT LỖI KHÔNG ĐỦ QUYỀN (403)
+            
         };
     });
+
 
 var app = builder.Build();
 
