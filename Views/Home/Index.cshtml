@@ -1,8 +1,182 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model QuanLyKhachSan.Models.ViewModels.DashboardViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Tổng quan quản trị";
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+
+<div class="dashboard-page">
+    <section class="dashboard-welcome">
+        <div>
+            <div class="dashboard-eyebrow"><i class="bi bi-speedometer2 me-1"></i> TRUNG TÂM VẬN HÀNH</div>
+            <h2>Xin chào, chúc bạn một ngày hiệu quả!</h2>
+            <p>Theo dõi nhanh tình hình phòng, lượt khách và doanh thu của khách sạn.</p>
+        </div>
+        <div class="welcome-date">
+            <span class="welcome-date-icon"><i class="bi bi-calendar-week"></i></span>
+            <span><small>Hôm nay</small><strong>@DateTime.Today.ToString("dddd, dd/MM/yyyy", vi)</strong></span>
+        </div>
+    </section>
+
+    <section class="dashboard-stat-grid" aria-label="Chỉ số tổng quan">
+        <article class="dashboard-stat-card stat-blue">
+            <div class="stat-top"><span>Tổng số phòng</span><span class="stat-icon"><i class="bi bi-building"></i></span></div>
+            <div class="stat-value">@Model.TongSoPhong</div>
+            <div class="stat-foot"><span>Phòng trong hệ thống</span><a asp-controller="Phong" asp-action="Index">Chi tiết <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+        <article class="dashboard-stat-card stat-green">
+            <div class="stat-top"><span>Phòng trống</span><span class="stat-icon"><i class="bi bi-door-open"></i></span></div>
+            <div class="stat-value">@Model.PhongTrong</div>
+            <div class="stat-foot"><span>Sẵn sàng nhận khách</span><a asp-controller="Phong" asp-action="Index">Xem phòng <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+        <article class="dashboard-stat-card stat-violet">
+            <div class="stat-top"><span>Đang lưu trú</span><span class="stat-icon"><i class="bi bi-person-check"></i></span></div>
+            <div class="stat-value">@Model.PhongDangO</div>
+            <div class="stat-foot"><span>Tỷ lệ lấp đầy @Model.TyLeLapDay.ToString("0.#")%</span><a asp-controller="ChiTietXepPhong" asp-action="Index">Theo dõi <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+        <article class="dashboard-stat-card stat-orange">
+            <div class="stat-top"><span>Chờ xác nhận</span><span class="stat-icon"><i class="bi bi-calendar2-check"></i></span></div>
+            <div class="stat-value">@Model.PhieuChoXacNhan</div>
+            <div class="stat-foot"><span>Phiếu đặt cần xử lý</span><a asp-controller="PhieuDatPhong" asp-action="Index">Xử lý ngay <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+    </section>
+
+    <section class="dashboard-main-grid">
+        <article class="dashboard-panel revenue-panel">
+            <div class="panel-heading">
+                <div><h3>Doanh thu</h3><p>Thống kê hóa đơn đã thanh toán</p></div>
+                <span class="panel-heading-icon"><i class="bi bi-graph-up-arrow"></i></span>
+            </div>
+            <div class="revenue-summary">
+                <div><small>Doanh thu hôm nay</small><strong>@Model.DoanhThuHomNay.ToString("N0", vi) <span>₫</span></strong></div>
+                <div class="month-revenue"><small>Trong tháng này</small><strong>@Model.DoanhThuThangNay.ToString("N0", vi) ₫</strong></div>
+            </div>
+            <div class="chart-heading"><span>7 ngày gần nhất</span><span class="chart-legend"><i></i> Doanh thu</span></div>
+            <div class="revenue-chart" role="img" aria-label="Biểu đồ doanh thu trong 7 ngày gần nhất">
+                @foreach (var day in Model.DoanhThu7Ngay)
+                {
+                    <div class="chart-day" title="@day.Ngay.ToString("dd/MM/yyyy"): @day.DoanhThu.ToString("N0", vi) đồng">
+                        <div class="chart-bar-track"><div class="chart-bar" style="height: @day.ChieuCaoCot.ToString("0.#", CultureInfo.InvariantCulture)%"></div></div>
+                        <span class="chart-day-name">@day.Ngay.ToString("dd/MM")</span>
+                    </div>
+                }
+            </div>
+        </article>
+
+        <article class="dashboard-panel activity-panel">
+            <div class="panel-heading">
+                <div><h3>Hoạt động hôm nay</h3><p>Các đầu việc cần theo dõi</p></div>
+                <span class="panel-heading-icon"><i class="bi bi-calendar2-check"></i></span>
+            </div>
+            <a class="activity-row" asp-controller="PhieuDatPhong" asp-action="Index">
+                <span class="activity-icon activity-blue"><i class="bi bi-journal-plus"></i></span>
+                <span class="activity-copy"><strong>Phiếu đặt mới</strong><small>Được tạo hôm nay</small></span>
+                <b>@Model.PhieuDatHomNay</b><i class="bi bi-chevron-right activity-chevron"></i>
+            </a>
+            <a class="activity-row" asp-controller="ChiTietXepPhong" asp-action="Index">
+                <span class="activity-icon activity-green"><i class="bi bi-box-arrow-in-right"></i></span>
+                <span class="activity-copy"><strong>Nhận phòng</strong><small>Lượt check-in hôm nay</small></span>
+                <b>@Model.CheckInHomNay</b><i class="bi bi-chevron-right activity-chevron"></i>
+            </a>
+            <a class="activity-row" asp-controller="PhieuDatPhong" asp-action="Index">
+                <span class="activity-icon activity-orange"><i class="bi bi-box-arrow-right"></i></span>
+                <span class="activity-copy"><strong>Trả phòng</strong><small>Lượt check-out hôm nay</small></span>
+                <b>@Model.CheckOutHomNay</b><i class="bi bi-chevron-right activity-chevron"></i>
+            </a>
+            <a class="activity-row" asp-controller="HoaDon" asp-action="Index">
+                <span class="activity-icon activity-violet"><i class="bi bi-receipt"></i></span>
+                <span class="activity-copy"><strong>Doanh thu tháng</strong><small>Hóa đơn đã thanh toán</small></span>
+                <b class="activity-money">@Model.DoanhThuThangNay.ToString("N0", vi) ₫</b><i class="bi bi-chevron-right activity-chevron"></i>
+            </a>
+            <div class="activity-foot"><i class="bi bi-info-circle me-1"></i> Số liệu được lấy từ cơ sở dữ liệu hiện tại.</div>
+        </article>
+    </section>
+
+    <section class="dashboard-panel room-panel">
+        <div class="panel-heading panel-heading-wrap">
+            <div><h3>Sơ đồ phòng</h3><p>Tình trạng phòng theo dữ liệu hiện tại</p></div>
+            <div class="room-legend">
+                <span><i class="legend-dot dot-available"></i>Trống <b>@Model.PhongTrong</b></span>
+                <span><i class="legend-dot dot-occupied"></i>Đang ở <b>@Model.PhongDangO</b></span>
+                <span><i class="legend-dot dot-cleaning"></i>Đang dọn <b>@Model.PhongDangDon</b></span>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="Phong" asp-action="Index">Quản lý phòng <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        @if (Model.PhongGanDay.Count == 0)
+        {
+            <div class="dashboard-empty"><span><i class="bi bi-building"></i></span><strong>Chưa có phòng trong hệ thống</strong><p>Thêm loại phòng và phòng để bắt đầu theo dõi vận hành.</p><a asp-controller="Phong" asp-action="Create" class="btn btn-primary btn-sm">Thêm phòng</a></div>
+        }
+        else
+        {
+            <div class="room-grid">
+                @foreach (var room in Model.PhongGanDay)
+                {
+                    var statusClass = room.TrangThai == "Trống" ? "room-available" :
+                        (room.TrangThai == "Đang ở" || room.TrangThai == "Đang sử dụng") ? "room-occupied" :
+                        (room.TrangThai == "Đang dọn" || room.TrangThai == "Đang dọn dẹp") ? "room-cleaning" : "room-other";
+                    var statusIcon = room.TrangThai == "Trống" ? "bi-check-circle" :
+                        (room.TrangThai == "Đang ở" || room.TrangThai == "Đang sử dụng") ? "bi-person-fill" :
+                        (room.TrangThai == "Đang dọn" || room.TrangThai == "Đang dọn dẹp") ? "bi-stars" : "bi-tools";
+                    <a class="room-tile @statusClass" asp-controller="Phong" asp-action="Details" asp-route-id="@room.MaPhong">
+                        <div class="room-tile-top"><span class="room-number">@room.SoPhong</span><i class="bi @statusIcon"></i></div>
+                        <span class="room-type">@(room.LoaiPhong?.TenLoaiPhong ?? "Chưa phân loại")</span>
+                        <span class="room-status">@room.TrangThai</span>
+                        <span class="room-floor">Tầng @room.Tang</span>
+                    </a>
+                }
+            </div>
+            @if (Model.TongSoPhong > Model.PhongGanDay.Count)
+            {
+                <div class="room-panel-footer">Đang hiển thị @Model.PhongGanDay.Count/@Model.TongSoPhong phòng đầu tiên. <a asp-controller="Phong" asp-action="Index">Xem toàn bộ phòng</a></div>
+            }
+        }
+    </section>
+
+    <section class="dashboard-panel booking-panel">
+        <div class="panel-heading panel-heading-wrap">
+            <div><h3>Phiếu đặt phòng gần đây</h3><p>Theo dõi các lượt đặt mới nhất</p></div>
+            <a class="btn btn-sm btn-outline-primary" asp-controller="PhieuDatPhong" asp-action="Index">Tất cả phiếu đặt <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+        @if (Model.PhieuDatGanDay.Count == 0)
+        {
+            <div class="dashboard-empty compact-empty"><span><i class="bi bi-calendar-x"></i></span><strong>Chưa có phiếu đặt phòng</strong><p>Các phiếu đặt mới sẽ xuất hiện tại đây.</p></div>
+        }
+        else
+        {
+            <div class="table-responsive dashboard-table-wrap">
+                <table class="table dashboard-table align-middle">
+                    <thead><tr><th>MÃ PHIẾU</th><th>KHÁCH HÀNG</th><th>LOẠI PHÒNG</th><th>NGÀY ĐẾN</th><th>NGÀY ĐI</th><th>TRẠNG THÁI</th><th></th></tr></thead>
+                    <tbody>
+                    @foreach (var booking in Model.PhieuDatGanDay)
+                    {
+                        var statusClass = booking.TrangThai == "Chờ xác nhận" ? "status-pending" : booking.TrangThai == "Đã xác nhận" ? "status-confirmed" : booking.TrangThai == "Đang ở" ? "status-staying" : booking.TrangThai == "Hoàn thành" ? "status-completed" : "status-other";
+                        <tr>
+                            <td><a class="booking-code" asp-controller="PhieuDatPhong" asp-action="Details" asp-route-maphieu="@booking.MaPhieu">#@booking.MaPhieu</a><small>@booking.NgayDat.ToString("dd/MM/yyyy HH:mm")</small></td>
+                            <td><span class="booking-customer-avatar">@((booking.KhachHang?.HoTen ?? "K").Trim().Take(1).FirstOrDefault())</span><span class="booking-customer-name">@(booking.KhachHang?.HoTen ?? "Chưa có thông tin")</span></td>
+                            <td>@(booking.LoaiPhong?.TenLoaiPhong ?? "—")</td>
+                            <td>@booking.NgayDen.ToString("dd/MM/yyyy")</td>
+                            <td>@booking.NgayDi.ToString("dd/MM/yyyy")</td>
+                            <td><span class="booking-status @statusClass">@booking.TrangThai</span></td>
+                            <td><a class="table-action" asp-controller="PhieuDatPhong" asp-action="Details" asp-route-maphieu="@booking.MaPhieu" aria-label="Xem phiếu đặt #@booking.MaPhieu"><i class="bi bi-arrow-up-right"></i></a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section class="dashboard-quick-actions">
+        <div><h3>Truy cập nhanh</h3><p>Các khu vực sử dụng thường xuyên</p></div>
+        <div class="quick-action-list">
+            <a asp-controller="PhieuDatPhong" asp-action="Index"><span class="quick-icon quick-blue"><i class="bi bi-calendar-plus"></i></span><span><strong>Đặt phòng</strong><small>Quản lý phiếu đặt</small></span><i class="bi bi-arrow-up-right"></i></a>
+            <a asp-controller="ChiTietXepPhong" asp-action="Index"><span class="quick-icon quick-green"><i class="bi bi-door-open"></i></span><span><strong>Check-in</strong><small>Xếp phòng cho khách</small></span><i class="bi bi-arrow-up-right"></i></a>
+            <a asp-controller="HoaDon" asp-action="Index"><span class="quick-icon quick-orange"><i class="bi bi-receipt-cutoff"></i></span><span><strong>Hóa đơn</strong><small>Thanh toán & tra cứu</small></span><i class="bi bi-arrow-up-right"></i></a>
+            <a asp-controller="KhachHang" asp-action="Index"><span class="quick-icon quick-violet"><i class="bi bi-people"></i></span><span><strong>Khách hàng</strong><small>Hồ sơ khách lưu trú</small></span><i class="bi bi-arrow-up-right"></i></a>
+        </div>
+    </section>
 </div>

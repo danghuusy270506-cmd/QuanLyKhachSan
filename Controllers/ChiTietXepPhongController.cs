@@ -41,27 +41,39 @@ namespace QuanLyKhachSan.Controllers
                         .Include(p => p.LoaiPhong)
                         .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
 
-            if (phieu == null)
-                return NotFound("Không tìm thấy phiếu đặt phòng.");
+            if (phieu == null) return NotFound("Không tìm thấy phiếu đặt phòng.");
 
             if (phieu.TrangThai != "Đã xác nhận")
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return BadRequest("Chỉ được xếp phòng cho phiếu đã xác nhận.");
+
                 TempData["Error"] = "Chỉ được xếp phòng cho phiếu đã xác nhận.";
                 return RedirectToAction(nameof(Index));
             }
 
-            //Không cho check-in lại nếu phiếu đã có chi tiết xếp phòng
             bool daXepPhong = await context.ChiTietXepPhongs.AnyAsync(ct => ct.MaPhieu == maPhieu);
-
             if (daXepPhong)
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return BadRequest("Phiếu này đã có phòng được xếp.");
+
                 TempData["Error"] = "Phiếu này đã có phòng được xếp.";
                 return RedirectToAction(nameof(Index));
             }
 
             var phongPhuHop = await LayPhongTrong(phieu);
+            var selectListItems = phongPhuHop.Select(p => new SelectListItem
+            {
+                Value = p.MaPhong.ToString(),
+                Text = $"Phòng {p.SoPhong} — Tầng {p.Tang} — Trống"
+            }).ToList();
+            ViewBag.DanhSachPhong = new SelectList(selectListItems, "Value", "Text");
 
-            ViewBag.DanhSachPhong = new SelectList(phongPhuHop, "MaPhong", "SoPhong");
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_XepPhongPartial", phieu);
+            }
 
             return View(phieu);
         }
@@ -76,43 +88,25 @@ namespace QuanLyKhachSan.Controllers
                         .Include(p => p.LoaiPhong)
                         .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
 
-            if (phieu == null) return NotFound("Không tìm thấy phiếu đặt phòng.");
+            if (phieu == null)
+                return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng." });
 
             if (phieu.TrangThai != "Đã xác nhận")
-            {
-                TempData["Error"] = "Phiếu không ở trạng thái có thể check-in.";
-                return RedirectToAction(nameof(Index));
-            }
+                return Json(new { success = false, message = "Phiếu không ở trạng thái có thể check-in." });
 
-            // Kiểm tra phiếu đã được xếp phòng chưa
             bool daXepPhong = await context.ChiTietXepPhongs.AnyAsync(ct => ct.MaPhieu == maPhieu);
-
             if (daXepPhong)
-            {
-                TempData["Error"] = "Phiếu này đã được xếp phòng.";
-                return RedirectToAction(nameof(Index));
-            }
+                return Json(new { success = false, message = "Phiếu này đã được xếp phòng." });
 
-            // Kiểm tra phòng được chọn có còn phù hợp không
             var phongPhuHop = await LayPhongTrong(phieu);
             var phong = phongPhuHop.FirstOrDefault(p => p.MaPhong == maPhong);
-
             if (phong == null)
-            {
-                TempData["Error"] ="Phòng không còn khả dụng hoặc không đúng loại phòng.";
-                return RedirectToAction(nameof(XepPhong), new { maPhieu });
-            }
+                return Json(new { success = false, message = "Phòng không còn khả dụng hoặc không đúng loại phòng." });
 
-            // Lấy giá phòng từ loại phòng trong database
             int donGia = (int)phieu.LoaiPhong.GiaPhong;
-
             if (donGia <= 0)
-            {
-                TempData["Error"] = "Giá loại phòng không hợp lệ.";
-                return RedirectToAction(nameof(XepPhong), new { maPhieu });
-            }
+                return Json(new { success = false, message = "Giá loại phòng không hợp lệ." });
 
-            // Tạo chi tiết xếp phòng và ghi nhận check-in
             var chiTiet = new ChiTietXepPhong
             {
                 MaPhieu = maPhieu,
@@ -133,13 +127,15 @@ namespace QuanLyKhachSan.Controllers
             }
             catch (DbUpdateException)
             {
-                TempData["Error"] ="Không thể lưu thông tin xếp phòng. Vui lòng kiểm tra lại dữ liệu.";
-                return RedirectToAction(nameof(XepPhong), new { maPhieu });
+                return Json(new { success = false, message = "Không thể lưu thông tin xếp phòng. Vui lòng kiểm tra lại dữ liệu." });
             }
 
-            TempData["Success"] =$"Đã xếp phòng {phong.SoPhong}, giá phòng {donGia:N0}đ và check-in thành công.";
-
-            return RedirectToAction(nameof(Index));
+            return Json(new
+            {
+                success = true,
+                message = $"Check-in thành công cho phòng {phong.SoPhong}!",
+                maPhieu = maPhieu
+            });
         }
 
 
@@ -181,6 +177,9 @@ namespace QuanLyKhachSan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CheckOut(int maPhieu)
         {
+            // Kiểm tra request có phải AJAX không
+            bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
             // Tìm phiếu đặt phòng và các phòng đã xếp
             var phieu = await context.PhieuDatPhongs
                         .Include(p => p.ChiTietXepPhongs)
@@ -188,13 +187,18 @@ namespace QuanLyKhachSan.Controllers
 
             if (phieu == null)
             {
+                if (isAjax)
+                    return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng." });
                 return NotFound();
             }
 
             // Chỉ cho check-out phiếu đang ở
             if (phieu.TrangThai != "Đang ở")
             {
-                TempData["ThongBao"] ="Phiếu đặt phòng không ở trạng thái đang ở.";
+                if (isAjax)
+                    return Json(new { success = false, message = "Phiếu đặt phòng không ở trạng thái đang ở." });
+
+                TempData["ThongBao"] = "Phiếu đặt phòng không ở trạng thái đang ở.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
 
@@ -202,7 +206,10 @@ namespace QuanLyKhachSan.Controllers
 
             if (!chiTietPhong.Any())
             {
-                TempData["ThongBao"] ="Phiếu đặt phòng chưa được xếp phòng.";
+                if (isAjax)
+                    return Json(new { success = false, message = "Phiếu đặt phòng chưa được xếp phòng." });
+
+                TempData["ThongBao"] = "Phiếu đặt phòng chưa được xếp phòng.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
 
@@ -210,20 +217,26 @@ namespace QuanLyKhachSan.Controllers
             var phongChuaTra = chiTietPhong.Where(ct => ct.NgayTra == null).ToList();
             if (!phongChuaTra.Any())
             {
-                TempData["ThongBao"] ="Các phòng của phiếu này đã được check-out.";
+                // Đã check-out hết → chuyển sang tạo hóa đơn
+                if (isAjax)
+                    return Json(new { success = true, message = "Các phòng đã được check-out trước đó.", maPhieu = maPhieu });
+
+                TempData["ThongBao"] = "Các phòng của phiếu này đã được check-out.";
                 return RedirectToAction("Create", "HoaDon", new { maPhieu = maPhieu });
             }
 
             // Kiểm tra các phòng đã có thời điểm check-in
             if (phongChuaTra.Any(ct => ct.NgayNhanPhongThucTe == null))
             {
+                if (isAjax)
+                    return Json(new { success = false, message = "Có phòng chưa ghi nhận thời gian check-in." });
+
                 TempData["ThongBao"] = "Có phòng chưa ghi nhận thời gian check-in.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
 
             // Ghi nhận thời gian trả phòng thực tế
             DateTime thoiGianTra = DateTime.Now;
-
             foreach (var ct in phongChuaTra)
             {
                 ct.NgayTra = thoiGianTra;
@@ -231,10 +244,20 @@ namespace QuanLyKhachSan.Controllers
 
             await context.SaveChangesAsync();
 
-            TempData["ThongBao"] ="Check-out thành công. Vui lòng kiểm tra hóa đơn.";
+            // Trả về JSON cho AJAX (JS sẽ tiếp tục load form Create hóa đơn)
+            if (isAjax)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = "Check-out thành công.",
+                    maPhieu = maPhieu
+                });
+            }
 
-            // Chuyển sang trang lập hóa đơn
-            return RedirectToAction("Create","HoaDon",new { maPhieu = maPhieu });
+            // Fallback cho request thường
+            TempData["ThongBao"] = "Check-out thành công. Vui lòng kiểm tra hóa đơn.";
+            return RedirectToAction("Create", "HoaDon", new { maPhieu = maPhieu });
         }
 
     }

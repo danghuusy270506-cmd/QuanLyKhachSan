@@ -1,0 +1,123 @@
+﻿/* wwwroot/css/PhieuDatPhong/DetailsModal.css */
+
+/* Khung tổng thể Modal */
+#detailModal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+}
+
+/* Header tối màu sang trọng */
+#detailModal .detail-modal-header {
+    background: linear-gradient(135deg, #212529, #343a40);
+    color: #ffffff;
+    padding: 18px 24px;
+    border-bottom: none;
+}
+
+    #detailModal .detail-modal-header .modal-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+/* Tùy chỉnh bảng 2 cột */
+.table-detail-modern {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: collapse;
+}
+
+    .table-detail-modern tr {
+        transition: background-color 0.2s ease;
+    }
+
+        .table-detail-modern tr:hover {
+            background-color: #f8fafc; /* Hiệu ứng sáng lên khi rê chuột vào từng dòng */
+        }
+
+    .table-detail-modern th,
+    .table-detail-modern td {
+        padding: 14px 20px;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Cột Nhãn (Label) */
+    .table-detail-modern th {
+        width: 38%;
+        font-weight: 600;
+        color: #475569;
+        background-color: #fafafa;
+        border-right: 1px solid #f1f5f9;
+    }
+
+    /* Cột Giá trị (Value) */
+    .table-detail-modern td {
+        width: 62%;
+        color: #0f172a;
+        font-weight: 500;
+    }
+
+    /* Bỏ viền dòng cuối cùng */
+    .table-detail-modern tr:last-child th,
+    .table-detail-modern tr:last-child td {
+        border-bottom: none;
+    }
+
+/* Thẻ Badge trạng thái bo tròn mềm mại */
+.badge-custom {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50px;
+    letter-spacing: 0.3px;
+}
+
+/* Phần chân trang (Footer) */
+#detailModal .modal-footer {
+    padding: 16px 24px;
+    background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Nút Đóng kiểu pill */
+.btn-close-pill {
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: transparent;
+    transition: all 0.2s;
+}
+
+    .btn-close-pill:hover {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        border-color: #94a3b8;
+    }
+
+/* Nút Chỉnh sửa cao cấp */
+.btn-edit-modern {
+    background: linear-gradient(135deg, #ffc107, #ffb300);
+    color: #000000;
+    border: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 9px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    transition: all 0.2s;
+}
+
+    .btn-edit-modern:hover {
+        background: linear-gradient(135deg, #e0a800, #d39e00);
+        color: #000000;
+        box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+        transform: translateY(-1px);
+    }

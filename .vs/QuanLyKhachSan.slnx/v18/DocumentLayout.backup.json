@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\",
+  "WorkspaceRootPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\downloads\\quanlykhachsan-sybranch\\quanlykhachsan-sybranch\\controllers\\hoadonapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\hoadonapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\views\\loaiphong\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\loaiphong\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\downloads\\quanlykhachsan-sybranch\\quanlykhachsan-sybranch\\controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\views\\loaiphong\\_loaiphongpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\loaiphong\\_loaiphongpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\downloads\\quanlykhachsan-sybranch\\quanlykhachsan-sybranch\\controllers\\hoadoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\hoadoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\wwwroot\\js\\loaiphong\\index.js||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:wwwroot\\js\\loaiphong\\index.js||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\downloads\\quanlykhachsan-sybranch\\quanlykhachsan-sybranch\\views\\hoadon\\_danhsachhoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\hoadon\\_danhsachhoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\downloads\\quanlykhachsan-sybranch\\quanlykhachsan-sybranch\\views\\hoadon\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\hoadon\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\controllers\\loaiphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\loaiphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,73 +26,64 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "KhachHangController.cs",
-              "DocumentMoniker": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\KhachHangController.cs",
-              "RelativeDocumentMoniker": "Controllers\\KhachHangController.cs",
-              "ToolTip": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\KhachHangController.cs",
-              "RelativeToolTip": "Controllers\\KhachHangController.cs",
-              "ViewState": "AgIAAAgAAABAMjMzM/MmwBQAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T09:56:07.043Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_DanhSachHoaDon.cshtml",
-              "DocumentMoniker": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Views\\HoaDon\\_DanhSachHoaDon.cshtml",
-              "RelativeDocumentMoniker": "Views\\HoaDon\\_DanhSachHoaDon.cshtml",
-              "ToolTip": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Views\\HoaDon\\_DanhSachHoaDon.cshtml",
-              "RelativeToolTip": "Views\\HoaDon\\_DanhSachHoaDon.cshtml",
-              "ViewState": "AgIAAGMAAAAAVGZmZmb0vwAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-13T09:32:06.188Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "HoaDonApiController.cs",
-              "DocumentMoniker": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\HoaDonApiController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HoaDonApiController.cs",
-              "ToolTip": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\HoaDonApiController.cs",
-              "RelativeToolTip": "Controllers\\HoaDonApiController.cs",
-              "ViewState": "AgIAAFYAAADgxczMzMwCwHQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T09:29:23.366Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Views\\HoaDon\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\HoaDon\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Views\\HoaDon\\Index.cshtml",
-              "RelativeToolTip": "Views\\HoaDon\\Index.cshtml",
-              "ViewState": "AgIAAIEAAAAAAQAAAEAlwAkAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-13T04:51:11.901Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "HoaDonController.cs",
-              "DocumentMoniker": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\HoaDonController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HoaDonController.cs",
-              "ToolTip": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\Controllers\\HoaDonController.cs",
-              "RelativeToolTip": "Controllers\\HoaDonController.cs",
-              "ViewState": "AgIAABQAAAAAAgAAAIAfwBoAAAAAAAAAAAAAAA==",
+              "Title": "Index.js",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\wwwroot\\js\\LoaiPhong\\Index.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\LoaiPhong\\Index.js",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\wwwroot\\js\\LoaiPhong\\Index.js",
+              "RelativeToolTip": "wwwroot\\js\\LoaiPhong\\Index.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-10-17T07:57:13.302Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_LoaiPhongPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
+              "RelativeDocumentMoniker": "Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
+              "RelativeToolTip": "Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-17T07:56:05.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoaiPhongController.cs",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Controllers\\LoaiPhongController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LoaiPhongController.cs",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Controllers\\LoaiPhongController.cs",
+              "RelativeToolTip": "Controllers\\LoaiPhongController.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA/wCQAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T04:45:01.768Z"
+              "WhenOpened": "2026-10-17T07:51:27.277Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\LoaiPhong\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\Index.cshtml",
+              "RelativeToolTip": "Views\\LoaiPhong\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-17T07:51:32.163Z",
+              "EditorCaption": ""
             }
           ]
         }

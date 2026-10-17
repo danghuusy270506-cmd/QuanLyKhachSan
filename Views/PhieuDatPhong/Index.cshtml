@@ -3,96 +3,102 @@
 @{
     ViewData["Title"] = "Danh Sách Phiếu Đặt Phòng";
 }
+<link rel="stylesheet" href="~/css/PhieuDatPhong/Index.css" />
 
-<div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="fw-bold text-primary mb-0"><i class="bi bi-journal-bookmark-fill me-2"></i>Danh Sách Phiếu Đặt Phòng</h3>
-        <a asp-action="Create" class="btn btn-success fw-semibold">
-            <i class="bi bi-plus-lg me-1"></i> Tạo Phiếu Đặt Mới
-        </a>
+<div class="container-fluid py-3">
+    <!-- BỘ LỌC TÌM KIẾM -->
+    <div class="card card-custom mb-4">
+        <div class="card-body p-3">
+            <form asp-action="Index" method="get" id="filterForm" class="row g-3 align-items-center">
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Mã Phiếu</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-hash"></i></span>
+                        <input type="text" name="maPhieu" value="@ViewBag.maPhieu" class="form-control border-start-0" placeholder="VD: 32" />
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Tên Khách Hàng</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                        <input type="text" name="khachHang" value="@ViewBag.khachHang" class="form-control border-start-0" placeholder="Nhập tên..." />
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Loại Phòng</label>
+                    <select name="maLoaiPhong" class="form-select form-select-sm" asp-items="ViewBag.ListLoaiPhong">
+                        <option value="">-- Tất cả loại phòng --</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Trạng Thái</label>
+                    <select name="trangThai" class="form-select form-select-sm" asp-items="ViewBag.ListTrangThai">
+                        <option value="">-- Tất cả trạng thái --</option>
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Từ Ngày Đến</label>
+                    <input type="date" name="ngayDen" value="@ViewBag.ngayDen" class="form-control form-control-sm" />
+                </div>
+
+                <div class="col-xl-2 col-md-4">
+                    <label class="form-label small text-muted mb-1">Đến Ngày Đi</label>
+                    <input type="date" name="ngayDi" value="@ViewBag.ngayDi" class="form-control form-control-sm" />
+                </div>
+
+                <div class="col-12 d-flex justify-content-between align-items-center pt-2 border-top">
+                    <!-- Nút tạo phiếu mở Modal AJAX -->
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm rounded-2 btn-create-phieu" style="background-color: #1e293b; border: none;">
+                            <i class="bi bi-plus-lg me-1"></i> Tạo Phiếu Đặt Mới
+                        </button>
+                    </div>
+
+                    <!-- Nhóm nút Lọc & Làm mới -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-dark-filter btn-sm px-3 fw-semibold rounded-2">
+                            <i class="bi bi-funnel-fill me-1"></i> Lọc
+                        </button>
+                        <button type="button" id="btnResetFilter" class="btn btn-outline-secondary btn-sm px-3 fw-semibold rounded-2 bg-white">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="ps-3">Mã Phíếu</th>
-                            <th>Khách Hàng</th>
-                            <th>Loại Phòng</th>
-                            <th>Ngày Đặt</th>
-                            <th>Ngày Đến / Đi</th>
-                            <th>Số Người</th>
-                            <th>Tiền Cọc</th>
-                            <th>Trạng Thái</th>
-                            <th class="text-center">Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (!Model.Any())
-                        {
-                            <tr>
-                                <td colspan="9" class="text-center py-4 text-muted">Chưa có phiếu đặt phòng nào trong hệ thống.</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td class="ps-3 fw-bold">#@item.MaPhieu</td>
-                                    <td class="fw-semibold text-dark">@(item.KhachHang?.HoTen ?? "N/A")</td>
-                                    <td>
-                                        <span class="badge bg-info text-dark">@(item.LoaiPhong?.TenLoaiPhong ?? "Chưa xếp")</span>
-                                    </td>
-                                    <td>@item.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td>
-                                        <small class="d-block text-success">Đến: @item.NgayDen.ToString("dd/MM/yyyy")</small>
-                                        <small class="d-block text-danger">Đi: @item.NgayDi.ToString("dd/MM/yyyy")</small>
-                                    </td>
-                                    <td class="text-center">@item.SoNguoi</td>
-                                    <td class="fw-bold text-primary">@item.TienCoc.ToString("N0") VNĐ</td>
-                                    <td>
-                                        @if (item.TrangThai == "Chờ xác nhận")
-                                        {
-                                            <span class="badge bg-warning text-dark">Chờ xác nhận</span>
-                                        }
-                                        else if (item.TrangThai == "Đã xác nhận")
-                                        {
-                                            <span class="badge bg-success">Đã xác nhận</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">@item.TrangThai</span>
-                                        }
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a asp-action="Details" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-info" title="Chi tiết"><i class="bi bi-eye"></i> Xem</a>
-                                            <a asp-action="Edit" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-warning" title="Sửa"><i class="bi bi-pencil"></i> Sửa</a>
-                                            <a asp-action="Delete" asp-route-maphieu="@item.MaPhieu" class="btn btn-outline-danger" title="Xóa"><i class="bi bi-trash"></i> Xóa</a>
-                                            @if (item.TrangThai == "Đã xác nhận")
-                                            {
-                                                <a asp-controller="ChiTietXepPhong" asp-action="XepPhong" asp-route-maPhieu="@item.MaPhieu" class="btn btn-success btn-sm"> Check-in</a>
-                                            }
-                                            @if (item.TrangThai == "Đang ở")
-                                            {
-                                                <form asp-controller="ChiTietXepPhong" asp-action="CheckOut" method="post" style="display:inline">
-                                                    @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="maPhieu" value="@item.MaPhieu" />
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn check-out phiếu này không?')"> Check-out
-                                                    </button>
-                                                </form>
-                                            }
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+    <!-- Gọi Partial View + Ajax -->
+    <div id="phieuDatPhongContainer">
+        <partial name="_PhieuDatPhongPartial" model="Model" />
+    </div>
+</div>
+
+<!-- ===== MODAL DÙNG CHUNG CHO TOÀN BỘ CHỨC NĂNG (TẠO / SỬA / XÓA / CHI TIẾT) ===== -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="detailModalContent">
+            <!-- Nội dung Partial được nhét động vào đây -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xếp phòng / Check-in -->
+<div class="modal fade" id="xepPhongModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-0" id="xepPhongModalBody">
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/PhieuDatPhong/Index.js" asp-append-version="true"></script>
+    <script src="~/js/ChiTietXepPhong/XepPhong.js" asp-append-version="true"></script>
+    <script src="~/js/HoaDon/Create.js" asp-append-version="true"></script>
+}

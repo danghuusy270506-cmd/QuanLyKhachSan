@@ -1,42 +1,27 @@
 @model QuanLyKhachSan.Models.Entities.DichVu
-
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Xóa dịch vụ";
 }
-
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>QuanLyKhachSan.Models.Entities.DichVu</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenDichVu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenDichVu)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChiTietXepPhong_DichVus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChiTietXepPhong_DichVus)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MaDichVu" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<div class="container-fluid py-3">
+    <div class="mb-4">
+        <a asp-action="Index" class="text-decoration-none small"><i class="bi bi-arrow-left me-1"></i> Quay lại danh sách</a>
+        <h1 class="h3 fw-bold mt-2 mb-1">Xác nhận xóa dịch vụ</h1>
+        <p class="text-muted mb-0">Bạn đang chuẩn bị xóa dịch vụ khỏi danh mục.</p>
+    </div>
+    <div class="card border-0 shadow-sm" style="max-width: 760px; border-radius: 14px;">
+        <div class="card-body p-4">
+            <div class="alert alert-warning"><i class="bi bi-exclamation-triangle me-2"></i>Nếu dịch vụ đã được sử dụng trong lượt lưu trú, hệ thống sẽ không cho xóa để bảo toàn lịch sử.</div>
+            <dl class="row mb-4">
+                <dt class="col-sm-3">Mã dịch vụ</dt><dd class="col-sm-9">@Model.MaDichVu</dd>
+                <dt class="col-sm-3">Tên dịch vụ</dt><dd class="col-sm-9 fw-semibold">@Model.TenDichVu</dd>
+                <dt class="col-sm-3">Mô tả</dt><dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả" : Model.MoTa)</dd>
+                <dt class="col-sm-3">Đơn giá</dt><dd class="col-sm-9">@Model.DonGia.ToString("N0") đ</dd>
+            </dl>
+            <form asp-action="Delete" asp-route-madichvu="@Model.MaDichVu" method="post">
+                <input type="hidden" name="madichvu" value="@Model.MaDichVu" />
+                <button type="submit" class="btn btn-danger"><i class="bi bi-trash3 me-1"></i> Xác nhận xóa</button>
+                <a asp-action="Index" class="btn btn-outline-secondary ms-1">Hủy</a>
+            </form>
+        </div>
+    </div>
 </div>

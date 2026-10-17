@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +8,6 @@ namespace QuanLyKhachSan.Models.Entities
     public class HoaDon
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string MaHoaDon { get; set; }
         
         public int TongTien { get; set; }

@@ -49,16 +49,25 @@ namespace QuanLyKhachSan.Controllers
         public async Task<IActionResult> Create(int maPhieu)
         {
             var phieu = await LayPhieu(maPhieu);
-            if (phieu == null) return NotFound();
+            if (phieu == null)
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-danger'>Không tìm thấy phiếu đặt phòng.</div>");
+                return NotFound();
+            }
 
             if (await context.HoaDons.AnyAsync(hd => hd.MaPhieu == maPhieu))
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Phiếu này đã có hóa đơn.</div>");
                 TempData["ThongBao"] = "Phiếu này đã có hóa đơn.";
                 return RedirectToAction(nameof(Index));
             }
 
             if (!phieu.ChiTietXepPhongs.Any())
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Phiếu chưa được xếp phòng.</div>");
                 TempData["ThongBao"] = "Phiếu chưa được xếp phòng.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
@@ -66,6 +75,8 @@ namespace QuanLyKhachSan.Controllers
             if (phieu.ChiTietXepPhongs.Any(ct =>
                 ct.NgayNhanPhongThucTe == null || ct.NgayTra == null))
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Vui lòng check-out tất cả phòng trước khi lập hóa đơn.</div>");
                 TempData["ThongBao"] = "Vui lòng check-out tất cả phòng trước khi lập hóa đơn.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
@@ -79,6 +90,10 @@ namespace QuanLyKhachSan.Controllers
             ViewBag.TienCoc = phieu.TienCoc;
             ViewBag.TongTien = Math.Max(0, tienPhong + tienDichVu - phieu.TienCoc);
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("Create");
+            }
             return View();
         }
 
@@ -136,6 +151,11 @@ namespace QuanLyKhachSan.Controllers
 
             context.HoaDons.Add(hoaDon);
             await context.SaveChangesAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = "Tạo hóa đơn thành công." });
+            }
 
             TempData["ThongBao"] = "Tạo hóa đơn thành công.";
             return RedirectToAction(nameof(Index));
@@ -253,6 +273,11 @@ namespace QuanLyKhachSan.Controllers
                 ViewBag.TienDichVu = TinhTienDichVu(hoaDon.PhieuDatPhong);
             }
 
+            if(Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+                return PartialView("_ChiTietHoaDonPartial", hoaDon);
+            }
+
             return View("ChiTietHoaDon", hoaDon);
         }
 
@@ -263,6 +288,11 @@ namespace QuanLyKhachSan.Controllers
             var hoaDon = await context.HoaDons.FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
 
             if (hoaDon == null) return NotFound();
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_XoaHoaDonPartial", hoaDon);
+            }
+
             return View(hoaDon);
         }
 
@@ -291,7 +321,10 @@ namespace QuanLyKhachSan.Controllers
                          .ThenInclude(ct => ct.Phong)
                          .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
 
-            if (hoaDon == null) return NotFound();
+            if (hoaDon == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy hóa đơn." });
+            }
 
             if (hoaDon.TrangThai != "DaThanhToan")
             {
@@ -312,9 +345,7 @@ namespace QuanLyKhachSan.Controllers
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToAction(
-                nameof(ChiTietHoaDon),
-                new { maHoaDon = hoaDon.MaHoaDon });
+            return Json(new { success = true, message = "Xác nhận thanh toán thành công!" });
         }
     }
 }

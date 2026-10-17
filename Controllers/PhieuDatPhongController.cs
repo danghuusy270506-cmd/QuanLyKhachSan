@@ -18,15 +18,76 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
-        // 1. DSN PHIẾU ĐẶT PHÒNG (Nối bảng lấy thông tin Tên Khách, Loại Phòng)
-        public async Task<IActionResult> Index()
+        // 1. DS PHIẾU ĐẶT PHÒNG
+        public async Task<IActionResult> Index(int? page, string maPhieu, string khachHang, string trangThai, int? maLoaiPhong, DateTime? ngayDen, DateTime? ngayDi)
         {
-            var dsPhieu = _context.PhieuDatPhongs
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+            var query = _context.PhieuDatPhongs
                 .Include(p => p.KhachHang)
                 .Include(p => p.LoaiPhong)
-                .Include(p => p.NhanVien);
+                .Include(p => p.NhanVien)
+                .AsQueryable();
 
-            return View(await dsPhieu.ToListAsync());
+            //Lọc && Tìm kiếm
+            if (!string.IsNullOrEmpty(maPhieu))
+            {
+                string ma = maPhieu.Replace("#", "").Trim();
+                if(int.TryParse(ma, out int maPhieuDatPhong))
+                {
+                    query = query.Where(p => p.MaPhieu == maPhieuDatPhong);
+                }
+            }
+            if (!string.IsNullOrEmpty(khachHang))
+            {
+                string keyWord = khachHang.Trim().ToLower();
+                query = query.Where(p => p.KhachHang != null && p.KhachHang.HoTen.ToLower().Contains(keyWord));
+            }
+            if (!string.IsNullOrEmpty(trangThai))
+            {
+                query = query.Where(p => p.TrangThai == trangThai);
+            }
+            if(maLoaiPhong.HasValue && maLoaiPhong.Value > 0)
+            {
+                query = query.Where(p => p.MaLoaiPhong == maLoaiPhong.Value);
+            }
+            if (ngayDen.HasValue)
+            {
+                query = query.Where(p => p.NgayDen.Date >= ngayDen.Value.Date);
+            }
+            if (ngayDi.HasValue)
+            {
+                query = query.Where(p => p.NgayDi.Date <= ngayDi.Value.Date);
+            }
+
+            query = query.OrderByDescending(p => p.MaPhieu);
+            //Tổng số lượng phiếu đặt phòng để tính số trang
+            int soLuongPhieu = await query.CountAsync();
+            int tongSoTrang = (int)Math.Ceiling(soLuongPhieu / (double)pageSize);
+            // Lấy dữ liệu của trang hiện tại
+            var dsPhieu = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            // Truyền thông tin phân trang sang View
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.TotalPages = tongSoTrang;
+
+            ViewBag.maPhieu = maPhieu;
+            ViewBag.khachHang = khachHang;
+            ViewBag.trangThai = trangThai;
+            ViewBag.maLoaiPhong = maLoaiPhong;
+            ViewBag.ngayDen = ngayDen?.ToString("yyyy-MM-dd");
+            ViewBag.ngayDi = ngayDi?.ToString("yyyy-MM-dd");
+            ViewData["ListLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", maLoaiPhong);
+            ViewData["ListTrangThai"] = new SelectList(new List<string>
+            {
+                "Chờ xác nhận", "Đã xác nhận", "Đang ở", "Hoàn thành", "Đã hủy"
+            }, trangThai);
+
+            //Ajax
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_PhieuDatPhongPartial", dsPhieu);
+            }
+            return View(dsPhieu);
         }
 
         // 2. CHI TIẾT PHIẾU ĐẶT PHÒNG
@@ -42,7 +103,7 @@ namespace QuanLyKhachSan.Controllers
 
             if (phieudatphong == null) return NotFound();
 
-            return View(phieudatphong);
+            return PartialView("_DetailsPartial", phieudatphong);
         }
 
         // 3. GIAO DIỆN ĐẶT PHÒNG (GET: Create)
@@ -52,23 +113,36 @@ namespace QuanLyKhachSan.Controllers
             int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
             if (maKhachHang == null)
             {
+                // Trả về một PartialView thông báo lỗi hoặc JSON có cấu trúc để JS xử lý thông báo
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Content("<div class='modal-header bg-danger text-white'><h5 class='modal-title'>Thông báo</h5><button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal'></button></div><div class='modal-body p-4 text-center'><h6>Vui lòng đăng nhập tài khoản khách hàng để thực hiện đặt phòng!</h6></div>", "text/html");
+                }
                 return RedirectToAction("Authentication", "DangNhap");
             }
-
-            // Nạp danh sách Loại phòng ra DropDownList
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong");
-            return View();
+
+            var phieuMoi = new PhieuDatPhong();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", phieuMoi);
+            }
+            return View(phieuMoi);
         }
 
         // 4. XỬ LÝ ĐẶT PHÒNG (POST: Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // ĐÃ SỬA: Bỏ các navigation properties khỏi [Bind] để không bị lỗi ModelState.IsValid
         public async Task<IActionResult> Create([Bind("NgayDen,NgayDi,TienCoc,SoNguoi,MaLoaiPhong")] PhieuDatPhong phieudatphong)
         {
             int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
             if (maKhachHang == null)
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = "Phiên đăng nhập đã hết hạn." });
+                }
                 return RedirectToAction("Authentication", "DangNhap");
             }
 
@@ -87,10 +161,21 @@ namespace QuanLyKhachSan.Controllers
             {
                 _context.Add(phieudatphong);
                 await _context.SaveChangesAsync();
+
+                // Nếu là AJAX gửi lên, trả về JSON thành công để JS đóng modal và load lại bảng
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true });
+                }
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phieudatphong.MaLoaiPhong);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", phieudatphong);
+            }
             return View(phieudatphong);
         }
 
@@ -99,12 +184,12 @@ namespace QuanLyKhachSan.Controllers
         {
             if (maphieu == null) return NotFound();
 
-            var phieudatphong = await _context.PhieuDatPhongs.FindAsync(maphieu);
-            if (phieudatphong == null) return NotFound();
+            var phieuDatPhong = await _context.PhieuDatPhongs.FindAsync(maphieu);
+            if (phieuDatPhong == null) return NotFound();
 
-            ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen", phieudatphong.MaKhachHang);
-            ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phieudatphong.MaLoaiPhong);
-            return View(phieudatphong);
+            ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen", phieuDatPhong.MaKhachHang);
+            ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phieuDatPhong.MaLoaiPhong);
+            return PartialView("_EditPartial", phieuDatPhong);
         }
 
         // 6. XỬ LÝ SỬA PHIẾU (POST: Edit)
@@ -118,20 +203,39 @@ namespace QuanLyKhachSan.Controllers
             {
                 try
                 {
-                    _context.Update(phieudatphong);
+                    var existingPhieu = await _context.PhieuDatPhongs
+                    .Include(p => p.KhachHang)
+                    .Include(p => p.LoaiPhong)
+                    .Include(p => p.NhanVien)
+                    .FirstOrDefaultAsync(p => p.MaPhieu == maphieu);
+
+                    if (existingPhieu == null) return NotFound();
+
+                    // Cập nhật các trường dữ liệu mới từ form
+                    existingPhieu.MaKhachHang = phieudatphong.MaKhachHang;
+                    existingPhieu.MaLoaiPhong = phieudatphong.MaLoaiPhong;
+                    existingPhieu.NgayDen = phieudatphong.NgayDen;
+                    existingPhieu.NgayDi = phieudatphong.NgayDi;
+                    existingPhieu.SoNguoi = phieudatphong.SoNguoi;
+                    existingPhieu.TienCoc = phieudatphong.TienCoc;
+                    existingPhieu.TrangThai = phieudatphong.TrangThai;
+
+                    _context.Update(existingPhieu);
                     await _context.SaveChangesAsync();
+
+                    // Trả về JSON báo thành công để JavaScript đóng modal và load lại bảng
+                    return Json(new { success = true });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!PhieuDatPhongExists(phieudatphong.MaPhieu)) return NotFound();
                     else throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen", phieudatphong.MaKhachHang);
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phieudatphong.MaLoaiPhong);
-            return View(phieudatphong);
+            return PartialView("_EditPartial", phieudatphong);
         }
 
         // 7. GIAO DIỆN XÓA PHIẾU (GET: Delete)
@@ -146,7 +250,7 @@ namespace QuanLyKhachSan.Controllers
 
             if (phieudatphong == null) return NotFound();
 
-            return View(phieudatphong);
+            return PartialView("_DeletePartial", phieudatphong);
         }
 
         // 8. XỬ LÝ XÓA PHIẾU (POST: Delete)
@@ -159,14 +263,33 @@ namespace QuanLyKhachSan.Controllers
             {
                 _context.PhieuDatPhongs.Remove(phieudatphong);
                 await _context.SaveChangesAsync();
+                return Json(new { success = true });
             }
 
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng để xóa." });
         }
 
         private bool PhieuDatPhongExists(int maphieu)
         {
             return _context.PhieuDatPhongs.Any(e => e.MaPhieu == maphieu);
+        }
+
+        // XỬ LÝ ĐỔI TRẠNG THÁI SANG "ĐÃ XÁC NHẬN"
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XacNhan(int maphieu)
+        {
+            var phieu = await _context.PhieuDatPhongs.FindAsync(maphieu);
+            if (phieu == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng." });
+            }
+
+            phieu.TrangThai = "Đã xác nhận";
+            _context.Update(phieu);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
         }
     }
 }

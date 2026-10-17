@@ -1,0 +1,85 @@
+﻿
+#detailModal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+}
+
+/* Header tối màu sang trọng đồng bộ */
+#detailModal .edit-modal-header {
+    background: linear-gradient(135deg, #212529, #343a40);
+    color: #ffffff;
+    padding: 18px 24px;
+    border-bottom: none;
+}
+
+    #detailModal .edit-modal-header .modal-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+/* Định dạng form bên trong */
+.form-label {
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    border-color: #cbd5e1;
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    }
+
+/* Phần chân trang (Footer) */
+#detailModal .modal-footer {
+    padding: 16px 24px;
+    background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Nút Đóng kiểu pill */
+.btn-close-pill {
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: transparent;
+    transition: all 0.2s;
+}
+
+    .btn-close-pill:hover {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        border-color: #94a3b8;
+    }
+
+/* Nút Lưu thay đổi màu vàng đồng bộ tuyệt đối */
+.btn-edit-modern {
+    background-color: #ffc107;
+    color: #000000;
+    border: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 9px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    transition: all 0.2s;
+}
+
+    .btn-edit-modern:hover {
+        background-color: #e0a800;
+        color: #000000;
+        box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+        transform: translateY(-1px);
+    }

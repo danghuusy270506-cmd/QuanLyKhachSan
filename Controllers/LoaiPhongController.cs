@@ -21,9 +21,27 @@ namespace QuanLyKhachSan.Controllers
         }
 
         // 1. DANH SÁCH LOẠI PHÒNG
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
-            return View(await _context.LoaiPhongs.ToListAsync());
+            var query = _context.LoaiPhongs.AsQueryable();
+
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var dsLoaiPhong = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_LoaiPhongPartial", dsLoaiPhong);
+            }
+
+            return View(dsLoaiPhong);
         }
 
         // 2. CHI TIẾT LOẠI PHÒNG

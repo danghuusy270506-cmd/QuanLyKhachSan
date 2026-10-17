@@ -1,0 +1,86 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.LoaiPhong>
+
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark" style="background-color: #1a202c;">
+                    <tr>
+                        <th class="ps-3" style="width: 100px;">Hình Ảnh</th>
+                        <th>Tên Loại Phòng</th>
+                        <th>Giá Phòng / Đêm</th>
+                        <th>Sức Chứa</th>
+                        <th>Mô Tả</th>
+                        <th class="text-center" style="width: 200px;">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Chưa có loại phòng nào trong hệ thống.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3">
+                                    @if (!string.IsNullOrEmpty(item.Anh))
+                                    {
+                                        <img src="@item.Anh" alt="@item.TenLoaiPhong" class="rounded border shadow-sm" style="width: 70px; height: 50px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light text-muted border rounded d-flex align-items-center justify-content-center" style="width: 70px; height: 50px; font-size: 11px;">
+                                            Không ảnh
+                                        </div>
+                                    }
+                                </td>
+                                <td class="fw-bold text-dark">@item.TenLoaiPhong</td>
+                                <td class="fw-bold text-primary">@item.GiaPhong.ToString("N0") VNĐ</td>
+                                <td>
+                                    <span class="badge bg-info text-dark"><i class="bi bi-person-fill"></i> @item.SucChua người</span>
+                                </td>
+                                <td class="text-muted small" style="max-width: 250px;">
+                                    @(string.IsNullOrEmpty(item.MoTa) ? "Chưa có mô tả" : (item.MoTa.Length > 60 ? item.MoTa.Substring(0, 60) + "..." : item.MoTa))
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-maloaiphong="@item.MaLoaiPhong" class="btn btn-outline-info" title="Xem chi tiết"><i class="bi bi-eye"></i> Xem</a>
+                                        <a asp-action="Edit" asp-route-maloaiphong="@item.MaLoaiPhong" class="btn btn-outline-warning" title="Sửa"><i class="bi bi-pencil"></i> Sửa</a>
+                                        <a asp-action="Delete" asp-route-maloaiphong="@item.MaLoaiPhong" class="btn btn-outline-danger" title="Xóa"><i class="bi bi-trash"></i> Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Thanh phân trang căn giữa -->
+@if (ViewBag.TotalPages > 1)
+{
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination custom-pagination mb-0">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link loaiphong-page-link" href="#" data-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link loaiphong-page-link" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link loaiphong-page-link" href="#" data-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}

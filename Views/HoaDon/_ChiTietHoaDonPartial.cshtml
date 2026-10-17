@@ -1,0 +1,96 @@
+﻿@model QuanLyKhachSan.Models.Entities.HoaDon
+
+<div class="modal-header bg-dark text-white">
+    <h5 class="modal-title" id="chiTietHoaDonModalLabel">Chi tiết hóa đơn: @Model.MaHoaDon</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle mb-0">
+            <tbody>
+                <tr>
+                    <th class="table-light" style="width: 35%;">Mã hóa đơn</th>
+                    <td>@Model.MaHoaDon</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Mã phiếu đặt phòng</th>
+                    <td>@Model.MaPhieu</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Tiền phòng</th>
+                    <td>@(((int)(ViewBag.TienPhong ?? 0)).ToString("N0")) VNĐ</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Tiền dịch vụ</th>
+                    <td>@(((int)(ViewBag.TienDichVu ?? 0)).ToString("N0")) VNĐ</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Tiền cọc</th>
+                    <td>@Model.TienCoc.ToString("N0") VNĐ</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Giảm giá</th>
+                    <td>@Model.GiamGia.ToString("N0") VNĐ</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Tổng tiền thanh toán</th>
+                    <td><strong>@Model.TongTien.ToString("N0") VNĐ</strong></td>
+                </tr>
+                <tr>
+                    <th class="table-light">Kiểu thanh toán</th>
+                    <td>@(string.IsNullOrEmpty(Model.KieuThanhToan) ? "Chưa xác định" : Model.KieuThanhToan)</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Thời gian thanh toán</th>
+                    <td>
+                        @if (Model.ThoiGianThanhToan == DateTime.MinValue)
+                        {
+                            <span class="text-muted">Chưa thanh toán</span>
+                        }
+                        else
+                        {
+                            @Model.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="table-light">Trạng thái thanh toán</th>
+                    <td>
+                        @if (Model.TrangThai == "DaThanhToan")
+                        {
+                            <span class="badge bg-success">Đã thanh toán</span>
+                        }
+                        else if (Model.TrangThai == "DaHoanTien")
+                        {
+                            <span class="badge bg-warning text-dark">Đã hoàn tiền</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Chưa thanh toán</span>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer d-flex justify-content-between align-items-center bg-light px-4 py-3 border-top">
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i> Đóng
+    </button>
+
+    <div id="modal-footer-actions">
+        @if (Model.TrangThai == "ChuaThanhToan")
+        {
+            <button type="button" class="btn btn-success px-4 py-2 fw-semibold rounded-pill shadow-sm d-inline-flex align-items-center gap-2 btn-xac-nhan-tien btn-xac-nhan-modal" data-id="@Model.MaHoaDon">
+                <i class="bi bi-check-circle-fill fs-5"></i> Xác nhận đã nhận tiền
+            </button>
+        }
+        else
+        {
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-semibold rounded-pill d-inline-flex align-items-center gap-1.5" style="font-size: 13.5px;">
+                <i class="bi bi-check-circle-fill text-success"></i> Thanh toán thành công
+            </span>
+        }
+    </div>
+</div>

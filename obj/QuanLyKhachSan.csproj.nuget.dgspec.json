@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\QuanLyKhachSan.csproj": {}
+    "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\QuanLyKhachSan.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\QuanLyKhachSan.csproj": {
+    "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\QuanLyKhachSan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\QuanLyKhachSan.csproj",
+        "projectUniqueName": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\QuanLyKhachSan.csproj",
         "projectName": "QuanLyKhachSan",
-        "projectPath": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\QuanLyKhachSan.csproj",
+        "projectPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\QuanLyKhachSan.csproj",
         "packagesPath": "C:\\Users\\Huung\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Huung\\Downloads\\QuanLyKhachSan-sybranch\\QuanLyKhachSan-sybranch\\obj\\",
+        "outputPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -87,6 +87,10 @@
             "NUnit3TestAdapter": {
               "target": "Package",
               "version": "[6.3.1, )"
+            },
+            "System.Security.Cryptography.Pkcs": {
+              "target": "Package",
+              "version": "[10.0.13, )"
             }
           },
           "imports": [

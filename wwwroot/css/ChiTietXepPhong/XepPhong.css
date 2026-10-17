@@ -1,0 +1,35 @@
+﻿
+.modal-header.bg-primary {
+    background-color: #2563eb !important;
+    color: #ffffff;
+}
+
+.modal-content {
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0.05, 0.1, 0.15);
+    border: none;
+}
+
+/* Thông tin chi tiết bên trong modal */
+.booking-info-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Hiệu ứng loading khi gọi Ajax */
+.ajax-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border-radius: 0.75rem;
+}

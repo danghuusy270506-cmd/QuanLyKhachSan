@@ -1,0 +1,105 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.Phong>
+
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Số Phòng</th>
+                        <th>Tầng</th>
+                        <th>Loại Phòng</th>
+                        <th>Giá Phòng</th>
+                        <th>Trạng Thái</th>
+                        <th class="text-center" style="width: 280px;">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Không tìm thấy phòng phù hợp.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">Phòng @item.SoPhong</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border px-2 py-1">Tầng @item.Tang</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-loai-phong">
+                                        @(item.LoaiPhong?.TenLoaiPhong ?? "N/A")
+                                    </span>
+                                </td>
+                                <td class="fw-bold text-danger">
+                                    @(item.LoaiPhong != null ? item.LoaiPhong.GiaPhong.ToString("N0") + " đ" : "N/A")
+                                </td>
+                                <td>
+                                    @if (item.TrangThai == "Trống")
+                                    {
+                                        <span class="badge bg-success px-2 py-1">Trống</span>
+                                    }
+                                    else if (item.TrangThai == "Đang sử dụng" || item.TrangThai == "Đang ở")
+                                    {
+                                        <span class="badge bg-secondary px-2 py-1">Đang ở</span>
+                                    }
+                                    else if (item.TrangThai == "Bảo trì")
+                                    {
+                                        <span class="badge bg-warning text-dark px-2 py-1">Bảo trì</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info text-dark px-2 py-1">@item.TrangThai</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-inline-flex gap-1">
+                                        <!-- Nút Chi Tiết -->
+                                        <a href="javascript:void(0);" class="btn-action btn-action-view btn-view-details" data-id="@item.MaPhong" title="Xem chi tiết">
+                                            <i class="bi bi-eye"></i> Chi tiết
+                                        </a>
+                                        <!-- Nút Sửa -->
+                                        <a href="javascript:void(0);" class="btn-action btn-action-edit btn-edit-phong" data-id="@item.MaPhong" title="Sửa">
+                                            <i class="bi bi-pencil"></i> Sửa
+                                        </a>
+                                        <!-- Nút Xóa -->
+                                        <a href="javascript:void(0);" class="btn-action btn-action-delete btn-delete-phong" data-id="@item.MaPhong" title="Xóa">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Phân trang căn giữa -->
+@if (ViewBag.TotalPages > 1)
+{
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination custom-pagination mb-0">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="#" data-page="@(ViewBag.CurrentPage - 1)">Trước</a>
+                </li>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="#" data-page="@(ViewBag.CurrentPage + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}

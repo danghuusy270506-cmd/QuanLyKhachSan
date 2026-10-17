@@ -16,10 +16,50 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string soPhong,string tenLoaiPhong, string trangThai, int page = 1, int pageSize=5)
         {
-            var dsPhong = _context.Phongs.Include(p => p.LoaiPhong);
-            return View(await dsPhong.ToListAsync());
+            var query = _context.Phongs.Include(p => p.LoaiPhong).AsQueryable();
+            // Lọc theo từ khóa
+            if (!string.IsNullOrEmpty(soPhong))
+            {
+                query = query.Where(p => p.SoPhong.Contains(soPhong));
+            }
+            // 2. Lọc theo Loại phòng
+            if (!string.IsNullOrEmpty(tenLoaiPhong) && tenLoaiPhong != "Tất cả")
+            {
+                query = query.Where(p => p.LoaiPhong != null && p.LoaiPhong.TenLoaiPhong.Contains(tenLoaiPhong));
+            }
+            // Lọc theo trạng thái
+            if (!string.IsNullOrEmpty(trangThai) && trangThai != "Tất cả")
+            {
+                query = query.Where(p => p.TrangThai == trangThai);
+            }
+            // Tổng số bản ghi phục vụ phân trang
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            // Lấy dữ liệu phân trang
+            var dsPhong = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            // Truyền dữ liệu phân trang qua ViewBag để sử dụng ở View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.soPhong = soPhong;
+            ViewBag.tenLoaiPhong = tenLoaiPhong;
+            ViewBag.TrangThai = trangThai;
+
+            // Lấy danh sách tên loại phòng duy nhất từ CSDL cho Dropdown
+            ViewBag.DanhSachLoaiPhong = await _context.LoaiPhongs
+                .Select(l => l.TenLoaiPhong)
+                .Distinct()
+                .ToListAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_PhongPartial", dsPhong);
+            }
+
+            return View(dsPhong);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -31,6 +71,11 @@ namespace QuanLyKhachSan.Controllers
                 .FirstOrDefaultAsync(m => m.MaPhong == id);
 
             if (phong == null) return NotFound();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DetailsPartial", phong);
+            }
 
             return View(phong);
         }
@@ -63,6 +108,10 @@ namespace QuanLyKhachSan.Controllers
             if (phong == null) return NotFound();
 
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phong.MaLoaiPhong);
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", phong);
+            }
             return View(phong);
         }
 
@@ -71,13 +120,17 @@ namespace QuanLyKhachSan.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("MaPhong,SoPhong,Tang,TrangThai,MaLoaiPhong")] Phong phong)
         {
             if (id != phong.MaPhong) return NotFound();
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(phong);
                     await _context.SaveChangesAsync();
+
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = true});
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -86,7 +139,14 @@ namespace QuanLyKhachSan.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phong.MaLoaiPhong);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", phong);
+            }
+
             return View(phong);
         }
 
@@ -100,6 +160,11 @@ namespace QuanLyKhachSan.Controllers
 
             if (phong == null) return NotFound();
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DeletePartial", phong);
+            }
+
             return View(phong);
         }
 
@@ -112,6 +177,10 @@ namespace QuanLyKhachSan.Controllers
             {
                 _context.Phongs.Remove(phong);
                 await _context.SaveChangesAsync();
+            }
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true });
             }
             return RedirectToAction(nameof(Index));
         }

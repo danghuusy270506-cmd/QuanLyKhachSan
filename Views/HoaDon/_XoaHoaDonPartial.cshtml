@@ -1,0 +1,40 @@
+﻿@model QuanLyKhachSan.Models.Entities.HoaDon
+
+<div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">Xác nhận xóa hóa đơn</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form id="formXoaHoaDon" asp-controller="HoaDon" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="maHoaDon" value="@Model.MaHoaDon" />
+
+    <div class="modal-body">
+        <div class="alert alert-warning mb-3" role="alert">
+            <strong>Cảnh báo!</strong> Bạn có chắc chắn muốn xóa hóa đơn này không?
+        </div>
+        <table class="table table-bordered align-middle mb-0">
+            <tbody>
+                <tr>
+                    <th class="table-light" style="width: 35%;">Mã hóa đơn</th>
+                    <td>@Model.MaHoaDon</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Mã phiếu đặt phòng</th>
+                    <td>@Model.MaPhieu</td>
+                </tr>
+                <tr>
+                    <th class="table-light">Tổng tiền</th>
+                    <td class="text-danger">
+                        <strong>@Model.TongTien.ToString("N0") VNĐ</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-danger btn-sm">Xác nhận xóa</button>
+    </div>
+</form>

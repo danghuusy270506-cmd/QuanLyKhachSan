@@ -1,0 +1,34 @@
+﻿<!-- ===== FILE: _DeletePartial.cshtml ===== -->
+@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+<link rel="stylesheet" href="~/css/PhieuDatPhong/Delete.css" />
+
+<div class="modal-header bg-dark text-white border-bottom border-secondary px-4 py-3">
+    <h5 class="modal-title fw-bold text-white d-flex align-items-center mb-0">
+        <i class="bi bi-trash-fill text-danger me-2 fs-4"></i> Xác nhận xóa phiếu đặt: <span class="text-danger ms-1">#@Model.MaPhieu</span>
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body p-4 bg-white text-dark rounded-bottom-4">
+    <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger rounded-3 mb-4 p-3 d-flex align-items-center">
+        <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+        <div><strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa phiếu đặt phòng này? Thao tác này không thể khôi phục!</div>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Khách Hàng</label><div class="form-control bg-light text-dark border shadow-sm py-2">@(Model.KhachHang?.HoTen ?? "N/A")</div></div>
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Loại Phòng</label><div class="form-control bg-light text-dark border shadow-sm py-2">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</div></div>
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Ngày Đến</label><div class="form-control bg-light text-dark border shadow-sm py-2">@Model.NgayDen.ToString("dd/MM/yyyy")</div></div>
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Ngày Đi</label><div class="form-control bg-light text-dark border shadow-sm py-2">@Model.NgayDi.ToString("dd/MM/yyyy")</div></div>
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Số Người</label><div class="form-control bg-light text-dark border shadow-sm py-2">@Model.SoNguoi</div></div>
+        <div class="col-md-6"><label class="form-label small text-muted mb-1">Tiền Cọc (VNĐ)</label><div class="form-control bg-light text-dark border shadow-sm py-2">@Model.TienCoc.ToString("N0")</div></div>
+        <div class="col-12"><label class="form-label small text-muted mb-1">Trạng Thái</label><div class="form-control bg-light text-dark border shadow-sm py-2"><span class="badge bg-secondary">@Model.TrangThai</span></div></div>
+    </div>
+    <form asp-action="Delete" id="deletePhieuForm" class="mt-4">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="maphieu" value="@Model.MaPhieu" />
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i> Đóng</button>
+            <button type="submit" class="btn btn-danger px-4 rounded-pill fw-semibold shadow-sm"><i class="bi bi-trash-fill me-1"></i> Xác Nhận Xóa</button>
+        </div>
+    </form>
+</div>

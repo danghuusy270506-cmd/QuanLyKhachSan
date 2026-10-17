@@ -493,3 +493,242 @@ body {
 }
 
 
+
+
+/* ===== Giao dien sidebar icon-only, mo rong khi hover/focus ===== */
+.topbar {
+    color: #fff;
+    background: #111827;
+    border-bottom-color: #1f2937;
+}
+
+.breadcrumb-caption {
+    color: #9ca3af;
+}
+
+.breadcrumb-title h1 {
+    color: #fff;
+}
+
+.today-label {
+    color: #d1d5db;
+}
+
+.today-label i {
+    color: #cbd5e1;
+}
+
+.user-avatar {
+    background: #374151;
+    color: #fff;
+}
+
+.icon-button {
+    border-color: #374151;
+    background: #1f2937;
+    color: #fff;
+}
+
+.icon-button:hover {
+    background: #374151;
+    color: #fff;
+}
+
+@media (min-width: 901px) {
+    .app-sidebar {
+        width: 76px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #111827;
+        box-shadow: 3px 0 16px rgba(15, 23, 42, .12);
+        transition: width .22s ease, box-shadow .22s ease;
+    }
+
+    .app-sidebar:hover,
+    .app-sidebar:focus-within {
+        width: 258px;
+        box-shadow: 8px 0 24px rgba(15, 23, 42, .18);
+    }
+
+    .brand {
+        justify-content: center;
+        gap: 12px;
+        min-width: 258px;
+        min-height: 78px;
+        padding: 16px;
+        background: #111827;
+        border-bottom-color: #263244;
+    }
+
+    .brand-icon {
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        background: #2563eb;
+    }
+
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span,
+    .sidebar-footer > span:last-child {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .12s ease;
+    }
+
+    .brand-text {
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .app-sidebar:hover .brand,
+    .app-sidebar:focus-within .brand {
+        justify-content: flex-start;
+        padding-left: 18px;
+    }
+
+    .app-sidebar:hover .brand-text,
+    .app-sidebar:focus-within .brand-text {
+        width: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-label {
+        display: block;
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .app-sidebar:hover .sidebar-label,
+    .app-sidebar:focus-within .sidebar-label {
+        height: auto;
+        padding: 20px 22px 8px;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-nav {
+        min-width: 258px;
+        padding: 10px 10px 18px;
+    }
+
+    .sidebar-link {
+        justify-content: flex-start;
+        gap: 14px;
+        min-width: 236px;
+        min-height: 46px;
+        margin: 4px 0;
+        padding: 10px 17px;
+        border-radius: 10px;
+        color: #cbd5e1;
+    }
+
+    .sidebar-link i {
+        flex: 0 0 22px;
+        width: 22px;
+        color: #cbd5e1;
+        font-size: 19px;
+    }
+
+    .sidebar-link span {
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    .app-sidebar:hover .sidebar-link span,
+    .app-sidebar:focus-within .sidebar-link span {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-link:hover {
+        background: #263244;
+        color: #fff;
+    }
+
+    .sidebar-link.active {
+        background: #2563eb;
+        color: #fff;
+        box-shadow: none;
+    }
+
+    .sidebar-footer {
+        display: flex;
+        justify-content: flex-start;
+        min-width: 230px;
+        margin: auto 14px 16px;
+        padding: 12px;
+        overflow: hidden;
+        border-color: #263244;
+        background: #1f2937;
+        white-space: nowrap;
+    }
+
+    .sidebar-footer-icon {
+        flex: 0 0 34px;
+    }
+
+    .app-sidebar:not(:hover):not(:focus-within) .sidebar-footer {
+        display: none;
+    }
+
+    .app-sidebar:hover .sidebar-footer > span:last-child,
+    .app-sidebar:focus-within .sidebar-footer > span:last-child {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .app-main {
+        margin-left: 76px;
+        transition: margin-left .22s ease;
+    }
+}
+
+/* Mobile: sidebar remains a full drawer opened by the menu button. */
+@media (max-width: 900px) {
+    .app-sidebar {
+        width: 258px;
+        background: #111827;
+    }
+
+    .brand {
+        justify-content: flex-start;
+    }
+
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span,
+    .sidebar-footer > span:last-child {
+        width: auto;
+        height: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sidebar-label {
+        padding: 22px 22px 9px;
+    }
+
+    .sidebar-link {
+        min-width: 0;
+    }
+
+    .topbar {
+        background: #111827;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-sidebar,
+    .app-main,
+    .brand-text,
+    .sidebar-label,
+    .sidebar-link span {
+        transition: none !important;
+    }
+}

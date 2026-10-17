@@ -28,49 +28,44 @@
 
             <div class="sidebar-label">MENU CHÍNH</div>
             <nav class="sidebar-nav" aria-label="Điều hướng chính">
-                <a class="sidebar-link @(isHome ? "active" : "")"
+                <a class="sidebar-link @(isHome ? "active" : "")" title="Tổng quan" aria-label="Tổng quan"
                    asp-controller="Home" asp-action="Index">
                     <i class="bi bi-grid-1x2"></i><span>Tổng quan</span>
                 </a>
 
                 <div class="sidebar-label">NGHIỆP VỤ</div>
 
-                <a class="sidebar-link @(controller == "PhieuDatPhong" ? "active" : "")"
+                <a class="sidebar-link @(controller == "PhieuDatPhong" ? "active" : "")" title="Phiếu đặt phòng" aria-label="Phiếu đặt phòng"
                    asp-controller="PhieuDatPhong" asp-action="Index">
                     <i class="bi bi-calendar-check"></i><span>Phiếu đặt phòng</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "ChiTietXepPhong" ? "active" : "")"
-                   asp-controller="ChiTietXepPhong" asp-action="Index">
-                    <i class="bi bi-door-open"></i><span>Xếp phòng / Check-in</span>
-                </a>
-
-                <a class="sidebar-link @(controller == "Phong" ? "active" : "")"
+                <a class="sidebar-link @(controller == "Phong" ? "active" : "")" title="Phòng" aria-label="Phòng"
                    asp-controller="Phong" asp-action="Index">
                     <i class="bi bi-hospital"></i><span>Phòng</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "LoaiPhong" ? "active" : "")"
+                <a class="sidebar-link @(controller == "LoaiPhong" ? "active" : "")" title="Loại phòng" aria-label="Loại phòng"
                    asp-controller="LoaiPhong" asp-action="Index">
                     <i class="bi bi-layers"></i><span>Loại phòng</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "KhachHang" ? "active" : "")"
+                <a class="sidebar-link @(controller == "KhachHang" ? "active" : "")" title="Khách hàng" aria-label="Khách hàng"
                    asp-controller="KhachHang" asp-action="Index">
                     <i class="bi bi-people"></i><span>Khách hàng</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "NhanVien" ? "active" : "")"
+                <a class="sidebar-link @(controller == "NhanVien" ? "active" : "")" title="Nhân viên" aria-label="Nhân viên"
                    asp-controller="NhanVien" asp-action="Index">
                     <i class="bi bi-person-badge"></i><span>Nhân viên</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "DichVu" ? "active" : "")"
+                <a class="sidebar-link @(controller == "DichVu" ? "active" : "")" title="Dịch vụ" aria-label="Dịch vụ"
                    asp-controller="DichVu" asp-action="Index">
                     <i class="bi bi-cup-hot"></i><span>Dịch vụ</span>
                 </a>
 
-                <a class="sidebar-link @(controller == "HoaDon" ? "active" : "")"
+                <a class="sidebar-link @(controller == "HoaDon" ? "active" : "")" title="Hóa đơn" aria-label="Hóa đơn"
                    asp-controller="HoaDon" asp-action="Index">
                     <i class="bi bi-receipt"></i><span>Hóa đơn</span>
                 </a>
@@ -117,31 +112,31 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        (() => {
-            const sidebar = document.getElementById("appSidebar");
-            const toggle = document.getElementById("menuToggle");
-            const backdrop = document.getElementById("sidebarBackdrop");
+            (() => {
+                const sidebar = document.getElementById("appSidebar");
+                const toggle = document.getElementById("menuToggle");
+                const backdrop = document.getElementById("sidebarBackdrop");
 
-            if (!sidebar || !toggle || !backdrop) return;
+                if (!sidebar || !toggle || !backdrop) return;
 
-            const closeSidebar = () => {
-                sidebar.classList.remove("sidebar-open");
-                backdrop.classList.remove("show");
-                document.body.classList.remove("sidebar-visible");
-            };
+                const closeSidebar = () => {
+                    sidebar.classList.remove("sidebar-open");
+                    backdrop.classList.remove("show");
+                    document.body.classList.remove("sidebar-visible");
+                };
 
-            toggle.addEventListener("click", () => {
-                const isOpen = sidebar.classList.toggle("sidebar-open");
-                backdrop.classList.toggle("show", isOpen);
-                document.body.classList.toggle("sidebar-visible", isOpen);
-            });
+                toggle.addEventListener("click", () => {
+                    const isOpen = sidebar.classList.toggle("sidebar-open");
+                    backdrop.classList.toggle("show", isOpen);
+                    document.body.classList.toggle("sidebar-visible", isOpen);
+                });
 
-            backdrop.addEventListener("click", closeSidebar);
+                backdrop.addEventListener("click", closeSidebar);
 
-            window.addEventListener("resize", () => {
-                if (window.innerWidth > 900) closeSidebar();
-            });
-        })();
+                window.addEventListener("resize", () => {
+                    if (window.innerWidth > 900) closeSidebar();
+                });
+            })();
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
