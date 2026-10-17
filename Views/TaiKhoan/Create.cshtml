@@ -1,0 +1,148 @@
+@model QuanLyKhachSan.Models.ViewModel.TaiKhoanKhachHang
+
+@{
+    bool isAdmin = ViewBag.IsAdmin ?? false;
+    ViewData["Title"] = isAdmin ? "Tạo tài khoản hệ thống" : "Tạo tài khoản Khách hàng";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        @(isAdmin ? "TẠO TÀI KHOẢN HỆ THỐNG (ADMIN)" : "TẠO TÀI KHOẢN KHÁCH HÀNG")
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <form asp-controller="TaiKhoan" asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Hiển thị lỗi tổng quan -->
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- KHỐI PHÂN QUYỀN VAI TRÒ (CHỈ HIỂN THỊ KHI LÀ ADMIN) -->
+                        @if (isAdmin)
+                        {
+                            <h6 class="text-danger text-uppercase border-bottom pb-2 mb-3 fw-bold">
+                                <i class="bi bi-shield-check me-1"></i> Phân quyền tài khoản
+                            </h6>
+
+                            <div class="mb-4 p-3 bg-light border rounded">
+                                <label asp-for="Role" class="form-label fw-bold text-danger">Chọn vai trò (Role) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="bi bi-person-badge text-danger"></i></span>
+                                    <select asp-for="Role" asp-items="@ViewBag.RoleList" class="form-select fw-bold text-dark"></select>
+                                </div>
+                                <span asp-validation-for="Role" class="text-danger small"></span>
+                            </div>
+                        }
+
+                        <!-- KHỐI 1: THÔNG TIN TÀI KHOẢN -->
+                        <h6 class="text-primary text-uppercase border-bottom pb-2 mb-3 fw-bold">
+                            <i class="bi bi-shield-lock me-1"></i> Thông tin đăng nhập
+                        </h6>
+
+                        <div class="mb-3">
+                            <label asp-for="Username" class="form-label fw-bold">Tên đăng nhập <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="Username" class="form-control" placeholder="Nhập tên đăng nhập..." />
+                            </div>
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Password" class="form-label fw-bold">Mật khẩu <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-key"></i></span>
+                                    <input asp-for="Password" class="form-control" placeholder="Nhập mật khẩu..." />
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label fw-bold">Xác nhận mật khẩu <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Xác nhận lại mật khẩu..." />
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- KHỐI 2: THÔNG TIN CÁ NHÂN -->
+                        <h6 class="text-primary text-uppercase border-bottom pb-2 mb-3 mt-4 fw-bold">
+                            <i class="bi bi-card-heading me-1"></i> Thông tin cá nhân khách hàng
+                        </h6>
+
+                        <div class="mb-3">
+                            <label asp-for="HoTen" class="form-label fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                            <input asp-for="HoTen" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" />
+                            <span asp-validation-for="HoTen" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Sdt" class="form-label fw-bold">Số điện thoại</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input asp-for="Sdt" class="form-control" placeholder="0901234567" />
+                                </div>
+                                <span asp-validation-for="Sdt" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Cccd" class="form-label fw-bold">Số CCCD / CMND</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                                    <input asp-for="Cccd" class="form-control" placeholder="Số căn cước..." />
+                                </div>
+                                <span asp-validation-for="Cccd" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold">Địa chỉ Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="example@gmail.com" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- NÚT THAO TÁC -->
+                        <div class="d-flex justify-content-between pt-2 border-top">
+                            @if (isAdmin)
+                            {
+                                <a asp-action="Indexx" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="DangNhap" asp-action="Authentication" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i> Trở về Đăng nhập
+                                </a>
+                            }
+
+                            <button type="submit" class="btn btn-primary px-4 fw-bold">
+                                <i class="bi bi-check-circle me-1"></i> Đăng Ký Tài Khoản
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

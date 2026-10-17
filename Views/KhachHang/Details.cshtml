@@ -5,42 +5,92 @@
 }
 
 <div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Thông tin chi tiết khách hàng</h4>
-            <span class="badge bg-light text-dark">ID: #@Model.MaKhachHang</span>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <strong>Họ và tên:</strong>
-                    <p class="text-muted">@Model.HoTen</p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">
+            <i class="bi bi-person-vcard text-info"></i> Chi tiết khách hàng
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Thông tin khách hàng -->
+        <div class="col-md-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-person-lines-fill"></i> Thông tin khách hàng
                 </div>
-                <div class="col-md-6">
-                    <strong>Tên tài khoản:</strong>
-                    <p class="text-muted">@Model.Username</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Số CCCD/CMND:</strong>
-                    <p class="text-muted">@Model.Cccd</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Số điện thoại:</strong>
-                    <p class="text-muted">@Model.Sdt</p>
-                </div>
-                <div class="col-md-12">
-                    <strong>Địa chỉ Email:</strong>
-                    <p class="text-muted">@Model.Email</p>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Mã khách hàng</dt>
+                        <dd class="col-sm-8">@Model.MaKhachHang</dd>
+
+                        <dt class="col-sm-4">Họ tên</dt>
+                        <dd class="col-sm-8 fw-semibold">@Model.HoTen</dd>
+
+                        <dt class="col-sm-4">CCCD</dt>
+                        <dd class="col-sm-8">@Model.Cccd</dd>
+
+                        <dt class="col-sm-4">Số điện thoại</dt>
+                        <dd class="col-sm-8">@Model.Sdt</dd>
+
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+                    </dl>
                 </div>
             </div>
         </div>
-        <div class="card-footer d-flex gap-2">
-            <a asp-controller="KhachHang" asp-action="Edit" asp-route-maKhachHang="@Model.MaKhachHang" class="btn btn-warning">
-                Sửa thông tin
-            </a>
-            <a asp-controller="KhachHang" asp-action="Index" class="btn btn-secondary">
-                Quay lại danh sách
-            </a>
+
+        <!-- Thông tin tài khoản -->
+        <div class="col-md-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-shield-lock"></i> Thông tin tài khoản
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Username</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-secondary">
+                                @Model.TaiKhoan?.Username
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-5">Vai trò</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-info text-dark">
+                                @Model.TaiKhoan?.Role
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-5">Trạng thái</dt>
+                        <dd class="col-sm-7">
+                            @if (Model.TaiKhoan?.TrangThai == "HoatDong")
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle"></i> Hoạt động
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle"></i> @Model.TaiKhoan?.TrangThai
+                                </span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-maKhachHang="@Model.MaKhachHang" class="btn btn-warning">
+            <i class="bi bi-pencil-square"></i> Sửa
+        </a>
+        <a asp-action="Delete" asp-route-maKhachHang="@Model.MaKhachHang" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Xóa
+        </a>
     </div>
 </div>

@@ -1,22 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\",
+  "WorkspaceRootPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\views\\loaiphong\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\loaiphong\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\nhanvien\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\nhanvien\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\views\\loaiphong\\_loaiphongpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\loaiphong\\_loaiphongpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\nhanvien\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\nhanvien\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\wwwroot\\js\\loaiphong\\index.js||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:wwwroot\\js\\loaiphong\\index.js||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan_v2\\quanlykhachsan_v2\\controllers\\loaiphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\loaiphongcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\controllers\\nhanviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\nhanviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,52 +34,40 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.js",
-              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\wwwroot\\js\\LoaiPhong\\Index.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\LoaiPhong\\Index.js",
-              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\wwwroot\\js\\LoaiPhong\\Index.js",
-              "RelativeToolTip": "wwwroot\\js\\LoaiPhong\\Index.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-10-17T07:57:13.302Z"
+              "DocumentIndex": 0,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\NhanVien\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\NhanVien\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\NhanVien\\Details.cshtml",
+              "RelativeToolTip": "Views\\NhanVien\\Details.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-17T10:23:49.919Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "_LoaiPhongPartial.cshtml",
-              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
-              "RelativeDocumentMoniker": "Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
-              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
-              "RelativeToolTip": "Views\\LoaiPhong\\_LoaiPhongPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFUAAAABAAAAAAAAAA==",
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\NhanVien\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Views\\NhanVien\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\NhanVien\\Delete.cshtml",
+              "RelativeToolTip": "Views\\NhanVien\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-17T07:56:05.681Z"
+              "WhenOpened": "2026-10-17T10:23:47.509Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoaiPhongController.cs",
-              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Controllers\\LoaiPhongController.cs",
-              "RelativeDocumentMoniker": "Controllers\\LoaiPhongController.cs",
-              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Controllers\\LoaiPhongController.cs",
-              "RelativeToolTip": "Controllers\\LoaiPhongController.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAA/wCQAAAAsAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "NhanVienController.cs",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Controllers\\NhanVienController.cs",
+              "RelativeDocumentMoniker": "Controllers\\NhanVienController.cs",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Controllers\\NhanVienController.cs",
+              "RelativeToolTip": "Controllers\\NhanVienController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-17T07:51:27.277Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\LoaiPhong\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan_V2\\QuanLyKhachSan_V2\\Views\\LoaiPhong\\Index.cshtml",
-              "RelativeToolTip": "Views\\LoaiPhong\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-17T07:51:32.163Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-17T10:23:10.093Z"
             }
           ]
         }

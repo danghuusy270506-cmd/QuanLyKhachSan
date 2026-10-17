@@ -1,60 +1,108 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using QuanLyKhachSan.Models.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-
-//cấu hình kết nối với SQL Server
-builder.Services.AddDbContext<QLKhachSanContext>(Options =>
-Options.UseSqlServer(builder.Configuration.GetConnectionString("QuanLyKhachSan")));
-// Đăng ký class Authentication để Controller có thể Inject vào
-
-
-// Thêm bộ nhớ đệm cho Session
-builder.Services.AddDistributedMemoryCache();
-// Đăng ký dịch vụ Session
-builder.Services.AddSession(options =>
+// 1. CẤU HÌNH GLOBAL AUTHORIZATION POLICY (Khóa toàn bộ View & API mặc định)
+builder.Services.AddControllersWithViews(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian sống của Session (30 phút)
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
 });
 
+// 2. KẾT NỐI DATABASE
+builder.Services.AddDbContext<QLKhachSanContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("QuanLyKhachSan")));
+
+// 3. CẤU HÌNH JWT BEARER ĐỌC TOKEN TỪ HTTPONLY COOKIE
+var secretKey = "Chuoi_Secret_Key_Bao_Mat_Khach_San_123456789";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+            ValidIssuer = "QuanLyKhachSanServer",
+            ValidAudience = "QuanLyKhachSanClient",
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        // Lấy Token từ Cookie "AccessToken" ở mỗi Request
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("AccessToken"))
+                {
+                    context.Token = context.Request.Cookies["AccessToken"];
+                }
+                return Task.CompletedTask;
+            },
+            // Trả về JSON 401 nếu gọi API chưa đăng nhập
+            OnChallenge = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.HandleResponse();
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+                    return context.Response.WriteAsync("{\"message\": \"Bạn chưa đăng nhập!\"}");
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 var app = builder.Build();
 
-
-// Tự động tạo cơ sở dữ liệu và bảng khi ứng dụng khởi động
+// TỰ ĐỘNG TẠO DB NẾU CHƯA CÓ
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<QLKhachSanContext>();
-    context.Database.EnsureCreated(); // Dòng này tự động tạo DB & Bảng nếu chưa có
+    context.Database.EnsureCreated();
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseSession();
-
+// BẬT XÁC THỰC VÀ PHÂN QUYỀN (Không còn UseSession)
+app.UseAuthentication();
 app.UseAuthorization();
+
+// TỰ ĐỘNG REDIRECT VỀ DANGNHAP NẾU CHƯA XÁC THỰC (Dành cho View)
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    var request = context.HttpContext.Request;
+
+    if (response.StatusCode == StatusCodes.Status401Unauthorized && !request.Path.StartsWithSegments("/api"))
+    {
+        response.Redirect("/DangNhap/Authentication");
+    }
+});
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=KhachHang}/{action=create}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

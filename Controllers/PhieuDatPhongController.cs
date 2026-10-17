@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
+using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
@@ -33,7 +35,7 @@ namespace QuanLyKhachSan.Controllers
             if (!string.IsNullOrEmpty(maPhieu))
             {
                 string ma = maPhieu.Replace("#", "").Trim();
-                if(int.TryParse(ma, out int maPhieuDatPhong))
+                if (int.TryParse(ma, out int maPhieuDatPhong))
                 {
                     query = query.Where(p => p.MaPhieu == maPhieuDatPhong);
                 }
@@ -47,7 +49,7 @@ namespace QuanLyKhachSan.Controllers
             {
                 query = query.Where(p => p.TrangThai == trangThai);
             }
-            if(maLoaiPhong.HasValue && maLoaiPhong.Value > 0)
+            if (maLoaiPhong.HasValue && maLoaiPhong.Value > 0)
             {
                 query = query.Where(p => p.MaLoaiPhong == maLoaiPhong.Value);
             }
@@ -107,19 +109,39 @@ namespace QuanLyKhachSan.Controllers
         }
 
         // 3. GIAO DIỆN ĐẶT PHÒNG (GET: Create)
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            // Kiểm tra khách hàng đã đăng nhập chưa
-            int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
-            if (maKhachHang == null)
+            // Lấy MaTaiKhoan từ Token JWT đã xác thực
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int maTaiKhoan))
             {
-                // Trả về một PartialView thông báo lỗi hoặc JSON có cấu trúc để JS xử lý thông báo
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
-                    return Content("<div class='modal-header bg-danger text-white'><h5 class='modal-title'>Thông báo</h5><button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal'></button></div><div class='modal-body p-4 text-center'><h6>Vui lòng đăng nhập tài khoản khách hàng để thực hiện đặt phòng!</h6></div>", "text/html");
+                    return Content("<div class='modal-header bg-danger text-white'><h5 class='modal-title'>Thông báo</h5><button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal'></button></div><div class='modal-body p-4 text-center'><h6>Vui lòng đăng nhập tài khoản để thực hiện đặt phòng!</h6></div>", "text/html");
                 }
                 return RedirectToAction("Authentication", "DangNhap");
             }
+
+            bool isAdminOrStaff = User.IsInRole("Admin") || User.IsInRole("ADMIN") || User.IsInRole("NhanVien");
+
+            if (!isAdminOrStaff)
+            {
+                var khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaTaiKhoan == maTaiKhoan);
+                if (khachHang == null)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Content("<div class='modal-header bg-danger text-white'><h5 class='modal-title'>Thông báo</h5><button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal'></button></div><div class='modal-body p-4 text-center'><h6>Không tìm thấy thông tin khách hàng tương ứng!</h6></div>", "text/html");
+                    }
+                    return RedirectToAction("Authentication", "DangNhap");
+                }
+                ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen", khachHang.MaKhachHang);
+            }
+            else
+            {
+                ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen");
+            }
+
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong");
 
             var phieuMoi = new PhieuDatPhong();
@@ -134,10 +156,10 @@ namespace QuanLyKhachSan.Controllers
         // 4. XỬ LÝ ĐẶT PHÒNG (POST: Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NgayDen,NgayDi,TienCoc,SoNguoi,MaLoaiPhong")] PhieuDatPhong phieudatphong)
+        public async Task<IActionResult> Create([Bind("NgayDen,NgayDi,TienCoc,SoNguoi,MaLoaiPhong,MaKhachHang")] PhieuDatPhong phieudatphong)
         {
-            int? maKhachHang = HttpContext.Session.GetInt32("MaKhachHang");
-            if (maKhachHang == null)
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int maTaiKhoan))
             {
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
@@ -146,9 +168,24 @@ namespace QuanLyKhachSan.Controllers
                 return RedirectToAction("Authentication", "DangNhap");
             }
 
-            // Tự động gán các thông tin mặc định
-            phieudatphong.MaKhachHang = maKhachHang.Value;
-            phieudatphong.NgayDat = System.DateTime.Now;
+            bool isAdminOrStaff = User.IsInRole("Admin") || User.IsInRole("ADMIN") || User.IsInRole("NhanVien");
+
+            if (!isAdminOrStaff)
+            {
+                var khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaTaiKhoan == maTaiKhoan);
+                if (khachHang == null)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = false, message = "Không tìm thấy thông tin khách hàng." });
+                    }
+                    return RedirectToAction("Authentication", "DangNhap");
+                }
+                // Tự động gán MaKhachHang nếu là tài khoản Khách hàng đang đăng nhập
+                phieudatphong.MaKhachHang = khachHang.MaKhachHang;
+            }
+
+            phieudatphong.NgayDat = DateTime.Now;
             phieudatphong.TrangThai = "Chờ xác nhận";
 
             // Validate logic ngày đến & ngày đi
@@ -162,7 +199,6 @@ namespace QuanLyKhachSan.Controllers
                 _context.Add(phieudatphong);
                 await _context.SaveChangesAsync();
 
-                // Nếu là AJAX gửi lên, trả về JSON thành công để JS đóng modal và load lại bảng
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     return Json(new { success = true });
@@ -171,6 +207,7 @@ namespace QuanLyKhachSan.Controllers
             }
 
             ViewData["MaLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", phieudatphong.MaLoaiPhong);
+            ViewData["MaKhachHang"] = new SelectList(_context.KhachHangs, "MaKhachHang", "HoTen", phieudatphong.MaKhachHang);
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -223,7 +260,6 @@ namespace QuanLyKhachSan.Controllers
                     _context.Update(existingPhieu);
                     await _context.SaveChangesAsync();
 
-                    // Trả về JSON báo thành công để JavaScript đóng modal và load lại bảng
                     return Json(new { success = true });
                 }
                 catch (DbUpdateConcurrencyException)

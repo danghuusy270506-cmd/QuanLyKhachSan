@@ -23,16 +23,11 @@ namespace QuanLyKhachSan.Models.Entities
         [StringLength(100)]
         public string? Email { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Username { get; set; } = string.Empty;
+        // ===== Khóa ngoại 1-1 sang TaiKhoan =====
+        public int MaTaiKhoan { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Password { get; set; } = string.Empty;
-
-        [StringLength(50)]
-        public string? TrangThai { get; set; }
+        [ForeignKey(nameof(MaTaiKhoan))]
+        public virtual TaiKhoan? TaiKhoan { get; set; }
 
         // Mối quan hệ 1-N sang PhieuDatPhong (Duyệt / Xác nhận)
         public virtual ICollection<PhieuDatPhong> PhieuDatPhongs { get; set; } = new List<PhieuDatPhong>();

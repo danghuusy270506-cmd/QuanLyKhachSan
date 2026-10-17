@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
-using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
 {
+    [Authorize]
     public class NhanVienController : Controller
     {
         private readonly QLKhachSanContext _context;
@@ -15,138 +16,132 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
-   
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "ADMIN")]
+
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
-            var danhSachNhanVien = await _context.NhanViens.ToListAsync();
-            return View(danhSachNhanVien);
+            if (page < 1) page = 1;
+
+            // Lấy truy vấn ban đầu
+            var query = _context.NhanViens
+                .Include(nv => nv.TaiKhoan)
+                .AsNoTracking();
+
+            // Tìm kiếm theo tên hoặc SĐT/CCCD (nếu có nhập từ form)
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(nv => nv.HoTen.Contains(searchString) ||
+                                          (nv.Sdt != null && nv.Sdt.Contains(searchString)) ||
+                                          (nv.Cccd != null && nv.Cccd.Contains(searchString)));
+            }
+
+            // Tính tổng số lượng bản ghi để tính tổng số trang
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Bỏ qua các bản ghi trước đó và lấy số lượng tương ứng với pageSize
+            var dsNhanVien = await query
+                .OrderBy(nv => nv.MaNhanVien)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Truyền các tham số phân trang qua ViewBag sang View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.SearchString = searchString;
+
+            return View(dsNhanVien);
         }
 
-        // 2. Chi tiết 1 nhân viên
-        [HttpGet]
-        public async Task<IActionResult> Details(int maNhanVien)
+        // 2. CHI TIẾT NHÂN VIÊN (DETAILS)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (maNhanVien <= 0)
-            {
-                return BadRequest("ID nhân viên không hợp lệ!");
-            }
+            if (id == null) return NotFound();
 
             var nhanVien = await _context.NhanViens
-                .Include(nv => nv.PhieuDatPhongs) // Nạp danh sách phiếu đặt phòng nếu muốn hiển thị
-                .FirstOrDefaultAsync(nv => nv.MaNhanVien == maNhanVien);
+                .Include(nv => nv.TaiKhoan)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.MaNhanVien == id);
 
-            if (nhanVien == null)
-            {
-                return NotFound("Không tìm thấy nhân viên có ID này!");
-            }
+            if (nhanVien == null) return NotFound();
 
             return View(nhanVien);
         }
 
-        // 3. Hiển thị trang Thêm mới nhân viên
-        [HttpGet]
-        public IActionResult Create()
+        // 3. SỬA NHÂN VIÊN - GET
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null) return NotFound();
+
+            var nhanVien = await _context.NhanViens.FindAsync(id);
+            if (nhanVien == null) return NotFound();
+
+            return View(nhanVien);
         }
 
-        // 4. Xử lý Thêm mới nhân viên
+        // 3. SỬA NHÂN VIÊN - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NhanVien nhanVien)
+        public async Task<IActionResult> Edit(int id, [Bind("MaNhanVien,HoTen,Cccd,Sdt,Email,MaTaiKhoan")] NhanVien nhanVien)
         {
+            if (id != nhanVien.MaNhanVien) return NotFound();
+
             if (ModelState.IsValid)
             {
-                // Mặc định trạng thái nếu người dùng để trống
-                if (string.IsNullOrWhiteSpace(nhanVien.TrangThai))
+                try
                 {
-                    nhanVien.TrangThai = "Đang làm việc";
+                    _context.Update(nhanVien);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Cập nhật thông tin nhân viên thành công!";
+                    return RedirectToAction(nameof(Index));
                 }
-
-                // Băm mật khẩu bằng BCrypt trước khi lưu
-                if (!string.IsNullOrEmpty(nhanVien.Password))
+                catch (DbUpdateConcurrencyException)
                 {
-                    nhanVien.Password = BCrypt.Net.BCrypt.HashPassword(nhanVien.Password);
+                    if (!NhanVienExists(nhanVien.MaNhanVien)) return NotFound();
+                    else throw;
                 }
+            }
 
-                _context.NhanViens.Add(nhanVien);
+            return View(nhanVien);
+        }
+
+        // 4. XÓA NHÂN VIÊN - GET
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var nhanVien = await _context.NhanViens
+                .Include(nv => nv.TaiKhoan)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.MaNhanVien == id);
+
+            if (nhanVien == null) return NotFound();
+
+            return View(nhanVien);
+        }
+
+        // 4. XÓA NHÂN VIÊN - POST
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var nhanVien = await _context.NhanViens.FindAsync(id);
+            if (nhanVien != null)
+            {
+                _context.NhanViens.Remove(nhanVien);
                 await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Details), new { maNhanVien = nhanVien.MaNhanVien });
+                TempData["SuccessMessage"] = "Xóa nhân viên thành công!";
             }
-
-            return View(nhanVien);
-        }
-
-        // 5. Hiển thị trang Cập nhật thông tin nhân viên
-        [HttpGet]
-        public async Task<IActionResult> Edit(int maNhanVien)
-        {
-            if (maNhanVien <= 0)
-            {
-                return BadRequest("ID nhân viên không hợp lệ!");
-            }
-
-            var nhanVien = await _context.NhanViens.FindAsync(maNhanVien);
-            if (nhanVien == null)
-            {
-                return NotFound("Không tìm thấy nhân viên có ID này!");
-            }
-
-            return View(nhanVien);
-        }
-
-        // 6. Xử lý Cập nhật thông tin nhân viên
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int maNhanVien, NhanVien model, string? newPassword)
-        {
-            if (maNhanVien != model.MaNhanVien)
-            {
-                return BadRequest("ID nhân viên không trùng khớp!");
-            }
-
-            var nhanVien = await _context.NhanViens.FindAsync(maNhanVien);
-            if (nhanVien == null)
-            {
-                return NotFound("Không tìm thấy nhân viên có ID này!");
-            }
-
-            // Cập nhật các thông tin cơ bản
-            nhanVien.HoTen = model.HoTen;
-            nhanVien.Cccd = model.Cccd;
-            nhanVien.Sdt = model.Sdt;
-            nhanVien.Email = model.Email;
-            nhanVien.Username = model.Username;
-            nhanVien.TrangThai = model.TrangThai;
-
-            // Chỉ đổi mật khẩu nếu quản trị viên/nhân viên nhập mật khẩu mới
-            if (!string.IsNullOrWhiteSpace(newPassword))
-            {
-                nhanVien.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new { maNhanVien = nhanVien.MaNhanVien });
-        }
-
-        // 7. Xử lý Xóa nhân viên
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int maNhanVien)
-        {
-            var nhanVien = await _context.NhanViens.FindAsync(maNhanVien);
-            if (nhanVien == null)
-            {
-                return NotFound("Không tìm thấy nhân viên có ID này!");
-            }
-
-            _context.NhanViens.Remove(nhanVien);
-            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool NhanVienExists(int id)
+        {
+            return _context.NhanViens.Any(e => e.MaNhanVien == id);
         }
     }
 }

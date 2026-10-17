@@ -20,249 +20,277 @@ build_property.TargetFrameworkVersion = v10.0
 build_property.EntryPointFilePath = 
 build_property.RootNamespace = QuanLyKhachSan
 build_property.RootNamespace = QuanLyKhachSan
-build_property.ProjectDir = C:\Users\Huung\OneDrive\Desktop\QuanLyKhachSan_V2\QuanLyKhachSan_V2\
+build_property.ProjectDir = C:\Users\Huung\OneDrive\Desktop\QuanLyKhachSan\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Huung\OneDrive\Desktop\QuanLyKhachSan_V2\QuanLyKhachSan_V2
+build_property.MSBuildProjectDirectory = C:\Users\Huung\OneDrive\Desktop\QuanLyKhachSan
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/ChiTietXepPhong/XepPhong.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/ChiTietXepPhong/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hpVGlldFhlcFBob25nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/ChiTietXepPhong/XepPhong.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hpVGlldFhlcFBob25nXFhlcFBob25nLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/ChiTietXepPhong/_XepPhongPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/ChiTietXepPhong/_XepPhongPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hpVGlldFhlcFBob25nXF9YZXBQaG9uZ1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DangNhap/Authentication.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DangNhap/Authentication.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ05oYXBcQXV0aGVudGljYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DangNhap/DangXuat.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DangNhap/DangXuat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ05oYXBcRGFuZ1h1YXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DichVu/Create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DichVu/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGljaFZ1XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DichVu/Delete.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DichVu/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGljaFZ1XERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DichVu/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DichVu/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGljaFZ1XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DichVu/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DichVu/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGljaFZ1XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/DichVu/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/DichVu/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGljaFZ1XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/ChiTietHoaDon.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/ChiTietHoaDon.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXENoaVRpZXRIb2FEb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/Create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/Delete.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/_ChiTietHoaDonPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/_ChiTietHoaDonPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXF9DaGlUaWV0SG9hRG9uUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/_DanhSachHoaDon.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/_DanhSachHoaDon.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXF9EYW5oU2FjaEhvYURvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/HoaDon/_XoaHoaDonPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/HoaDon/_XoaHoaDonPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9hRG9uXF9Yb2FIb2FEb25QYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Home/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Home/Privacy.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/KhachHang/create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGNyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/KhachHang/deleteKhachHang.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGRlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/deleteKhachHang.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXGRlbGV0ZUtoYWNoSGFuZy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/KhachHang/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/KhachHang/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/KhachHang/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/KhachHang/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/Create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/Delete.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/LoaiPhong/_LoaiPhongPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/LoaiPhong/_LoaiPhongPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9haVBob25nXF9Mb2FpUGhvbmdQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/NhanVien/create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cY3JlYXRlLmNzaHRtbA==
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/NhanVien/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/NhanVien/deleteKhachHang.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cZGVsZXRlS2hhY2hIYW5nLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/NhanVien/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/NhanVien/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/NhanVien/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/NhanVien/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/NhanVien/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/NhanVien/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/Create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/Delete.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_CreatePartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_CreatePartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfQ3JlYXRlUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_DeletePartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_DeletePartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfRGVsZXRlUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_DetailsPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_DetailsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfRGV0YWlsc1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_EditPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_EditPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfRWRpdFBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_PhieuDatPhongPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_PhieuDatPhongPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfUGhpZXVEYXRQaG9uZ1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/PhieuDatPhong/_PhieuDatPhongPhanTrangPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/PhieuDatPhong/_PhieuDatPhongPhanTrangPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhpZXVEYXRQaG9uZ1xfUGhpZXVEYXRQaG9uZ1BoYW5UcmFuZ1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/Create.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/Delete.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/Details.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/Edit.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/Index.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/_DeletePartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/_DeletePartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcX0RlbGV0ZVBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/_DetailsPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/_DetailsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcX0RldGFpbHNQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/_EditPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/_EditPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcX0VkaXRQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Phong/_PhongPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Phong/_PhongPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhvbmdcX1Bob25nUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Shared/Error.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/_ViewImports.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/TaiKhoan/Indexx.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFpS2hvYW5cSW5kZXh4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/_ViewStart.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan_V2/QuanLyKhachSan_V2/Views/Shared/_Layout.cshtml]
+[C:/Users/Huung/OneDrive/Desktop/QuanLyKhachSan/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-fgvefgshpn
