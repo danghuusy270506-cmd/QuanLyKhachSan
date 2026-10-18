@@ -1,0 +1,122 @@
+﻿@model QuanLyKhachSan.Models.Entities.LoaiPhong
+
+<!-- 1. HEADER MODAL -->
+<div class="modal-header text-white px-4 py-3 align-items-center" style="background-color: #1a202c; border-bottom: none;">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-door-open-fill text-primary fs-4"></i>
+        <h5 class="modal-title fw-bold fs-5 mb-0 text-white">
+            Chi tiết loại phòng: <span class="text-primary">@Model.TenLoaiPhong</span>
+        </h5>
+    </div>
+    <button type="button" class="btn-close btn-close-white shadow-none opacity-75" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- 2. BODY MODAL -->
+<div class="modal-body p-4 fs-6">
+    <!-- CỘT KÉP: Ảnh to hơn bên trái + Thông tin bên phải -->
+    <div class="row g-4 align-items-center mb-4">
+        <!-- Cột trái: Hình ảnh phóng to -->
+        <div class="col-md-6 col-12">
+            <div class="position-relative overflow-hidden rounded-3 border bg-light shadow-sm" style="height: 260px;">
+                @if (!string.IsNullOrEmpty(Model.Anh))
+                {
+                    <img src="@Model.Anh" alt="@Model.TenLoaiPhong" class="w-100 h-100 object-fit-cover d-block" />
+                }
+                else
+                {
+                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted">
+                        <i class="bi bi-image fs-1 mb-1"></i>
+                        <span>Chưa có ảnh</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Cột phải: Thông tin tổng quan (chữ to rõ) -->
+        <div class="col-md-6 col-12">
+            <h3 class="fw-bold text-dark mb-3">@Model.TenLoaiPhong</h3>
+
+            <div class="mb-3">
+                <span class="fs-3 fw-bold text-primary">@Model.GiaPhong.ToString("N0") VNĐ</span>
+                <span class="text-muted"> / đêm</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-2 fs-6 fw-medium d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-person-fill text-muted"></i>
+                    Sức chứa tối đa: <strong class="text-dark">@Model.SucChua người</strong>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- KHU VỰC MÔ TẢ -->
+    <div class="p-3 bg-light rounded-3 mb-4 border-0">
+        <h6 class="fw-bold text-dark mb-2 fs-5">
+            <i class="bi bi-card-text me-1 text-secondary"></i> Mô tả
+        </h6>
+        <p class="text-secondary mb-0 lh-base" style="white-space: pre-line; font-size: 1.05rem;">
+            @(string.IsNullOrEmpty(Model.MoTa) ? "Chưa có thông tin mô tả chi tiết cho loại phòng này." : Model.MoTa)
+        </p>
+    </div>
+
+    <!-- KHU VỰC CÁC PHÒNG THUỘC LOẠI PHÒNG NÀY -->
+    <div>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6 class="fw-bold text-dark mb-0 fs-5">
+                <i class="bi bi-houses me-1 text-secondary"></i> Phòng thuộc loại này
+            </h6>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-1.5 fs-6">
+                @(Model.Phongs?.Count ?? 0) phòng
+            </span>
+        </div>
+
+        @if (Model.Phongs != null && Model.Phongs.Any())
+        {
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var p in Model.Phongs)
+                {
+                    /* Xác định màu badge theo trạng thái phòng */
+                    string statusCssClass = "bg-secondary bg-opacity-10 text-secondary border-secondary";
+                    string statusLower = (p.TrangThai ?? "").ToLower();
+
+                    if (statusLower.Contains("trống") || statusLower.Contains("sẵn"))
+                    {
+                        statusCssClass = "bg-success bg-opacity-10 text-success border-success border-opacity-25";
+                    }
+                    else if (statusLower.Contains("đang ở") || statusLower.Contains("đang thuê") || statusLower.Contains("bận"))
+                    {
+                        statusCssClass = "bg-danger bg-opacity-10 text-danger border-danger border-opacity-25";
+                    }
+                    else if (statusLower.Contains("dọn") || statusLower.Contains("vệ sinh") || statusLower.Contains("bảo trì"))
+                    {
+                        statusCssClass = "bg-warning bg-opacity-10 text-dark border-warning border-opacity-25";
+                    }
+                    else if (statusLower.Contains("đặt") || statusLower.Contains("chờ"))
+                    {
+                        statusCssClass = "bg-info bg-opacity-10 text-info border-info border-opacity-25";
+                    }
+
+                    <div class="badge px-3 py-2 rounded-2 border fw-normal text-start d-inline-flex align-items-center gap-1.5 fs-6 @statusCssClass">
+                        <!-- THAY ĐỔI Ở ĐÂY: Thay p.MaPhong thành thuộc tính tên/số phòng thực tế (ví dụ: p.SoPhong hoặc p.TenPhong) -->
+                        <span class="fw-bold">Phòng @p.SoPhong</span>
+                        <small class="opacity-75">• @p.TrangThai</small>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="p-3 bg-light rounded-3 text-center text-muted">
+                <i class="bi bi-info-circle me-1"></i> Hiện chưa có phòng nào được xếp vào loại phòng này.
+            </div>
+        }
+    </div>
+</div>
+
+<!-- 3. FOOTER MODAL -->
+<div class="modal-footer bg-light border-top-0 px-4 py-3 justify-content-end">
+    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 shadow-none fw-medium fs-6" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i> Đóng
+    </button>
+</div>

@@ -1,0 +1,46 @@
+@model QuanLyKhachSan.Models.Entities.NhanVien
+
+@{
+    ViewData["Title"] = "Chi tiết Nhân viên";
+}
+
+<div class="container mt-4" style="max-width: 650px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Thông tin Chi tiết Nhân viên</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row mb-0 fs-6">
+                <dt class="col-sm-4 text-muted">Mã nhân viên:</dt>
+                <dd class="col-sm-8 fw-bold">#@Model.MaNhanVien</dd>
+
+                <dt class="col-sm-4 text-muted">Họ và tên:</dt>
+                <dd class="col-sm-8 fw-bold text-primary">@Model.HoTen</dd>
+
+                <dt class="col-sm-4 text-muted">Mã Tài Khoản:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-secondary">ID: @Model.MaTaiKhoan</span>
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Số CCCD:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Cccd) ? "Chưa cập nhật" : Model.Cccd)</dd>
+
+                <dt class="col-sm-4 text-muted">Số điện thoại:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Sdt) ? "Chưa cập nhật" : Model.Sdt)</dd>
+
+                <dt class="col-sm-4 text-muted">Email:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)</dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-white d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Trở về
+            </a>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.MaNhanVien" class="btn btn-warning me-1">
+                    <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

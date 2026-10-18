@@ -1,0 +1,99 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.Phong>
+
+@{
+    ViewData["Title"] = "Danh Sách Phòng";
+    var dsLoaiPhong = ViewBag.DanhSachLoaiPhong as List<string> ?? new List<string>();
+}
+
+<link rel="stylesheet" href="~/css/Phong/Index.css" />
+
+    <div class="d-flex justify-content-end mb-3">
+        <button type="button" id="btnOpenCreateModal" class="btn btn-dark fw-semibold px-3 py-2 rounded-2">
+            <i class="bi bi-plus-lg me-1"></i> Thêm Phòng Mới
+        </button>
+    </div>
+<!-- Khu vực Lọc dữ liệu -->
+        <div class="filter-container card shadow-sm border-0 rounded-3 p-3 mb-4">
+            <div class="row g-3 align-items-end">
+                <!-- Lọc theo Số phòng -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-muted small">Số phòng</label>
+                    <input type="text" id="soPhongInput" class="form-control" placeholder="Nhập số phòng..." value="@ViewBag.soPhong" />
+                </div>
+
+                <!-- Lọc theo Loại phòng -->
+            <div class="col-md-3">
+                <label class="form-label fw-semibold text-muted small">Loại phòng</label>
+                <select id="loaiPhongFilter" class="form-select">
+                    <option value="Tất cả">Tất cả loại phòng</option>
+                    @foreach (var tenLoai in dsLoaiPhong)
+                    {
+                        <option value="@tenLoai" selected="@(ViewBag.TenLoaiPhong == tenLoai)">@tenLoai</option>
+                    }
+                </select>
+            </div>
+
+                <!-- Lọc theo Trạng thái -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-muted small">Trạng thái</label>
+                    <select id="trangThaiFilter" class="form-select">
+                        <option value="Tất cả">Tất cả</option>
+                        <option value="Trống" selected="@(ViewBag.TrangThai == "Trống")">Trống</option>
+                        <option value="Đang sử dụng" selected="@(ViewBag.TrangThai == "Đang sử dụng")">Đang sử dụng</option>
+                        <option value="Đang dọn dẹp" selected="@(ViewBag.TrangThai == "Đang dọn dẹp")">Đang dọn dẹp</option>
+                        <option value="Bảo trì" selected="@(ViewBag.TrangThai == "Bảo trì")">Bảo trì</option>
+                    </select>
+                </div>
+
+                <!-- Nút bấm Lọc & Xóa lọc -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="button" id="btnFilter" class="btn btn-dark px-3 fw-semibold flex-grow-1">
+                        <i class="bi bi-funnel-fill me-1"></i> Lọc
+                    </button>
+                    <button type="button" id="btnReset" class="btn btn-outline-secondary px-3">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+<!-- Khung Modal hiển thị chi tiết phòng -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="detailModalContent">
+        </div>
+    </div>
+</div>
+
+<!-- Khung Modal Chỉnh Sửa -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="editModalContent">
+        </div>
+    </div>
+</div>
+
+<!-- Khung Modal Xóa Phòng -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="deleteModalContent">
+        </div>
+    </div>
+</div>
+
+<!-- Khung Modal Thêm Phòng Mới -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="createModalContent">
+        </div>
+    </div>
+</div>
+
+<!-- Khu vực hiển thị bảng và phân trang AJAX -->
+<div id="phongTableContainer">
+    <partial name="_PhongPartial" model="Model" />
+</div>
+
+@section Scripts {
+    <script src="~/js/Phong/Index.js"></script>
+}

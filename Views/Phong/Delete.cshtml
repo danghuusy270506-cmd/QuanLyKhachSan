@@ -1,0 +1,35 @@
+﻿@model QuanLyKhachSan.Models.Entities.Phong
+
+@{
+    ViewData["Title"] = "Xóa Phòng";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-3 border-danger">
+                <div class="card-header bg-danger text-white py-3 text-center">
+                    <h4 class="card-title mb-0 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Xác Nhận Xóa Phòng</h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-bold text-dark mb-2">Phòng @Model.SoPhong</h3>
+                    <p class="text-muted mb-1">Tầng: @Model.Tang - Loại: <strong class="text-primary">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</strong></p>
+                    <p class="text-danger fw-semibold mb-3">Trạng thái: @Model.TrangThai</p>
+
+                    <div class="alert alert-warning text-start" role="alert">
+                        <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa phòng này ra khỏi danh sách quản lý không? Hành động này sẽ loại bỏ dữ liệu khỏi CSDL.
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="MaPhong" />
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Hủy Bỏ</a>
+                            <button type="submit" class="btn btn-danger px-4 fw-semibold">Xác Nhận Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

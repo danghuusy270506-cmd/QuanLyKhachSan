@@ -1,0 +1,64 @@
+﻿@model dynamic
+@{
+    int currentPage = Model.CurrentPage;
+    int totalPages = Model.TotalPages;
+    string actionName = Model.ActionName ?? "Index";
+
+    string maPhieu = Model.maPhieu;
+    string khachHang = Model.khachHang;
+    string trangThai = Model.trangThai;
+    int? maLoaiPhong = Model.maLoaiPhong;
+    string ngayDen = Model.ngayDen;
+    string ngayDi = Model.ngayDi;
+}
+
+@if (totalPages > 1)
+{
+    <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+        <div class="text-muted small">
+            Trang <span class="fw-semibold text-dark">@currentPage</span> / <span class="fw-semibold text-dark">@totalPages</span>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm mb-0">
+                <!-- Nút Trang trước -->
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link px-3" asp-action="@actionName"
+                       asp-route-page="@(currentPage - 1)"
+                       asp-route-maPhieu="@maPhieu"
+                       asp-route-khachHang="@khachHang"
+                       asp-route-trangThai="@trangThai"
+                       asp-route-maLoaiPhong="@maLoaiPhong"
+                       asp-route-ngayDen="@ngayDen"
+                       asp-route-ngayDi="@ngayDi">Trước</a>
+                </li>
+
+                <!-- Danh sách số trang -->
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="@actionName"
+                           asp-route-page="@i"
+                           asp-route-maPhieu="@maPhieu"
+                           asp-route-khachHang="@khachHang"
+                           asp-route-trangThai="@trangThai"
+                           asp-route-maLoaiPhong="@maLoaiPhong"
+                           asp-route-ngayDen="@ngayDen"
+                           asp-route-ngayDi="@ngayDi">@i</a>
+                    </li>
+                }
+
+                <!-- Nút Trang sau -->
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link px-3" asp-action="@actionName"
+                       asp-route-page="@(currentPage + 1)"
+                       asp-route-maPhieu="@maPhieu"
+                       asp-route-khachHang="@khachHang"
+                       asp-route-trangThai="@trangThai"
+                       asp-route-maLoaiPhong="@maLoaiPhong"
+                       asp-route-ngayDen="@ngayDen"
+                       asp-route-ngayDi="@ngayDi">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}

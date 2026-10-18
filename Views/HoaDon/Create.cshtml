@@ -1,0 +1,133 @@
+@model QuanLyKhachSan.Models.Entities.HoaDon
+@{
+    ViewData["Title"] = "Tạo hóa đơn";
+}
+
+<div class="container py-4" style="max-width: 900px;">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-slate text-white px-4 py-3 d-flex align-items-center justify-content-between" style="background-color: #1e293b;">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-receipt fs-5"></i>
+                <h5 class="mb-0 fw-semibold text-white">Lập hóa đơn thanh toán</h5>
+            </div>
+            <span class="badge bg-light text-dark px-3 py-1.5 rounded-pill fw-medium">Phiếu đặt: #@ViewBag.MaPhieu</span>
+        </div>
+
+        <div class="card-body p-4 bg-white">
+            <form asp-controller="HoaDon"
+                  asp-action="Create"
+                  method="post"
+                  id="formHoaDon"
+                  data-tien-phong="@ViewBag.TienPhong"
+                  data-tien-dich-vu="@ViewBag.TienDichVu"
+                  data-tien-coc="@ViewBag.TienCoc">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="maPhieu" value="@ViewBag.MaPhieu" />
+
+                <div class="row g-4">
+                    <!-- Mã phiếu -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-secondary small text-uppercase">Mã phiếu đặt phòng</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-bookmark"></i></span>
+                            <input type="text" class="form-control bg-light border-start-0 ps-0 fw-medium shadow-none"
+                                   value="#@ViewBag.MaPhieu" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Tiền phòng -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-secondary small text-uppercase">Tiền phòng</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-door-open"></i></span>
+                            <input type="text" id="TienPhong"
+                                   class="form-control bg-light border-start-0 ps-0 fw-medium shadow-none"
+                                   value="@(((decimal)(ViewBag.TienPhong ?? 0m)).ToString("N0")) VNĐ" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Tiền dịch vụ -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-secondary small text-uppercase">Tiền dịch vụ phát sinh</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-cart-check"></i></span>
+                            <input type="text" id="TienDichVu"
+                                   class="form-control bg-light border-start-0 ps-0 fw-medium shadow-none"
+                                   value="@(((decimal)(ViewBag.TienDichVu ?? 0m)).ToString("N0")) VNĐ" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Tiền cọc -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-secondary small text-uppercase">Tiền đặt cọc trước</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-wallet2"></i></span>
+                            <input type="text" id="TienCoc"
+                                   class="form-control bg-light border-start-0 ps-0 fw-medium shadow-none text-success"
+                                   value="- @(((decimal)(ViewBag.TienCoc ?? 0m)).ToString("N0")) VNĐ" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Giảm giá -->
+                    <div class="col-md-6">
+                        <label for="GiamGia" class="form-label fw-semibold text-secondary small text-uppercase">
+                            Giảm giá / Voucher (VNĐ)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-primary"><i class="bi bi-tag-fill"></i></span>
+                            <input type="number" id="GiamGia" name="giamGia"
+                                   class="form-control border-start-0 ps-0 shadow-none fw-medium"
+                                   value="0" min="0" step="1000" required />
+                        </div>
+                        <div class="form-text text-muted small mt-1">
+                            <i class="bi bi-info-circle me-1"></i> Nhập số tiền giảm trừ trực tiếp vào hóa đơn.
+                        </div>
+                    </div>
+
+                    <!-- Kiểu thanh toán -->
+                    <div class="col-md-6">
+                        <label for="KieuThanhToan" class="form-label fw-semibold text-secondary small text-uppercase">
+                            Kiểu thanh toán <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-primary"><i class="bi bi-credit-card-2-front-fill"></i></span>
+                            <select id="KieuThanhToan" name="kieuThanhToan"
+                                    class="form-select border-start-0 ps-0 shadow-none fw-medium" required>
+                                <option value="">-- Chọn hình thức thanh toán --</option>
+                                <option value="Tiền mặt">Tiền mặt</option>
+                                <option value="Chuyển khoản">Chuyển khoản</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Tổng tiền -->
+                    <div class="col-12 mt-2">
+                        <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small fw-semibold text-uppercase d-block">Tổng tiền thực tế cần thanh toán</span>
+                                <span class="text-secondary small">Đã trừ tiền cọc và giảm giá</span>
+                            </div>
+                            <input type="text" id="TongTienHienThi"
+                                   class="form-control-plaintext text-end fw-bold text-danger fs-4 shadow-none p-0 w-auto"
+                                   value="@(((decimal)(ViewBag.TongTien ?? 0m)).ToString("N0")) VNĐ" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4 text-muted opacity-25" />
+
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                    <a asp-controller="PhieuDatPhong" asp-action="Index"
+                       class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-medium">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-dark px-4 py-2 rounded-pill fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-check-circle-fill"></i> Tạo hóa đơn ngay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

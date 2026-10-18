@@ -1,0 +1,68 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.DichVu>
+
+@{
+    ViewData["Title"] = "Quản lý dịch vụ";
+    var tuKhoa = ViewData["TuKhoa"]?.ToString();
+    var hasTuKhoa = !string.IsNullOrWhiteSpace(tuKhoa);
+}
+
+<link rel="stylesheet" href="~/css/DichVu/Index.css" asp-append-version="true" />
+
+<div class="container-fluid py-3 service-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <div class="text-muted small mb-1">Quản lý khách sạn</div>
+            <h1 class="h3 fw-bold text-dark mb-0">Danh sách dịch vụ</h1>
+        </div>
+        <a asp-action="Create" class="btn btn-primary px-3 shadow-sm">
+            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Thêm dịch vụ
+        </a>
+    </div>
+
+    @if (TempData["ThongBaoThanhCong"] is string thongBao)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @thongBao
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+    @if (TempData["ThongBaoLoi"] is string thongBaoLoi)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            @thongBaoLoi
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+
+    <div class="card service-card">
+        <div class="card-body p-0">
+            <!-- Form Lọc / Tìm kiếm chuẩn giao diện mẫu -->
+            <form id="searchForm" asp-action="Index" method="get" class="row g-2 align-items-center mb-3">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <input id="tuKhoa" name="tuKhoa" value="@(tuKhoa ?? "")"
+                           class="form-control" placeholder="Tên, mã hoặc mô tả..." autocomplete="off" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-filter-dark d-inline-flex align-items-center gap-1" type="submit">
+                        <i class="bi bi-funnel-fill"></i> Lọc
+                    </button>
+                </div>
+
+                <div class="col-auto" id="resetBtnContainer" style="display: @(hasTuKhoa ? "inline-block" : "none");">
+                    <button type="button" class="btn btn-reset-light d-inline-flex align-items-center gap-1" id="btnClear">
+                        <i class="bi bi-arrow-counterclockwise"></i> Xóa lọc
+                    </button>
+                </div>
+            </form>
+
+            <!-- Bảng dữ liệu Ajax -->
+            <div id="tableContainer">
+                @await Html.PartialAsync("_DichVuPartial", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/DichVu/Index.js" asp-append-version="true"></script>
+}

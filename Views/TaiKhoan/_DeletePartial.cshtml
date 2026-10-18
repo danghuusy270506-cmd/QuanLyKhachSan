@@ -1,0 +1,22 @@
+﻿@model QuanLyKhachSan.Models.Entities.TaiKhoan
+
+<form id="deleteTaiKhoanForm" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="mataikhoan" value="@Model.MaTaiKhoan" />
+
+    <p class="text-danger fw-bold mb-3">Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể hoàn tác!</p>
+
+    <dl class="row mb-0">
+        <dt class="col-sm-4">Mã Tài Khoản:</dt>
+        <dd class="col-sm-8">#@Model.MaTaiKhoan</dd>
+
+        <dt class="col-sm-4">Tên Đăng Nhập:</dt>
+        <dd class="col-sm-8 fw-bold">@Model.Username</dd>
+
+        <dt class="col-sm-4">Quyền Hạn:</dt>
+        <dd class="col-sm-8">@Model.Role</dd>
+
+        <dt class="col-sm-4">Trạng Thái:</dt>
+        <dd class="col-sm-8">@Model.TrangThai</dd>
+    </dl>
+</form>

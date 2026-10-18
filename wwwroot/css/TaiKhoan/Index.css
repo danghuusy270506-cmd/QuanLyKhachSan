@@ -1,0 +1,47 @@
+﻿/* Tùy chỉnh giao diện Quản lý Tài Khoản */
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Header của bảng có màu tối sang trọng như mẫu */
+.table thead.table-dark {
+    background-color: #1e293b !important;
+    border-color: #1e293b;
+    color: #ffffff;
+}
+
+.table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Tùy chỉnh badge hiển thị */
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.8em;
+    font-weight: 500;
+}
+
+/* Tùy chỉnh nút phân trang */
+.pagination .page-item .page-link {
+    color: #1e293b;
+    border-radius: 4px;
+    margin: 0 3px;
+    border: 1px solid #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #1e293b;
+    border-color: #1e293b;
+    color: #ffffff;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}

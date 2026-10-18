@@ -1,0 +1,175 @@
+﻿@model QuanLyKhachSan.Models.Entities.HoaDon
+
+<!-- Modal Header nền tối với tiêu đề giống ảnh mẫu -->
+<div class="modal-header bg-dark text-white py-3 px-4">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-card-checklist text-primary fs-4"></i>
+        <h5 class="modal-title fw-bold fs-5 mb-0" id="chiTietHoaDonModalLabel">
+            Chi tiết hóa đơn: <span class="text-primary">#@Model.MaHoaDon</span>
+        </h5>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body: Danh sách dòng mỏng, hiện đầy đủ thông tin gốc -->
+<div class="modal-body p-0">
+    <div class="list-group list-group-flush">
+
+        <!-- Mã hóa đơn -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-hash fs-5 text-secondary"></i>
+                <span>Mã hóa đơn</span>
+            </div>
+            <div class="fw-bold text-dark" style="width: 60%;">
+                #@Model.MaHoaDon
+            </div>
+        </div>
+
+        <!-- Mã phiếu đặt -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-bookmark-check fs-5 text-secondary"></i>
+                <span>Mã phiếu đặt phòng</span>
+            </div>
+            <div class="fw-bold text-dark" style="width: 60%;">
+                #@Model.MaPhieu
+            </div>
+        </div>
+
+        <!-- Tiền phòng -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-house-door fs-5 text-secondary"></i>
+                <span>Tiền phòng</span>
+            </div>
+            <div class="fw-bold text-primary" style="width: 60%;">
+                @(((int)(ViewBag.TienPhong ?? 0)).ToString("N0")) VNĐ
+            </div>
+        </div>
+
+        <!-- Tiền dịch vụ -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-bell fs-5 text-secondary"></i>
+                <span>Tiền dịch vụ</span>
+            </div>
+            <div class="fw-medium text-dark" style="width: 60%;">
+                @(((int)(ViewBag.TienDichVu ?? 0)).ToString("N0")) VNĐ
+            </div>
+        </div>
+
+        <!-- Tiền cọc -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-wallet2 fs-5 text-secondary"></i>
+                <span>Tiền cọc</span>
+            </div>
+            <div class="fw-bold text-danger" style="width: 60%;">
+                @Model.TienCoc.ToString("N0") VNĐ
+            </div>
+        </div>
+
+        <!-- Giảm giá -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-tag fs-5 text-secondary"></i>
+                <span>Giảm giá</span>
+            </div>
+            <div class="fw-medium text-dark" style="width: 60%;">
+                @Model.GiamGia.ToString("N0") VNĐ
+            </div>
+        </div>
+
+        <!-- Tổng tiền thanh toán -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-cash-stack fs-5 text-secondary"></i>
+                <span>Tổng tiền thanh toán</span>
+            </div>
+            <div class="fw-bold text-danger fs-6" style="width: 60%;">
+                @Model.TongTien.ToString("N0") VNĐ
+            </div>
+        </div>
+
+        <!-- Kiểu thanh toán -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-credit-card fs-5 text-secondary"></i>
+                <span>Kiểu thanh toán</span>
+            </div>
+            <div class="fw-medium text-dark" style="width: 60%;">
+                @(string.IsNullOrEmpty(Model.KieuThanhToan) ? "Chưa xác định" : Model.KieuThanhToan)
+            </div>
+        </div>
+
+        <!-- Thời gian thanh toán -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-clock-history fs-5 text-secondary"></i>
+                <span>Thời gian thanh toán</span>
+            </div>
+            <div class="fw-medium text-dark" style="width: 60%;">
+                @if (Model.ThoiGianThanhToan == DateTime.MinValue)
+                {
+                    <span class="text-muted">Chưa thanh toán</span>
+                }
+                else
+                {
+                    @Model.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
+                }
+            </div>
+        </div>
+
+        <!-- Trạng thái thanh toán -->
+        <div class="list-group-item d-flex align-items-center py-3 px-4">
+            <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
+                <i class="bi bi-shield-check fs-5 text-secondary"></i>
+                <span>Trạng thái thanh toán</span>
+            </div>
+            <div style="width: 60%;">
+                @if (Model.TrangThai == "DaThanhToan")
+                {
+                    <span class="badge bg-success px-3 py-2 rounded-pill fw-semibold" style="font-size: 13px;">
+                        Đã thanh toán
+                    </span>
+                }
+                else if (Model.TrangThai == "DaHoanTien")
+                {
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold" style="font-size: 13px;">
+                        Đã hoàn tiền
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger px-3 py-2 rounded-pill fw-semibold" style="font-size: 13px;">
+                        Chưa thanh toán
+                    </span>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal Footer giữ nguyên các hành động xác nhận/đóng -->
+<div class="modal-footer d-flex justify-content-between align-items-center px-4 py-3 border-top-0">
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg"></i> Đóng
+    </button>
+
+    <div id="modal-footer-actions">
+        @if (Model.TrangThai == "ChuaThanhToan")
+        {
+            <button type="button" class="btn btn-success px-4 py-2 fw-semibold rounded-pill shadow-sm d-inline-flex align-items-center gap-2 btn-xac-nhan-tien btn-xac-nhan-modal" data-id="@Model.MaHoaDon">
+                <i class="bi bi-check-circle-fill fs-5"></i> Xác nhận đã nhận tiền
+            </button>
+        }
+        else
+        {
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-semibold rounded-pill d-inline-flex align-items-center gap-1.5" style="font-size: 13.5px;">
+                <i class="bi bi-check-circle-fill text-success"></i> Thanh toán thành công
+            </span>
+        }
+    </div>
+</div>

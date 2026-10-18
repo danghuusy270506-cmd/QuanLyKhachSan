@@ -1,0 +1,72 @@
+﻿@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+@{
+    string today = DateTime.Now.ToString("yyyy-MM-dd");
+    var dsKhachHang = ViewBag.DanhSachKhachHang as IEnumerable<QuanLyKhachSan.Models.Entities.KhachHang>;
+}
+<div class="modal-header text-white px-4 py-3" style="background-color: #1e293b;">
+    <h5 class="modal-title fw-bold">
+        <i class="bi bi-calendar-plus me-2"></i> Đăng Ký Đặt Phòng Mới
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form asp-action="Create" method="post" id="createPhieuForm">
+    <div class="modal-body p-4">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+        <div class="mb-3">
+            <label asp-for="MaKhachHang" class="form-label fw-semibold">Khách Hàng</label>
+            <select asp-for="MaKhachHang" class="form-select border shadow-sm py-2" required>
+                <option value="">-- Chọn khách hàng --</option>
+                @if (dsKhachHang != null)
+                {
+                    foreach (var kh in dsKhachHang)
+                    {
+                        <option value="@kh.MaKhachHang">@kh.HoTen - @kh.Sdt</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="MaKhachHang" class="text-danger small"></span>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="MaLoaiPhong" class="form-label fw-semibold">Chọn Loại Phòng</label>
+                <select asp-for="MaLoaiPhong" class="form-select" asp-items="ViewBag.MaLoaiPhong" required>
+                    <option value="">-- Chọn loại phòng --</option>
+                </select>
+                <span asp-validation-for="MaLoaiPhong" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="NgayDen" class="form-label fw-semibold">Ngày Đến (Check-in)</label>
+                <input type="date" id="ngayDenInput" name="NgayDen" class="form-control" min="@today" value="@Model.NgayDen.ToString("yyyy-MM-dd")" required />
+                <span asp-validation-for="NgayDen" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="NgayDi" class="form-label fw-semibold">Ngày Đi (Check-out)</label>
+                <input type="date" id="ngayDiInput" name="NgayDi" class="form-control" min="@today" value="@Model.NgayDi.ToString("yyyy-MM-dd")" required />
+                <span asp-validation-for="NgayDi" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SoNguoi" class="form-label fw-semibold">Số Lượng Khách</label>
+                <input asp-for="SoNguoi" type="number" min="1" max="10" class="form-control" placeholder="Nhập số người..." />
+                <span asp-validation-for="SoNguoi" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="TienCoc" class="form-label fw-semibold">Tiền Đặt Cọc (VNĐ)</label>
+                <input asp-for="TienCoc" type="number" step="50000" class="form-control" placeholder="Nhập tiền cọc..." />
+                <span asp-validation-for="TienCoc" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer px-4 py-3 bg-light">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Hủy Bỏ</button>
+        <button type="submit" class="btn btn-primary px-4 fw-semibold" style="background-color: #2563eb; border: none;">Xác Nhận Đặt Phòng</button>
+    </div>
+</form>

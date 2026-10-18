@@ -1,0 +1,306 @@
+﻿/* ==========================================================
+   1. TRANG DANH SÁCH HÓA ĐƠN & BỘ LỌC (LAYOUT & FILTER)
+   ========================================================== */
+.hoa-don-page {
+    padding: 14px;
+    color: #111;
+    font-size: 14px;
+}
+
+.hoa-don-filter {
+    margin-bottom: 12px;
+}
+
+    .hoa-don-filter .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 4px;
+    }
+
+    .hoa-don-filter .form-control,
+    .hoa-don-filter .form-select {
+        min-height: 32px;
+        padding: 4px 8px;
+        font-size: 13px;
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+    }
+
+    .hoa-don-filter .btn {
+        min-height: 36px;
+        border-radius: 7px;
+        white-space: nowrap;
+    }
+
+    .hoa-don-filter .row {
+        column-gap: 4px;
+    }
+
+
+/* ==========================================================
+   2. KHUNG BẢNG VÀ GIAO DIỆN BẢNG (CLEAN & MODERN TABLE)
+   ========================================================== */
+.hoa-don-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    background: #fff;
+}
+
+.hoa-don-table {
+    width: 100%;
+    min-width: 1000px;
+    margin-bottom: 0;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    vertical-align: middle;
+}
+
+    /* Tiêu đề bảng */
+    .hoa-don-table thead th {
+        background-color: #1e293b !important;
+        color: #f8fafc;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 14px 16px;
+        border: none !important;
+        white-space: nowrap;
+        letter-spacing: 0.3px;
+    }
+
+    /* Các ô dữ liệu */
+    .hoa-don-table tbody td {
+        padding: 12px 14px;
+        height: 52px;
+        vertical-align: middle;
+        border-top: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        border-left: none !important;
+        border-right: none !important;
+        font-size: 13.5px;
+        color: #334155;
+        font-weight: 500 !important;
+        color: #1e293b !important
+    }
+
+    .hoa-don-table tbody tr:last-child td {
+        border-bottom: none !important;
+    }
+
+
+    /* ==========================================================
+   3. HIỆU ỨNG DÒNG XEN KẼ (ZEBRA STRIPING) & HOVER
+   ========================================================== */
+    .hoa-don-table tbody tr:nth-child(odd) td {
+        background-color: #f1f5f9 !important; /* Dòng lẻ xám nhạt tinh tế */
+    }
+
+    .hoa-don-table tbody tr:nth-child(even) td {
+        background-color: #ffffff !important; /* Dòng chẵn trắng */
+    }
+
+    .hoa-don-table tbody tr:hover td {
+        background-color: #e8eef5 !important;
+        transition: background-color 0.15s ease;
+    }
+
+
+    /* ==========================================================
+   4. CANH CHỈNH CÁC CỘT (ALIGNMENTS)
+   ========================================================== */
+    /* Cột 1 (Mã hóa đơn): Căn giữa */
+    .hoa-don-table th:nth-child(1) {
+        text-align: center !important;
+        font-weight: 600 !important;
+    }
+
+    .hoa-don-table td:nth-child(1) {
+        text-align: center !important;
+        color: #334155 !important;
+        font-weight: 500;
+    }
+
+    /* Cột 3 (Tổng tiền): Căn phải */
+    .hoa-don-table td:nth-child(3) {
+        text-align: center !important;
+        font-weight: 700 !important;
+        font-size: 14.5px !important;
+        color: #0f172a !important;
+        letter-spacing: -0.2px;
+    }
+
+    /* Các cột còn lại (2, 4, 5, 6, 7, 8): Căn giữa tuyệt đối */
+    .hoa-don-table th:nth-child(2), .hoa-don-table td:nth-child(2),
+    .hoa-don-table th:nth-child(4), .hoa-don-table td:nth-child(4),
+    .hoa-don-table th:nth-child(5), .hoa-don-table td:nth-child(5),
+    .hoa-don-table th:nth-child(6), .hoa-don-table td:nth-child(6),
+    .hoa-don-table th:nth-child(7), .hoa-don-table td:nth-child(7),
+    .hoa-don-table th:nth-child(8), .hoa-don-table td:nth-child(8) {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+
+/* ==========================================================
+   5. NÚT THAO TÁC & BADGE TRẠNG THÁI
+   ========================================================== */
+.hoa-don-actions {
+    white-space: nowrap;
+}
+
+    .hoa-don-actions .btn-group {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .hoa-don-actions .btn {
+        font-size: 12px;
+        padding: 5px 9px;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .hoa-don-actions .btn-outline-info:hover {
+        background-color: #0dcaf0;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .hoa-don-actions .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+.hoa-don-page .badge {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+
+/* ==========================================================
+   6. PHÂN TRANG (PAGINATION)
+   ========================================================== */
+.hoa-don-pagination {
+    margin-top: 12px;
+}
+
+    .hoa-don-pagination .page-link {
+        color: #212529;
+        border-color: #dee2e6;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .hoa-don-pagination .page-item.active .page-link {
+        background-color: #1e293b;
+        border-color: #1e293b;
+        color: #fff;
+    }
+
+    .hoa-don-pagination .page-link:hover {
+        background-color: #e9ecef;
+    }
+
+.thong-tin-phan-trang {
+    color: #6c757d;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+
+/* ==========================================================
+   7. RESPONSIVE (MÀN HÌNH NHỎ)
+   ========================================================== */
+@media (max-width: 768px) {
+    .hoa-don-page {
+        padding: 8px;
+    }
+
+    .hoa-don-filter .row {
+        flex-wrap: wrap !important;
+    }
+
+    .hoa-don-table thead th,
+    .hoa-don-table tbody td {
+        padding: 10px;
+    }
+}
+
+/* ===== TÙY CHỈNH NÚT LỌC & XÓA LỌC HIỆN ĐẠI ===== */
+.btn-loc-action {
+    background-color: #1e293b !important;
+    border-color: #1e293b !important;
+    color: #fff !important;
+    font-weight: 500;
+    border-radius: 8px !important;
+    transition: all 0.2s ease-in-out;
+    height: 34px; /* Khớp chiều cao với form-control-sm */
+}
+
+    .btn-loc-action:hover {
+        background-color: #0f172a !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+.btn-xoa-loc-action {
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+    background-color: #f8fafc !important;
+    font-weight: 500;
+    border-radius: 8px !important;
+    transition: all 0.2s ease-in-out;
+    height: 34px;
+}
+
+    .btn-xoa-loc-action:hover {
+        background-color: #f1f5f9 !important;
+        color: #dc2626 !important; /* Đổi màu chữ sang đỏ nhẹ khi rê chuột vào để báo hiệu hành động xóa/reset */
+        border-color: #fca5a5 !important;
+        transform: translateY(-1px);
+    }
+
+/* ===== TÙY CHỈNH NÚT XÁC NHẬN NHẬN TIỀN TRONG MODAL ===== */
+.btn-xac-nhan-tien {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 14.5px !important;
+    padding: 10px 22px !important;
+    transition: all 0.25s ease-in-out;
+}
+
+    .btn-xac-nhan-tien:hover {
+        background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(5, 150, 105, 0.3) !important;
+    }
+
+    .btn-xac-nhan-tien:active {
+        transform: translateY(0);
+    }
+
+/* Tinh chỉnh phần chân modal cho thoáng và hiện đại hơn */
+.modal-content .modal-footer {
+    border-top: 1px solid #f1f5f9 !important;
+    background-color: #f8fafc !important;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+/* Responsive cho màn hình nhỏ hơn (Tablet/Mobile) sẽ tự động rớt dòng hợp lý */
+@media (max-width: 992px) {
+    .hoa-don-filter-card .row > div {
+        margin-bottom: 8px;
+    }
+}

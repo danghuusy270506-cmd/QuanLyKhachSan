@@ -1,0 +1,51 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.LoaiPhong>
+
+@{
+    ViewData["Title"] = "Quản Lý Loại Phòng";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h2 class="fw-bold text-dark mb-1"><i class="bi bi-grid-fill text-primary me-2"></i> Danh Sách Loại Phòng</h2>
+            <p class="text-muted mb-0">Quản lý thông tin, giá cả và sức chứa của các loại phòng khách sạn.</p>
+        </div>
+        <!-- thêm loại phòng mới-->
+        <button type="button" id="btnOpenCreateModal" class="btn btn-dark-custom shadow-sm px-3 py-2 rounded-3">
+            <i class="bi bi-plus-lg me-1"></i> Thêm Phòng Mới
+        </button>
+    </div>
+
+    <div id="loaiPhongTableContainer">
+        <partial name="_LoaiPhongPartial" model="Model" />
+    </div>
+</div>
+
+<!-- Modal dùng chung cho Xem Chi Tiết, Thêm Mới, Chỉnh Sửa và Xóa -->
+<div class="modal fade" id="loaiPhongModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden" id="modalContentContainer">
+        </div>
+    </div>
+</div>
+
+<style>
+    /*Thêm Phòng Mới */
+    .btn-dark-custom {
+        background-color: #1e293b;
+        color: #ffffff;
+        border: none;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-dark-custom:hover {
+            background-color: #0f172a;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+</style>
+
+@section Scripts {
+    <script src="~/js/LoaiPhong/Index.js"></script>
+}

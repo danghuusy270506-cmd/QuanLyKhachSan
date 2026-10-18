@@ -1,0 +1,116 @@
+@model QuanLyKhachSan.Models.Entities.HoaDon
+
+@{
+    ViewData["Title"] = "Chi tiết hóa đơn";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Chi tiết hóa đơn</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">Thông tin hóa đơn</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="table-light" style="width: 35%;">Mã hóa đơn</th>
+                            <td>@Model.MaHoaDon</td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Mã phiếu đặt phòng</th>
+                            <td>@Model.MaPhieu</td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Tiền phòng</th>
+                            <td>@(((int)ViewBag.TienPhong).ToString("N0")) VNĐ
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Tiền dịch vụ</th>
+                            <td>@(((int)ViewBag.TienDichVu).ToString("N0")) VNĐ
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Tiền cọc</th>
+                            <td>@Model.TienCoc.ToString("N0") VNĐ
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Giảm giá</th>
+                            <td>@Model.GiamGia.ToString("N0") VNĐ
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Tổng tiền thanh toán</th>
+                            <td>
+                                <strong>@Model.TongTien.ToString("N0") VNĐ</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Kiểu thanh toán</th>
+                            <td>
+                                @(string.IsNullOrEmpty(Model.KieuThanhToan) ? "Chưa xác định" : Model.KieuThanhToan)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Thời gian thanh toán</th>
+                            <td>
+                                @if (Model.ThoiGianThanhToan == DateTime.MinValue)
+                                {
+                                    <span class="text-muted">Chưa thanh toán</span>
+                                }
+                                else
+                                {
+                                    @Model.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
+                                }
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="table-light">Trạng thái thanh toán</th>
+                            <td>
+                                @if (Model.TrangThai == "DaThanhToan")
+                                {
+                                    <span class="badge bg-success">Đã thanh toán</span>
+                                }
+                                else if (Model.TrangThai == "DaHoanTien")
+                                {
+                                    <span class="badge bg-warning text-dark">Đã hoàn tiền</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Chưa thanh toán</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex flex-wrap gap-2">
+            <a asp-controller="HoaDon" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+
+            @if (Model.TrangThai == "ChuaThanhToan")
+            {
+                <form asp-controller="HoaDon" asp-action="XacNhanThanhToan" method="post" onsubmit="return confirm('Bạn đã xác minh khách thanh toán đủ tiền chưa?');">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="maHoaDon" value="@Model.MaHoaDon" />
+                    <button type="submit" class="btn btn-success">Xác nhận đã nhận tiền</button>
+                </form>
+            }
+            else if (Model.TrangThai == "DaThanhToan")
+            {
+                <span class="badge bg-success d-inline-flex align-items-center">Đã thanh toán</span>
+            }
+        </div>
+    </div>
+</div>

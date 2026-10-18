@@ -1,0 +1,201 @@
+﻿:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --bg-main: #f8fafc;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --dark-header-bg: #1e293b; /* Tone màu tối mờ / xanh đen thanh lịch */
+    --dark-header-text: #ffffff;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 1rem; /* Tăng cỡ chữ cơ sở cho toàn trang */
+}
+
+/* Tăng cỡ chữ cho bộ lọc tìm kiếm */
+.form-label {
+    font-size: 0.95rem !important; /* Nhãn bộ lọc to hơn */
+}
+
+.form-control, .form-select, .input-group-text {
+    font-size: 0.95rem !important; /* Nhập liệu và dropdown to hơn */
+}
+
+/* Card Styling */
+.card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    background: #ffffff;
+    transition: all 0.25s ease;
+}
+
+    .card-custom:hover {
+        box-shadow: var(--card-shadow-hover);
+    }
+
+/* Header & Stat Cards */
+.stat-card {
+    border-radius: 12px;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+    }
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Nút Lọc màu tối */
+.btn-dark-filter {
+    background-color: var(--dark-header-bg) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease;
+}
+
+    .btn-dark-filter:hover {
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+    }
+
+/* Table Design */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+    .custom-table thead th {
+        background-color: var(--dark-header-bg) !important;
+        color: var(--dark-header-text) !important;
+        font-weight: 600;
+        font-size: 1rem !important; /* Tăng cỡ chữ tiêu đề bảng (cũ: 0.85rem) */
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 18px;
+        border: none;
+    }
+
+    /* Bo tròn 2 góc trên của thanh tiêu đề bảng */
+    .custom-table thead tr th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .custom-table thead tr th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    .custom-table tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+    .custom-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+        font-size: 1.05rem !important; /* Tăng cỡ chữ nội dung bảng (cũ: 0.9rem) */
+        font-weight: 600 !important;
+        color: #1e293b;
+    }
+
+/* Status Badges */
+.badge-status {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem !important; /* Tăng cỡ chữ nhãn trạng thái (cũ: 0.78rem) */
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-cho-xac-nhan {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.badge-da-xac-nhan {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.badge-dang-o {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+.badge-hoan-thanh {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.badge-da-huy {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+/* Custom Action Buttons (Chi tiết, Sửa, Xóa, Check-in, Check-out) */
+.custom-table .btn {
+    font-size: 0.9rem !important; /* Tăng chữ các nút hành động */
+    padding: 6px 12px !important;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.date-box {
+    line-height: 1.3;
+    font-size: 0.95rem;
+}
+
+/* Hiệu ứng zebra cho bảng (chẵn/lẻ) */
+.custom-table tbody tr:nth-child(odd) td {
+    background-color: #f1f5f9 !important;
+}
+
+.custom-table tbody tr:nth-child(even) td {
+    background-color: #ffffff !important;
+}
+
+/* Hiệu ứng di chuột vào dòng (Hover) */
+.custom-table tbody tr:hover td {
+    background-color: #e8eef5 !important;
+    transition: background-color 0.15s ease;
+}
+
+.btn-outline-warning {
+    color: #b7791f;
+    border-color: #ecc94b;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #000000;
+        border-color: #ffc107;
+        box-shadow: 0 4px 10px rgba(255, 193, 7, 0.25);
+    }

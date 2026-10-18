@@ -1,0 +1,73 @@
+﻿@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+
+<!-- Modal Header tối màu sang trọng với gradient -->
+<div class="modal-header d-flex justify-content-between align-items-center text-white px-4 py-3 border-0"
+     style="background: linear-gradient(135deg, #212529, #343a40);">
+    <h5 class="modal-title mb-0 fw-bold fs-6" style="letter-spacing: 0.3px;">
+        <i class="bi bi-pencil-square me-2 text-warning"></i> Cập nhật phiếu đặt: <span class="text-warning">#@Model.MaPhieu</span>
+    </h5>
+    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form id="editPhieuForm" asp-action="Edit" method="post">
+    <div class="modal-body p-4 bg-light">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="MaPhieu" />
+        <input type="hidden" asp-for="NgayDat" />
+
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3 py-2 small" role="alert"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="MaKhachHang" class="form-label fw-semibold text-secondary small">Khách Hàng</label>
+                <select asp-for="MaKhachHang" class="form-select rounded-3 shadow-sm py-2" asp-items="ViewBag.MaKhachHang"></select>
+                <span asp-validation-for="MaKhachHang" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="MaLoaiPhong" class="form-label fw-semibold text-secondary small">Loại Phòng</label>
+                <select asp-for="MaLoaiPhong" class="form-select rounded-3 shadow-sm py-2" asp-items="ViewBag.MaLoaiPhong"></select>
+                <span asp-validation-for="MaLoaiPhong" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NgayDen" class="form-label fw-semibold text-secondary small">Ngày Đến</label>
+                <input asp-for="NgayDen" type="date" class="form-control rounded-3 shadow-sm py-2" />
+                <span asp-validation-for="NgayDen" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NgayDi" class="form-label fw-semibold text-secondary small">Ngày Đi</label>
+                <input asp-for="NgayDi" type="date" class="form-control rounded-3 shadow-sm py-2" />
+                <span asp-validation-for="NgayDi" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="SoNguoi" class="form-label fw-semibold text-secondary small">Số Người</label>
+                <input asp-for="SoNguoi" class="form-control rounded-3 shadow-sm py-2" />
+                <span asp-validation-for="SoNguoi" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="TienCoc" class="form-label fw-semibold text-secondary small">Tiền Cọc (VNĐ)</label>
+                <input asp-for="TienCoc" class="form-control rounded-3 shadow-sm py-2" />
+                <span asp-validation-for="TienCoc" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="TrangThai" class="form-label fw-semibold text-secondary small">Trạng Thái</label>
+                <select asp-for="TrangThai" class="form-select rounded-3 shadow-sm py-2">
+                    <option value="Chờ xác nhận">Chờ xác nhận</option>
+                    <option value="Đã xác nhận">Đã xác nhận</option>
+                    <option value="Đã hủy">Đã hủy</option>
+                    <option value="Hoàn thành">Hoàn thành</option>
+                </select>
+                <span asp-validation-for="TrangThai" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer d-flex justify-content-between align-items-center bg-white px-4 py-3 border-top" style="border-color: #f1f5f9 !important;">
+        <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i> Đóng
+        </button>
+        <button type="submit" class="btn px-4 fw-bold text-dark rounded-3"
+                style="background-color: #ffc107 !important; border: none; box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);">
+            <i class="bi bi-check2-circle me-1"></i> Lưu Thay Đổi
+        </button>
+    </div>
+</form>

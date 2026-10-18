@@ -1,0 +1,117 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.KhachHang>
+
+@{
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int totalItems = ViewBag.TotalItems ?? 0;
+}
+
+<div class="custom-table-container">
+    <table class="table custom-table">
+        <thead>
+            <tr>
+                <th>MÃ KH</th>
+                <th>HỌ TÊN KHÁCH HÀNG</th>
+                <th>SỐ ĐIỆN THOẠI</th>
+                <th>CCCD / CMND</th>
+                <th>EMAIL</th>
+                <th>TÀI KHOẢN</th>
+                <th class="text-center">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">#@item.MaKhachHang</td>
+                        <td class="fw-semibold">@item.HoTen</td>
+                        <td>
+                            <span class="custom-badge-tag">
+                                @(item.Sdt ?? "Chưa có")
+                            </span>
+                        </td>
+                        <td>
+                            <span class="custom-badge-tag">
+                                @(item.Cccd ?? "Chưa có")
+                            </span>
+                        </td>
+                        <td class="highlight-text">
+                            @(item.Email ?? "---")
+                        </td>
+                        <td>
+                            @if (item.TaiKhoan != null)
+                            {
+                                <span class="custom-badge-status status-active">
+                                    @item.TaiKhoan.Username
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="custom-badge-status status-locked">
+                                    Chưa liên kết
+                                </span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group action-btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-info btn-view-details" data-id="@item.MaKhachHang" title="Chi tiết">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-edit btn-open-edit-modal" data-id="@item.MaKhachHang" title="Sửa">
+                                    <i class="bi bi-pencil"></i> Sửa
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-delete btn-open-delete-modal" data-id="@item.MaKhachHang" title="Xóa">
+                                    <i class="bi bi-trash"></i> Xóa
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                        Không tìm thấy khách hàng phù hợp.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- THANH PHÂN TRANG CĂN GIỮA GIỐNG MẪU -->
+@if (totalPages > 1)
+{
+    <div class="pagination-wrapper">
+        <ul class="custom-pagination">
+            <!-- Nút Trước -->
+            <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                <a class="page-link ajax-page-link" href="#" data-page="@(currentPage - 1)">Trước</a>
+            </li>
+
+            <!-- Số trang -->
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                if (i == 1 || i == totalPages || (i >= currentPage - 2 && i <= currentPage + 2))
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link ajax-page-link" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+                else if (i == currentPage - 3 || i == currentPage + 3)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+            }
+
+            <!-- Nút Sau -->
+            <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
+                <a class="page-link ajax-page-link" href="#" data-page="@(currentPage + 1)">Sau</a>
+            </li>
+        </ul>
+    </div>
+}

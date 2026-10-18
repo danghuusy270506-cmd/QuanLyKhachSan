@@ -1,0 +1,153 @@
+```cshtml
+@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+
+@{
+    ViewData["Title"] = "Xếp phòng";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Xếp phòng và Check-in</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Thông tin phiếu đặt phòng
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Mã phiếu:</strong>
+                    @Model.MaPhieu
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Khách hàng:</strong>
+                    @(Model.KhachHang?.HoTen ?? "Chưa có thông tin")
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Loại phòng:</strong>
+                    @(Model.LoaiPhong?.TenLoaiPhong ?? "Chưa xác định")
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Giá phòng:</strong>
+                    @if (Model.LoaiPhong != null)
+                    {
+                        @Model.LoaiPhong.GiaPhong.ToString("N0")
+                        @:đ/đêm
+                    }
+                    else
+                    {
+                        <span class="text-danger">Chưa xác định giá</span>
+                    }
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Số người:</strong>
+                    @Model.SoNguoi
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Ngày đến dự kiến:</strong>
+                    @Model.NgayDen.ToString("dd/MM/yyyy")
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Ngày đi dự kiến:</strong>
+                    @Model.NgayDi.ToString("dd/MM/yyyy")
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Tiền cọc:</strong>
+                    @Model.TienCoc.ToString("N0") đ
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Trạng thái:</strong>
+                    <span class="badge bg-primary">
+                        @Model.TrangThai
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            Chọn phòng thực tế
+        </div>
+
+        <div class="card-body">
+            <form asp-controller="ChiTietXepPhong"
+                  asp-action="XepPhong"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="maPhieu"
+                       value="@Model.MaPhieu" />
+
+                <div class="mb-3">
+                    <label for="maPhong" class="form-label">
+                        Phòng trống phù hợp
+                    </label>
+
+                    <select id="maPhong"
+                            name="maPhong"
+                            class="form-select"
+                            asp-items="ViewBag.DanhSachPhong"
+                            required>
+                        <option value="">-- Chọn phòng --</option>
+                    </select>
+
+                    <div class="form-text">
+                        Chỉ chọn phòng đúng loại và không bị trùng
+                        lịch lưu trú.
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Lưu ý:</strong>
+                    Giá phòng sẽ được hệ thống tự động lấy từ loại phòng
+                    trong cơ sở dữ liệu và lưu khi check-in.
+                    Bạn không cần nhập đơn giá thủ công.
+                </div>
+
+                <div class="alert alert-warning">
+                    Khi xác nhận, hệ thống sẽ ghi nhận phòng được xếp,
+                    thời điểm nhận phòng thực tế và chuyển trạng thái
+                    phiếu, phòng sang "Đang ở".
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        Xác nhận Check-in
+                    </button>
+
+                    <a asp-controller="ChiTietXepPhong"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+                        Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+```

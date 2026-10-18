@@ -1,0 +1,123 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.PhieuDatPhong>
+@Html.AntiForgeryToken()
+@{
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<div class="card card-custom overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle mb-0 text-nowrap">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Mã phiếu</th>
+                        <th>Khách hàng</th>
+                        <th>Loại phòng</th>
+                        <th class="text-center">Số người</th>
+                        <th>Tiền cọc</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                        <th class="text-center">Xử lý</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center py-4 text-muted">Chưa có phiếu đặt phòng nào trong hệ thống.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr data-maphieu="@item.MaPhieu">
+                                <td class="ps-4 fw-semibold text-dark">#@item.MaPhieu</td>
+                                <td class="fw-medium">@(item.KhachHang?.HoTen ?? "N/A")</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@(item.LoaiPhong?.TenLoaiPhong ?? "Chưa xếp")</span>
+                                </td>
+                                <td class="text-center">@item.SoNguoi</td>
+                                <td class="fw-bold">@item.TienCoc.ToString("N0") đ</td>
+                                <td>
+                                    @if (item.TrangThai == "Chờ xác nhận")
+                                    {
+                                        <span class="badge-status badge-cho-xac-nhan">@item.TrangThai</span>
+                                    }
+                                    else if (item.TrangThai == "Đã xác nhận")
+                                    {
+                                        <span class="badge-status badge-da-xac-nhan">@item.TrangThai</span>
+                                    }
+                                    else if (item.TrangThai == "Đang ở")
+                                    {
+                                        <span class="badge-status badge-dang-o">@item.TrangThai</span>
+                                    }
+                                    else if (item.TrangThai == "Hoàn thành")
+                                    {
+                                        <span class="badge-status badge-hoan-thanh">@item.TrangThai</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-status badge-da-huy">@item.TrangThai</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button type="button" class="btn btn-sm btn-outline-info px-2 py-1 btn-view-details" data-id="@item.MaPhieu" title="Chi tiết">
+                                            <i class="bi bi-eye"></i> Chi tiết
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-warning px-2 py-1 btn-edit-details" data-id="@item.MaPhieu" title="Sửa" style="color: #b7791f !important; font-weight: 600;">
+                                            <i class="bi bi-pencil-square"></i> Sửa
+                                        </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-details" data-id="@item.MaPhieu" title="Xóa">
+                                                <i class="bi bi-trash"></i> Xóa
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center td-thao-tac">
+                                    @if (item.TrangThai == "Đã xác nhận")
+                                    {
+                                        <button type="button" class="btn btn-primary btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkin-ajax" data-id="@item.MaPhieu" style="background-color: #2563eb; border: none;">
+                                            Check-in
+                                        </button>
+                                    }
+                                    else if (item.TrangThai == "Đang ở")
+                                    {
+                                        <button type="button" class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax" data-id="@item.MaPhieu">
+                                            Check-out
+                                        </button>
+                                    }
+                                    else if (item.TrangThai == "Chờ xác nhận")
+                                    {
+                                        <button type="button" class="btn btn-warning btn-sm px-3 fw-medium text-dark rounded-pill shadow-sm btn-xac-nhan" data-id="@item.MaPhieu" style="background-color: #f59e0b; border: none;">
+                                            Xác nhận
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Gọi Partial View Phân trang -->
+<partial name="_PhieuDatPhongPhanTrangPartial" model="@(new
+         {
+             CurrentPage = currentPage,
+             TotalPages = totalPages,
+             ActionName = "Index",
+             maPhieu = ViewBag.maPhieu,
+             khachHang = ViewBag.khachHang,
+             trangThai = ViewBag.trangThai,
+             maLoaiPhong = ViewBag.maLoaiPhong,
+             ngayDen = ViewBag.ngayDen,
+             ngayDi = ViewBag.ngayDi
+         })" />

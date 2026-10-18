@@ -1,0 +1,63 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.DichVu>
+
+<div class="service-table-wrap">
+    <table class="table service-table align-middle">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center" style="width: 15%;">MÃ DỊCH VỤ</th>
+                <th scope="col" style="width: 25%;">TÊN DỊCH VỤ</th>
+                <th scope="col" style="width: 25%;">MÔ TẢ</th>
+                <th scope="col" class="text-center" style="width: 15%;">ĐƠN GIÁ</th>
+                <th scope="col" class="text-center" style="width: 20%;">THAO TÁC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-2 d-block mb-2" aria-hidden="true"></i>
+                        Không tìm thấy dịch vụ phù hợp.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center"><span class="service-code">@item.MaDichVu</span></td>
+                        <td><span class="service-name">@item.TenDichVu</span></td>
+                        <td class="text-secondary">
+                            @(string.IsNullOrWhiteSpace(item.MoTa) ? "Chưa có mô tả" : item.MoTa)
+                        </td>
+                        <td class="text-center">
+                            <span class="service-price">@item.DonGia.ToString("N0") đ</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="service-actions">
+                                <a asp-action="Details" asp-route-madichvu="@item.MaDichVu"
+                                   class="btn btn-action btn-action-info" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </a>
+                                <a asp-action="Edit" asp-route-madichvu="@item.MaDichVu"
+                                   class="btn btn-action btn-action-warning" title="Sửa dịch vụ">
+                                    <i class="bi bi-pencil-square"></i> Sửa
+                                </a>
+                                <a asp-action="Delete" asp-route-madichvu="@item.MaDichVu"
+                                   class="btn btn-action btn-action-danger" title="Xóa dịch vụ">
+                                    <i class="bi bi-trash3"></i> Xóa
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Dòng thông tin ở góc dưới giống góc trái trên ảnh mẫu -->
+<div class="service-footer-info">
+    Trang 1 / 1 — Tổng <strong id="totalCount">@Model.Count()</strong> dịch vụ
+</div>

@@ -1,0 +1,131 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.KhachHang>
+
+@{
+    ViewData["Title"] = "Danh sách khách hàng";
+    string tuKhoa = ViewBag.TuKhoa as string ?? "";
+}
+<link rel="stylesheet" href="~/css/KhachHang/Index.css" asp-append-version="true" />
+
+<div class="container-fluid px-4 py-3 d-flex justify-content-end">
+    <button type="button" id="btnOpenCreateModal" class="btn btn-filter">
+        <i class="bi bi-plus-lg me-1"></i>Thêm khách hàng
+    </button>
+</div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- BỘ LỌC TÌM KIẾM -->
+    <div class="card filter-card p-3 mb-4">
+        <form id="searchForm" class="row g-3 align-items-end">
+            <div class="col-md-9">
+                <label class="filter-label">Từ khóa tìm kiếm</label>
+                <input type="text"
+                       id="tuKhoaInput"
+                       name="tuKhoa"
+                       value="@tuKhoa"
+                       class="form-control filter-input"
+                       placeholder="Nhập tên, số điện thoại, email hoặc CCCD..." />
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-filter flex-grow-1 d-flex align-items-center justify-content-center gap-1">
+                    <i class="bi bi-funnel-fill"></i> Lọc
+                </button>
+                <button type="button" id="btnReset" class="btn btn-reset-filter" title="Đặt lại bộ lọc">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- KHU VỰC CHỨA BẢNG VÀ PHÂN TRANG AJAX -->
+    <div id="khachHangContainer">
+        <partial name="_KhachHangPartial" model="Model" />
+    </div>
+</div>
+
+<!-- BOOTSTRAP MODAL CHO THÊM MỚI) -->
+<div class="modal fade" id="createKhachHangModal" tabindex="-1" aria-labelledby="createKhachHangModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header text-white px-4 py-3" style="background-color: #1e293b; border-bottom: none;">
+                <h5 class="modal-title fs-6 fw-bold mb-0" id="createKhachHangModalLabel">
+                    <i class="bi bi-person-plus-fill me-2 text-primary"></i>Thêm khách hàng</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="createModalBody">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- BOOTSTRAP MODAL CHI TIẾT (Đã đổi sang modal-xl để to ra) -->
+<div class="modal fade" id="detailsKhachHangModal" tabindex="-1" aria-labelledby="detailsKhachHangModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header text-white px-4 py-3" style="background-color: #1e293b; border-bottom: none;">
+                <h5 class="modal-title fs-6 fw-bold mb-0" id="detailsKhachHangModalLabel">
+                    <i class="bi bi-person-vcard me-2 text-info"></i>Chi tiết khách hàng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="detailsModalBody">
+                <!-- Nội dung AJAX sẽ đổ vào đây -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOOTSTRAP MODAL CHO SỬA KHÁCH HÀNG -->
+<div class="modal fade" id="editKhachHangModal" tabindex="-1" aria-labelledby="editKhachHangModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header text-white px-4 py-3" style="background-color: #1e293b; border-bottom: none;">
+                <h5 class="modal-title fs-6 fw-bold mb-0" id="editKhachHangModalLabel">
+                    <i class="bi bi-pencil-square me-2 text-warning"></i>Cập nhật thông tin khách hàng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="editModalBody">
+            </div>
+            <div class="modal-footer bg-light px-4 py-3">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary px-4" id="btnSubmitEditKhachHang">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOOTSTRAP MODAL CHO XÓA KHÁCH HÀNG -->
+<div class="modal fade" id="deleteKhachHangModal" tabindex="-1" aria-labelledby="deleteKhachHangModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header text-white px-4 py-3" style="background-color: #1e293b; border-bottom: none;">
+                <h5 class="modal-title fs-6 fw-bold mb-0" id="deleteKhachHangModalLabel">
+                    <i class="bi bi-trash-fill me-2 text-danger"></i>Xóa khách hàng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4" id="deleteModalBody">
+                <!-- Nội dung Ajax đổ vào đây -->
+            </div>
+            <div class="modal-footer bg-light px-4 py-3">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger px-4" id="btnSubmitDeleteKhachHang">
+                    <i class="bi bi-trash me-1"></i> Xác nhận xóa
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/KhachHang/Index.js" asp-append-version="true"></script>
+}

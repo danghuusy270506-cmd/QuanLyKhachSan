@@ -1,0 +1,52 @@
+﻿@model QuanLyKhachSan.Models.Entities.Phong
+
+<!-- Header cảnh báo màu đỏ -->
+<div class="modal-header bg-dark text-white py-3 border-bottom-0">
+    <h5 class="modal-title mb-0 fw-bold d-flex align-items-center gap-2" id="deleteModalLabel">
+        <i class="bi bi-trash fs-5 text-danger"></i>
+        <span>Xác nhận xóa phòng: <span class="text-danger">@Model.SoPhong</span></span>
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div id="deletePhongContainer">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="deleteMaPhong" value="@Model.MaPhong" />
+
+    <div class="modal-body px-4 py-4 text-center">
+        <h3 class="fw-bold text-dark mb-2">Phòng @Model.SoPhong</h3>
+        <p class="fs-5 text-muted mb-2">
+            Tầng: <strong>@Model.Tang</strong> — Loại: <strong class="text-primary">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</strong>
+        </p>
+        <p class="fs-6 mb-3">
+            Trạng thái:
+            @if (Model.TrangThai == "Trống")
+            {
+                <span class="badge bg-success">Trống</span>
+            }
+            else if (Model.TrangThai == "Đang sử dụng")
+            {
+                <span class="badge bg-danger">Đang sử dụng</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">@Model.TrangThai</span>
+            }
+        </p>
+
+        <div class="alert alert-warning text-start mb-0" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa phòng này ra khỏi hệ thống? Hành động này không thể hoàn tác.
+        </div>
+    </div>
+
+    <!-- Footer chứa nút Hủy và Xác Nhận Xóa -->
+    <div class="modal-footer bg-light px-4 py-3 border-top-0 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-5 rounded-2" data-bs-dismiss="modal">
+            Hủy Bỏ
+        </button>
+        <button type="button" id="btnSubmitDelete" class="btn btn-danger px-4 py-2 fs-5 fw-semibold rounded-2">
+            <i class="bi bi-trash-fill me-1"></i> Xác Nhận Xóa
+        </button>
+    </div>
+</div>

@@ -1,0 +1,219 @@
+﻿/* Custom CSS theo phong cách Admin Dashboard */
+
+/* --- BỘ LỌC TÌM KIẾM --- */
+.filter-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.filter-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.filter-input, .filter-select {
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #1e293b;
+    transition: all 0.2s ease;
+}
+
+    .filter-input:focus, .filter-select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+.btn-filter {
+    background-color: #1e293b;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 8px 20px;
+    transition: background-color 0.2s;
+}
+
+    .btn-filter:hover {
+        background-color: #0f172a;
+        color: #ffffff;
+    }
+
+.btn-reset-filter {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+    .btn-reset-filter:hover {
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+
+/* --- BẢNG DỮ LIỆU --- */
+.custom-table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    background-color: #ffffff;
+}
+
+.custom-table {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+    .custom-table thead th {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 14px 16px;
+        border: none;
+        vertical-align: middle;
+    }
+
+    .custom-table tbody tr {
+        border-bottom: 1px solid #f1f5f9;
+        transition: background-color 0.15s;
+    }
+
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+    .custom-table tbody td {
+        padding: 14px 16px;
+        vertical-align: middle;
+        font-size: 14px;
+        color: #334155;
+    }
+
+/* Cột điểm nhấn (ví dụ: Số điện thoại hoặc Mã) */
+.highlight-text {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Thẻ tag/badge bo góc xám nhạt */
+.custom-badge-tag {
+    background-color: #f1f5f9;
+    color: #334155;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.custom-badge-status {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-active {
+    background-color: #16a34a;
+    color: #ffffff;
+}
+
+.status-locked {
+    background-color: #64748b;
+    color: #ffffff;
+}
+
+/* NÚT THAO TÁC */
+.action-btn-group .btn {
+    font-size: 13px;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: 500;
+    margin-left: 2px;
+}
+
+.btn-outline-detail {
+    border-color: #38bdf8;
+    color: #0284c7;
+}
+
+    .btn-outline-detail:hover {
+        background-color: #0284c7;
+        color: #ffffff;
+    }
+
+.btn-outline-edit {
+    border-color: #fde047;
+    color: #d97706;
+}
+
+    .btn-outline-edit:hover {
+        background-color: #d97706;
+        color: #ffffff;
+    }
+
+.btn-outline-delete {
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+    .btn-outline-delete:hover {
+        background-color: #dc2626;
+        color: #ffffff;
+    }
+
+/* --- PHÂN TRANG --- */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.custom-pagination {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .custom-pagination .page-item .page-link {
+        border: 1px solid #e2e8f0;
+        background-color: #ffffff;
+        color: #1e293b;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .custom-pagination .page-item.active .page-link {
+        background-color: #1e293b;
+        border-color: #1e293b;
+        color: #ffffff;
+    }
+
+    .custom-pagination .page-item.disabled .page-link {
+        background-color: #f8fafc;
+        color: #94a3b8;
+        border-color: #e2e8f0;
+        cursor: not-allowed;
+    }
+
+    .custom-pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+        background-color: #f1f5f9;
+    }
+

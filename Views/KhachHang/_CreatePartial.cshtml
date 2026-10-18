@@ -1,0 +1,49 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<form id="formCreateKhachHang" asp-controller="KhachHang" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Họ và Tên Khách hàng <span class="text-danger">*</span></label>
+            <input asp-for="HoTen" class="form-control" required placeholder="Ví dụ: Nguyễn Văn A" />
+            <span asp-validation-for="HoTen" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+            <input asp-for="Sdt" class="form-control" placeholder="Nhập số điện thoại khách hàng..." />
+            <span asp-validation-for="Sdt" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Số CCCD / CMND</label>
+            <input asp-for="Cccd" class="form-control" placeholder="Nhập số CCCD (nếu có)..." />
+            <span asp-validation-for="Cccd" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Địa chỉ Email</label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="Nhập email khách hàng (nếu có)..." />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <div class="alert alert-info py-2 small mt-2">
+        <i class="bi bi-info-circle me-1"></i> Hệ thống tự động tạo Tài khoản Web với <b>Mật khẩu mặc định: 123456</b>.
+    </div>
+
+    <!-- NÚT BẤM DẠNG BO TRÒN CAPSULE THEO MẪU -->
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+        <button type="button" class="btn btn-outline-secondary px-4 fw-semibold rounded-pill" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i> Đóng
+        </button>
+        <button type="button" id="btnSubmitKhachHang" class="btn btn-primary px-4 fw-semibold rounded-pill">
+            <i class="bi bi-check-lg me-1"></i> Lưu Khách Hàng
+        </button>
+    </div>
+</form>
