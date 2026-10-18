@@ -1,12 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.ViewModels;
+using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
 {
+    [Authorize] // Yêu cầu người dùng phải đăng nhập
     public class HomeController : Controller
     {
         private readonly QLKhachSanContext _context;
@@ -16,8 +21,16 @@ namespace QuanLyKhachSan.Controllers
             _context = context;
         }
 
+        // Trang Dashboard Quản trị (Chỉ dành cho Admin và NhanVien)
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Nếu người đăng nhập là Khách hàng -> Chuyển hướng sang trang đặt phòng/loại phòng
+            if (User.IsInRole("KhachHang"))
+            {
+                return RedirectToAction("Index", "LoaiPhong");
+            }
+
             var homNay = DateTime.Today;
             var ngayMai = homNay.AddDays(1);
             var dauThang = new DateTime(homNay.Year, homNay.Month, 1);
@@ -73,7 +86,7 @@ namespace QuanLyKhachSan.Controllers
             var doanhThuCaoNhat = doanhThu7Ngay.Max(x => x.DoanhThu);
             foreach (var item in doanhThu7Ngay)
             {
-                // Luôn có chiều cao tối thiểu để các ngày không doanh thu vẫn hiển thị trên biểu đồ.
+                // Sửa lỗi tính phần trăm chiều cao cột biểu đồ
                 item.ChieuCaoCot = doanhThuCaoNhat <= 0
                     ? 4
                     : Math.Max(4, (double)(item.DoanhThu / doanhThuCaoNhat * 100));
@@ -109,11 +122,23 @@ namespace QuanLyKhachSan.Controllers
             return View(model);
         }
 
+        public IActionResult ClientIndex()
+        {
+            return View();
+        }
+        public IActionResult StaffIndex()
+        {
+            return View();
+        }
+
+
+        [AllowAnonymous] // Ai cũng có thể xem trang chính sách bảo mật
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -10,16 +10,13 @@
         <thead>
             <tr>
                 <th>Mã hóa đơn</th>
-                <th>Mã phiếu</th>
-                <th>Tiền phòng</th>
-                <th>Tiền dịch vụ</th>
-                <th>Tiền cọc</th>
-                <th>Giảm giá</th>
-                <th>Tổng tiền</th>
-                <th>Thanh toán</th>
-                <th>Thời gian thanh toán</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
+                <th class="text-center">MÃ PHIẾU</th>
+                <th class="text-center">TỔNG TIỀN</th>
+                <th class="text-center">THANH TOÁN</th>
+                <th class="text-center">THỜI GIAN THANH TOÁN</th>
+                <th class="text-center">TRẠNG THÁI</th>
+                <th class="text-center">THAO TÁC</th>
+                <th class="text-center">THANH TOÁN</th>
             </tr>
         </thead>
 
@@ -29,25 +26,21 @@
                 @foreach (var hd in Model)
                 {
                     <tr>
-                        <td class="ma-hoa-don">@hd.MaHoaDon</td>
-                        <td>@hd.MaPhieu</td>
-                        <td>@hd.TienPhong.ToString("N0") đ</td>
-                        <td>@hd.TienDichVu.ToString("N0") đ</td>
-                        <td>@hd.TienCoc.ToString("N0") đ</td>
-                        <td>@hd.GiamGia.ToString("N0") đ</td>
-                        <td>@hd.TongTien.ToString("N0") đ</td>
-                        <td>@hd.KieuThanhToan</td>
-                        <td>
+                        <td class="ma-hoa-don ps-3">@hd.MaHoaDon</td>
+                        <td class="text-center">@hd.MaPhieu</td>
+                        <td class="text-center fw-semibold">@hd.TongTien.ToString("N0") đ</td>
+                        <td class="text-center">@hd.KieuThanhToan</td>
+                        <td class="text-center">
                             @if (hd.ThoiGianThanhToan == DateTime.MinValue)
                             {
-                                <span>Chưa thanh toán</span>
+                                <span class="text-muted">Chưa thanh toán</span>
                             }
                             else
                             {
                                 @hd.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
                             }
                         </td>
-                        <td>
+                        <td class="trang-thai-nhan-@hd.MaHoaDon text-center align-middle">
                             @if (hd.TrangThai == "DaThanhToan")
                             {
                                 <span class="badge bg-success">Đã thanh toán</span>
@@ -57,18 +50,39 @@
                                 <span class="badge bg-warning text-dark">Chưa thanh toán</span>
                             }
                         </td>
-                        <td class="hoa-don-actions">
-                            <a asp-action="ChiTietHoaDon"
-                               asp-route-maHoaDon="@hd.MaHoaDon"
-                               class="btn btn-sm btn-info">
-                                Chi tiết
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-route-maHoaDon="@hd.MaHoaDon"
-                               class="btn btn-sm btn-danger">
-                                Xóa
-                            </a>
+                        <td class="hoa-don-actions text-center align-middle">
+                            <div class="btn-group btn-group-sm shadow-sm inline-flex justify-content-center" role="group" aria-label="Thao tác hóa đơn">
+                                <!-- Nút Chi tiết -->
+                                <button type="button"
+                                        data-id="@hd.MaHoaDon"
+                                        class="btn btn-outline-info btn-xem-chi-tiet px-2 py-1"
+                                        title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </button>
+                                <!-- Nút Xóa -->
+                                    <a asp-action="Delete"
+                                    asp-route-maHoaDon="@hd.MaHoaDon"
+                                    class="btn btn-outline-danger px-2 py-1 btn-xoa-modal"
+                                    title="Xóa hóa đơn">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
+                            </div>
+                        </td>
+                        <td class="trang-thai-@hd.MaHoaDon text-center align-middle">
+                            @if (hd.TrangThai == "DaThanhToan")
+                            {
+                                <button type="button" class="btn btn-sm btn-success" disabled>
+                                    Xác nhận
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        class="btn btn-sm btn-warning text-dark fw-bold btn-xem-chi-tiet"
+                                        data-id="@hd.MaHoaDon">
+                                    Xác nhận
+                                </button>
+                            }
                         </td>
                     </tr>
                 }
@@ -76,7 +90,7 @@
             else
             {
                 <tr>
-                    <td colspan="11" class="text-center">
+                    <td colspan="8" class="text-center py-4">
                         Không tìm thấy hóa đơn.
                     </td>
                 </tr>
@@ -122,4 +136,3 @@
 <p class="thong-tin-phan-trang">
     Trang @trangHienTai / @tongTrang — Tổng @ViewBag.TongBanGhi hóa đơn
 </p>
-</div>

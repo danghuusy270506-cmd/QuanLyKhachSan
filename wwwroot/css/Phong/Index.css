@@ -1,0 +1,175 @@
+﻿:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --bg-main: #f8fafc;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --dark-header-bg: #1e293b; /* Tone màu xanh đen thanh lịch */
+    --dark-header-text: #ffffff;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 1rem;
+}
+
+/* Tăng cỡ chữ cho bộ lọc tìm kiếm */
+.form-label {
+    font-size: 0.95rem !important;
+}
+
+.form-control, .form-select, .input-group-text {
+    font-size: 0.95rem !important;
+}
+
+/* Nút Lọc màu tối */
+.btn-dark-filter, .btn-dark {
+    background-color: var(--dark-header-bg) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+    .btn-dark-filter:hover, .btn-dark:hover {
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+    }
+
+/* Table Design đồng bộ */
+.custom-table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+    width: 100%;
+}
+
+    .custom-table thead th {
+        background-color: var(--dark-header-bg) !important;
+        color: var(--dark-header-text) !important;
+        font-weight: 600;
+        font-size: 0.95rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 18px;
+        border: none !important;
+    }
+
+    /* Bo tròn 2 góc trên của thanh tiêu đề bảng */
+    .custom-table thead tr th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .custom-table thead tr th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    /* Xóa bỏ đường kẻ ngang giữa các hàng, tăng khoảng cách */
+    .custom-table td {
+        padding: 16px 18px;
+        border-bottom: none !important;
+        vertical-align: middle;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #1e293b;
+    }
+
+    /* Hiệu ứng đan xen màu nền (zebra striping): Dòng lẻ xám nhạt, dòng chẵn trắng */
+    .custom-table tbody tr:nth-child(odd) td {
+        background-color: #f1f5f9 !important;
+    }
+
+    .custom-table tbody tr:nth-child(even) td {
+        background-color: #ffffff !important;
+    }
+
+    /* Hiệu ứng di chuột vào dòng */
+    .custom-table tbody tr:hover td {
+        background-color: #e2e8f0 !important;
+        transition: background-color 0.15s ease;
+    }
+
+/* Badge Loại phòng */
+.badge-loai-phong {
+    background-color: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+}
+
+/* Các nút Thao tác (Chi tiết, Sửa, Xóa) - Bỏ hoàn toàn gạch chân */
+.btn-action {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #ffffff;
+    text-decoration: none !important; /* Bỏ gạch chân */
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-action:hover {
+        text-decoration: none !important;
+    }
+
+/* Nút Chi tiết (Xanh dương) */
+.btn-action-view {
+    color: #0ea5e9;
+    border: 1px solid #38bdf8;
+}
+
+    .btn-action-view:hover {
+        background-color: #0ea5e9;
+        color: #fff;
+    }
+
+/* Nút Sửa (Vàng cam) */
+.btn-action-edit {
+    color: #b7791f;
+    border: 1px solid #ecc94b;
+}
+
+    .btn-action-edit:hover {
+        background-color: #ffc107;
+        color: #000000;
+    }
+
+/* Nút Xóa (Đỏ) */
+.btn-action-delete {
+    color: #dc2626;
+    border: 1px solid #f87171;
+}
+
+    .btn-action-delete:hover {
+        background-color: #dc2626;
+        color: #fff;
+    }
+
+/* Thanh phân trang căn giữa */
+.custom-pagination .page-item .page-link {
+    color: #1e293b;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    margin: 0 3px;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-weight: 500;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #1e293b !important;
+    border-color: #1e293b !important;
+    color: #fff !important;
+}
+
+.custom-pagination .page-link:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}

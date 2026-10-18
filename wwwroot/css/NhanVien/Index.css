@@ -1,0 +1,89 @@
+﻿/* --- BỘ LỌC TÌM KIẾM --- */
+.filter-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filter-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.filter-input {
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #1e293b;
+    transition: all 0.2s ease;
+}
+
+    .filter-input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+.btn-filter {
+    background-color: #1e293b;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 8px 20px;
+    transition: background-color 0.2s;
+}
+
+    .btn-filter:hover {
+        background-color: #0f172a;
+        color: #ffffff;
+    }
+
+.btn-reset-filter {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+    .btn-reset-filter:hover {
+        background-color: #f8fafc;
+        color: #1e293b;
+    }
+
+/* --- PHÂN TRANG --- */
+.custom-pagination .custom-page-btn {
+    border-radius: 8px !important;
+    padding: 6px 16px;
+    color: #1a2530;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+    .custom-pagination .custom-page-btn:hover {
+        background-color: #f8f9fa;
+        color: #0d6efd;
+        border-color: #ced4da;
+    }
+
+.custom-pagination .page-item.active .custom-page-btn {
+    background-color: #1c2a38 !important;
+    border-color: #1c2a38 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.custom-pagination .page-item.disabled .custom-page-btn {
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    opacity: 0.6;
+}
+

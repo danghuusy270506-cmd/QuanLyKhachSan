@@ -1,0 +1,86 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<form asp-action="Edit" method="post" asp-route-maKhachHang="@Model.MaKhachHang" id="editKhachHangForm">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <input type="hidden" asp-for="MaKhachHang" />
+
+    <!-- Thông tin khách hàng -->
+    <h5 class="text-primary border-bottom pb-2 mb-3">
+        <i class="bi bi-person-lines-fill"></i> Thông tin khách hàng
+    </h5>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="HoTen" class="form-label">
+                Họ tên <span class="text-danger">*</span>
+            </label>
+            <input asp-for="HoTen" class="form-control" />
+            <span asp-validation-for="HoTen" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Cccd" class="form-label">CCCD</label>
+            <input asp-for="Cccd" class="form-control" />
+            <span asp-validation-for="Cccd" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Sdt" class="form-label">Số điện thoại</label>
+            <input asp-for="Sdt" class="form-control" />
+            <span asp-validation-for="Sdt" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <!-- Thông tin tài khoản -->
+    <h5 class="text-primary border-bottom pb-2 mt-4 mb-3">
+        <i class="bi bi-shield-lock"></i> Thông tin tài khoản
+    </h5>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Username</label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-person-badge"></i>
+                </span>
+                <input type="text" class="form-control"
+                       value="@Model.TaiKhoan?.Username" disabled />
+            </div>
+            <small class="text-muted">Username không thể thay đổi.</small>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Trạng thái tài khoản</label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-toggle-on"></i>
+                </span>
+                <input type="text" class="form-control"
+                       value="@Model.TaiKhoan?.TrangThai" disabled />
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="newPassword" class="form-label">
+                Mật khẩu mới
+            </label>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-key"></i>
+                </span>
+                <input type="password" name="newPassword" id="newPassword"
+                       class="form-control" minlength="6"
+                       placeholder="Để trống nếu không đổi" />
+            </div>
+            <small class="text-muted">Chỉ nhập khi muốn đổi mật khẩu.</small>
+        </div>
+    </div>
+</form>

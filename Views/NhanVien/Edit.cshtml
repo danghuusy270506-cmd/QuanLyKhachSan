@@ -1,72 +1,68 @@
 ﻿@model QuanLyKhachSan.Models.Entities.NhanVien
 
 @{
-    ViewData["Title"] = "Cập nhật thông tin nhân viên";
+    ViewData["Title"] = "Sửa thông tin Nhân viên";
 }
 
-<div class="container mt-4" style="max-width: 650px;">
+<div class="container mt-4" style="max-width: 600px;">
     <div class="card shadow-sm">
         <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Cập Nhật Nhân Viên</h4>
+            <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Cập nhật Nhân viên #@Model.MaNhanVien</h4>
         </div>
         <div class="card-body">
-            <form asp-controller="NhanVien" asp-action="Edit" method="post">
-                @Html.AntiForgeryToken()
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <input type="hidden" asp-for="MaNhanVien" />
+                <input type="hidden" asp-for="MaTaiKhoan" />
 
                 <div class="mb-3">
-                    <label asp-for="HoTen" class="form-label">Họ và tên:</label>
-                    <input asp-for="HoTen" class="form-control" />
-                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                    <label asp-for="HoTen" class="form-label fw-bold">Họ và Tên <span class="text-danger">*</span></label>
+                    <input asp-for="HoTen" class="form-control" placeholder="Nhập họ tên đầy đủ" />
+                    <span asp-validation-for="HoTen" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Cccd" class="form-label">CCCD / CMND:</label>
-                    <input asp-for="Cccd" class="form-control" />
-                    <span asp-validation-for="Cccd" class="text-danger"></span>
+                    <label asp-for="Cccd" class="form-label fw-bold">Số CCCD / CMND</label>
+                    <input asp-for="Cccd" class="form-control" placeholder="Nhập số CCCD" />
+                    <span asp-validation-for="Cccd" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Sdt" class="form-label">Số điện thoại:</label>
-                    <input asp-for="Sdt" class="form-control" />
-                    <span asp-validation-for="Sdt" class="text-danger"></span>
+                    <label asp-for="Sdt" class="form-label fw-bold">Số điện thoại</label>
+                    <input asp-for="Sdt" class="form-control" placeholder="Nhập số điện thoại" />
+                    <span asp-validation-for="Sdt" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label">Email:</label>
-                    <input asp-for="Email" type="email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label asp-for="Email" class="form-label fw-bold">Địa chỉ Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="example@domain.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Username" class="form-label">Tên đăng nhập:</label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
+                    <label class="form-label fw-bold">Mã tài khoản liên kết</label>
+                    <input type="text" class="form-control" value="@Model.MaTaiKhoan" disabled readonly />
+                    <small class="text-muted">Không thể thay đổi tài khoản liên kết tại đây.</small>
                 </div>
 
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">Mật khẩu mới:</label>
-                    <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu" />
-                </div>
+                <hr />
 
-                <div class="mb-3">
-                    <label asp-for="TrangThai" class="form-label">Trạng thái làm việc:</label>
-                    <select asp-for="TrangThai" class="form-select">
-                        <option value="Đang làm việc">Đang làm việc</option>
-                        <option value="Đã nghỉ việc">Đã nghỉ việc</option>
-                    </select>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
-                        Hủy / Quay lại
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Trở về
                     </a>
                     <button type="submit" class="btn btn-warning">
-                        Lưu cập nhật
+                        <i class="bi bi-save me-1"></i> Lưu thay đổi
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

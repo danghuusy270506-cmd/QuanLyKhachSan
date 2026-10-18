@@ -1,15 +1,17 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
 using QuanLyKhachSan.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuanLyKhachSan.Controllers
 {
+    [Authorize]
     public class HoaDonController : Controller
     {
         private readonly QLKhachSanContext context;
@@ -44,21 +46,32 @@ namespace QuanLyKhachSan.Controllers
             return await context.PhieuDatPhongs.Include(p => p.ChiTietXepPhongs).ThenInclude(ct => ct.ChiTietXepPhong_DichVus).FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
         }
 
-        //Tạo hóa đơn - hiển thị trước khi tạo
+
+        // 1. Tạo hóa đơn
         [HttpGet]
+        [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Create(int maPhieu)
         {
             var phieu = await LayPhieu(maPhieu);
-            if (phieu == null) return NotFound();
+            if (phieu == null)
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-danger'>Không tìm thấy phiếu đặt phòng.</div>");
+                return NotFound();
+            }
 
             if (await context.HoaDons.AnyAsync(hd => hd.MaPhieu == maPhieu))
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Phiếu này đã có hóa đơn.</div>");
                 TempData["ThongBao"] = "Phiếu này đã có hóa đơn.";
                 return RedirectToAction(nameof(Index));
             }
 
             if (!phieu.ChiTietXepPhongs.Any())
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Phiếu chưa được xếp phòng.</div>");
                 TempData["ThongBao"] = "Phiếu chưa được xếp phòng.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
@@ -66,6 +79,8 @@ namespace QuanLyKhachSan.Controllers
             if (phieu.ChiTietXepPhongs.Any(ct =>
                 ct.NgayNhanPhongThucTe == null || ct.NgayTra == null))
             {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Content("<div class='alert alert-warning'>Vui lòng check-out tất cả phòng trước khi lập hóa đơn.</div>");
                 TempData["ThongBao"] = "Vui lòng check-out tất cả phòng trước khi lập hóa đơn.";
                 return RedirectToAction("Index", "PhieuDatPhong");
             }
@@ -79,12 +94,17 @@ namespace QuanLyKhachSan.Controllers
             ViewBag.TienCoc = phieu.TienCoc;
             ViewBag.TongTien = Math.Max(0, tienPhong + tienDichVu - phieu.TienCoc);
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("Create");
+            }
             return View();
         }
 
-        //Lưu hóa đơn
+        // 2. Lưu hóa đơn
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Create(int maPhieu, int giamGia, string kieuThanhToan)
         {
             var phieu = await LayPhieu(maPhieu);
@@ -137,11 +157,16 @@ namespace QuanLyKhachSan.Controllers
             context.HoaDons.Add(hoaDon);
             await context.SaveChangesAsync();
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = "Tạo hóa đơn thành công." });
+            }
+
             TempData["ThongBao"] = "Tạo hóa đơn thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        //Danh sách, tìm kiếm và lọc hóa đơn, phân trang
+        // 3. Danh sách hóa đơn
         [HttpGet]
         public async Task<IActionResult> Index(string tuKhoa, int? ngay, int? thang, int? nam,string trangThai, int page = 1)
         {
@@ -235,7 +260,7 @@ namespace QuanLyKhachSan.Controllers
             return View(danhSach);
         }
 
-        //Chi tiết hóa đơn
+        // 4. Chi tiết hóa đơn
         [HttpGet]
         public async Task<IActionResult> ChiTietHoaDon(string maHoaDon)
         {
@@ -253,22 +278,34 @@ namespace QuanLyKhachSan.Controllers
                 ViewBag.TienDichVu = TinhTienDichVu(hoaDon.PhieuDatPhong);
             }
 
+            if(Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+                return PartialView("_ChiTietHoaDonPartial", hoaDon);
+            }
+
             return View("ChiTietHoaDon", hoaDon);
         }
 
-        // Hiển thị trang xóa hóa đơn
+        // 5. Xóa hóa đơn
         [HttpGet]
+        [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Delete(string maHoaDon)
         {
             var hoaDon = await context.HoaDons.FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
 
             if (hoaDon == null) return NotFound();
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_XoaHoaDonPartial", hoaDon);
+            }
+
             return View(hoaDon);
         }
 
-        // Xóa hóa đơn
+        // 6. Xác nhận xóa hóa đơn
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = "Admin,NhanVien")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string maHoaDon)
         {
@@ -280,8 +317,9 @@ namespace QuanLyKhachSan.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Xác nhận thanh toán
+        // 7. Xác nhận thanh toán
         [HttpPost]
+        [Authorize(Roles = "Admin,NhanVien")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> XacNhanThanhToan(string maHoaDon)
         {
@@ -291,7 +329,10 @@ namespace QuanLyKhachSan.Controllers
                          .ThenInclude(ct => ct.Phong)
                          .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
 
-            if (hoaDon == null) return NotFound();
+            if (hoaDon == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy hóa đơn." });
+            }
 
             if (hoaDon.TrangThai != "DaThanhToan")
             {
@@ -312,9 +353,7 @@ namespace QuanLyKhachSan.Controllers
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToAction(
-                nameof(ChiTietHoaDon),
-                new { maHoaDon = hoaDon.MaHoaDon });
+            return Json(new { success = true, message = "Xác nhận thanh toán thành công!" });
         }
     }
 }

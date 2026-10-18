@@ -1,0 +1,105 @@
+﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.NhanVien>
+
+@{
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string searchString = ViewBag.SearchString as string ?? "";
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="py-3 ps-3">MÃ NV</th>
+                        <th class="py-3">HỌ TÊN NHÂN VIÊN</th>
+                        <th class="py-3">SỐ ĐIỆN THOẠI</th>
+                        <th class="py-3">CCCD / CMND</th>
+                        <th class="py-3">EMAIL</th>
+                        <th class="py-3">TÀI KHOẢN</th>
+                        <th class="py-3 text-center" style="width: 240px;">THAO TÁC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox fs-3"></i><br />
+                                Không tìm thấy dữ liệu nhân viên nào.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var nv in Model)
+                        {
+                            <tr>
+                                <td class="ps-3 fw-bold">#@nv.MaNhanVien</td>
+                                <td class="fw-semibold">@nv.HoTen</td>
+                                <td>@(string.IsNullOrEmpty(nv.Sdt) ? "—" : nv.Sdt)</td>
+                                <td>@(string.IsNullOrEmpty(nv.Cccd) ? "—" : nv.Cccd)</td>
+                                <td>@(string.IsNullOrEmpty(nv.Email) ? "—" : nv.Email)</td>
+                                <td>
+                                    @if (nv.TaiKhoan != null)
+                                    {
+                                        <span class="badge bg-success">@nv.TaiKhoan.Username</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Chưa cấp</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-info me-1 btn-detail" data-id="@nv.MaNhanVien">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning me-1 btn-edit" data-id="@nv.MaNhanVien">
+                                        <i class="bi bi-pencil-square"></i> Sửa
+                                    </button>
+
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="@nv.MaNhanVien">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- THANH PHÂN TRANG -->
+    @if (totalPages > 1)
+    {
+        <div class="card-footer bg-white py-3">
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination custom-pagination mb-0 gap-1">
+                    <!-- Nút Trước -->
+                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                        <a class="page-link ajax-link custom-page-btn" href="#" data-page="@(currentPage - 1)">
+                            Trước
+                        </a>
+                    </li>
+
+                    <!-- Các con số trang -->
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link ajax-link custom-page-btn" href="#" data-page="@i">@i</a>
+                        </li>
+                    }
+
+                    <!-- Nút Sau -->
+                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                        <a class="page-link ajax-link custom-page-btn" href="#" data-page="@(currentPage + 1)">
+                            Sau
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+</div>

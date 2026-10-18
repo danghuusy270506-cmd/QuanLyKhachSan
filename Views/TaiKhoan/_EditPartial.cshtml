@@ -1,0 +1,41 @@
+﻿@model QuanLyKhachSan.Models.Entities.TaiKhoan
+
+<form id="editTaiKhoanForm" asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="MaTaiKhoan" />
+
+    <!-- Tên đăng nhập -->
+    <div class="form-group mb-3">
+        <label asp-for="Username" class="control-label fw-semibold">Tên đăng nhập</label>
+        <input asp-for="Username" class="form-control" placeholder="Nhập tên đăng nhập..." />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <!-- Mật khẩu (Có thể giữ nguyên hoặc vô hiệu hóa/để trống nếu không muốn đổi mật khẩu tại đây) -->
+    <div class="form-group mb-3">
+        <label asp-for="Password" class="control-label fw-semibold">Mật khẩu</label>
+        <input asp-for="Password" class="form-control" type="password" placeholder="Để trống nếu không muốn đổi mật khẩu" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <!-- Quyền (Role) - Select Option -->
+    <div class="form-group mb-3">
+        <label asp-for="Role" class="control-label fw-semibold">Quyền (Role)</label>
+        <select asp-for="Role" class="form-select">
+            <option value="Admin">Admin</option>
+            <option value="NhanVien">Nhân viên</option>
+            <option value="KhachHang">Khách hàng</option>
+        </select>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+
+    <!-- Trạng thái - Select Option -->
+    <div class="form-group mb-3">
+        <label asp-for="TrangThai" class="control-label fw-semibold">Trạng thái</label>
+        <select asp-for="TrangThai" class="form-select">
+            <option value="HoatDong">Hoạt động</option>
+            <option value="Khoa">Khóa</option>
+        </select>
+        <span asp-validation-for="TrangThai" class="text-danger"></span>
+    </div>
+</form>

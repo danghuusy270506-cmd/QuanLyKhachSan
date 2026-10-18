@@ -1,0 +1,37 @@
+﻿<div class="modal-header bg-dark text-white">
+    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Xác nhận Xóa Nhân viên</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa thông tin nhân viên dưới đây khỏi hệ thống?</p>
+
+    <div class="alert alert-light border">
+        <dl class="row mb-0">
+            <dt class="col-sm-4 text-muted">Mã nhân viên:</dt>
+            <dd class="col-sm-8">#@Model.MaNhanVien</dd>
+
+            <dt class="col-sm-4 text-muted">Họ và Tên:</dt>
+            <dd class="col-sm-8 fw-bold">@Model.HoTen</dd>
+
+            <dt class="col-sm-4 text-muted">Số điện thoại:</dt>
+            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Sdt) ? "—" : Model.Sdt)</dd>
+
+            <dt class="col-sm-4 text-muted">Email:</dt>
+            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Email) ? "—" : Model.Email)</dd>
+        </dl>
+    </div>
+
+    <!-- Form gửi yêu cầu Xóa thông qua AJAX -->
+    <form id="deleteNhanVienForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="MaNhanVienDelete" name="MaNhanVien" value="@Model.MaNhanVien" />
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <i class="bi bi-x-circle me-1"></i> Hủy bỏ
+    </button>
+    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
+        <i class="bi bi-trash-fill me-1"></i> Đồng ý Xóa
+    </button>
+</div>

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="~/css/HoaDon/Index.css" asp-append-version="true" />
 
 <div class="container-fluid hoa-don-page">
-    @* <h2 class="mb-4">Danh sách hóa đơn</h2> *@
+    @Html.AntiForgeryToken()
 
     @if (TempData["Success"] != null)
     {
@@ -67,12 +67,16 @@
                 </select>
             </div>
             <!-- Nút lọc -->
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
+            <div class="col-auto d-flex align-items-end">
+                <button type="submit" class="btn btn-dark btn-sm px-3 py-2 d-inline-flex align-items-center gap-1 shadow-sm btn-loc-action">
+                    <i class="bi bi-funnel-fill"></i> Lọc
+                </button>
             </div>
             <!-- Nút xóa lọc -->
-            <div class="col-auto">
-                <button type="button" id="btnXoaLoc" class="btn btn-secondary btn-sm">Xóa lọc</button>
+            <div class="col-auto d-flex align-items-end">
+                <button type="button" id="btnXoaLoc" class="btn btn-outline-secondary btn-sm px-3 py-2 d-inline-flex align-items-center gap-1 btn-xoa-loc-action" title="Xóa điều kiện lọc">
+                    <i class="bi bi-arrow-counterclockwise"></i> Xóa lọc
+                </button>
             </div>
 
         </div>
@@ -82,68 +86,24 @@
     <div id="danhSachHoaDon">
         @await Html.PartialAsync("_DanhSachHoaDon", Model)
     </div>
-
+    <!-- Modal Chi Tiết Hóa Đơn -->
+    <div class="modal fade" id="chiTietHoaDonModal" tabindex="-1" aria-labelledby="chiTietHoaDonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" id="modalContentContainer">
+                <!-- Nội dung chi tiết hóa đơn sẽ được load vào đây bằng AJAX -->
+                <div class="modal-body text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Đang tải...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        $(function() {
-            // Tải lại bảng hóa đơn bằng AJAX
-            function taiDanhSachHoaDon(page) {
-                const duLieu = $("#formLocHoaDon").serializeArray();
-
-                duLieu.push({
-                    name: "page",
-                    value: page
-                });
-
-                $.ajax({
-                    url: '@Url.Action("Index", "HoaDon")',
-                    type: "GET",
-                    data: $.param(duLieu),
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest"
-                    },
-                    success: function(html) {
-                        $("#danhSachHoaDon").html(html);
-                    },
-                    error: function(xhr) {
-                        console.error(xhr.responseText);
-                        alert("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
-                    }
-                });
-            }
-
-            // Lọc hoặc tìm kiếm: quay về trang đầu tiên
-            $("#formLocHoaDon").on("submit", function(e) {
-                e.preventDefault();
-                taiDanhSachHoaDon(1);
-            });
-
-            // Bấm nút xóa lọc
-            $("#btnXoaLoc").on("click", function() {
-                $("#formLocHoaDon")[0].reset();
-                taiDanhSachHoaDon(1);
-            });
-
-            // Phân trang: dùng sự kiện delegation vì bảng được thay bằng AJAX
-            $(document).on(
-                "click",
-                "#danhSachHoaDon .ajax-trang",
-                function(e) {
-                    e.preventDefault();
-
-                    const page = parseInt($(this).attr("data-page"));
-
-                    if (!page ||
-                        $(this).closest(".page-item").hasClass("disabled")) {
-                        return;
-                    }
-
-                    taiDanhSachHoaDon(page);
-                }
-            );
-
-        });
+        var urlLayDanhSach = '@Url.Action("Index", "HoaDon")';
     </script>
+    <script src="~/js/HoaDon/Index.js" asp-append-version="true"></script>
 }

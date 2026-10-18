@@ -1,0 +1,53 @@
+﻿@model QuanLyKhachSan.Models.Entities.NhanVien
+
+<div class="modal-header bg-dark text-white">
+    <h5 class="modal-title fs-5 fw-bold">
+        <i class="bi bi-pencil-square me-2"></i>Chỉnh Sửa Nhân Viên: <span class="text-warning">@Model.HoTen</span>
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="editNhanVienForm">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="MaNhanVien" id="MaNhanVien" />
+        <input type="hidden" asp-for="MaTaiKhoan" />
+
+        <div class="mb-3">
+            <label asp-for="HoTen" class="form-label fw-bold">Họ và Tên <span class="text-danger">*</span></label>
+            <input asp-for="HoTen" class="form-control" placeholder="Nhập họ tên đầy đủ" />
+            <span asp-validation-for="HoTen" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Cccd" class="form-label fw-bold">Số CCCD / CMND</label>
+            <input asp-for="Cccd" class="form-control" placeholder="Nhập số CCCD" />
+            <span asp-validation-for="Cccd" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Sdt" class="form-label fw-bold">Số điện thoại</label>
+            <input asp-for="Sdt" class="form-control" placeholder="Nhập số điện thoại" />
+            <span asp-validation-for="Sdt" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-bold">Địa chỉ Email</label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="example@domain.com" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Mã tài khoản liên kết</label>
+            <input type="text" class="form-control" value="@Model.MaTaiKhoan" disabled readonly />
+            <small class="text-muted">Không thể thay đổi tài khoản liên kết tại đây.</small>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    <button type="button" id="saveEditBtn" class="btn btn-warning">
+        <i class="bi bi-save me-1"></i> Lưu thay đổi
+    </button>
+</div>

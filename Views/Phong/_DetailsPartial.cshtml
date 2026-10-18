@@ -1,0 +1,112 @@
+﻿@model QuanLyKhachSan.Models.Entities.Phong
+
+<!-- Header tối, tiêu đề chữ to và tên phòng màu xanh -->
+<div class="modal-header bg-dark text-white px-4 py-3 align-items-center">
+    <h4 class="modal-title fs-4 fw-bold mb-0">
+        <i class="bi bi-info-circle me-2"></i>Chi tiết phòng: <span class="text-info fw-bold">Phòng @Model.SoPhong</span>
+    </h4>
+    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body với kích thước chữ lớn hơn và khoảng cách phù hợp -->
+<div class="modal-body px-4 py-3">
+    <div class="table-responsive">
+        <table class="table table-borderless align-middle mb-0">
+            <tbody>
+                <!-- Số Phòng -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3" style="width: 38%;">
+                        <i class="bi bi-door-closed me-2 fs-5"></i>Số Phòng
+                    </td>
+                    <td class="fw-bold text-dark fs-5 py-3">
+                        Phòng @Model.SoPhong
+                    </td>
+                </tr>
+
+                <!-- Tầng Khách Sạn -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3">
+                        <i class="bi bi-layers me-2 fs-5"></i>Tầng Khách Sạn
+                    </td>
+                    <td class="fw-bold text-dark fs-5 py-3">
+                        Tầng @Model.Tang
+                    </td>
+                </tr>
+
+                <!-- Loại Phòng -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3">
+                        <i class="bi bi-tag me-2 fs-5"></i>Loại Phòng
+                    </td>
+                    <td class="fw-semibold text-primary fs-5 py-3">
+                        @(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")
+                    </td>
+                </tr>
+
+                <!-- Giá Phòng / Đêm -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3">
+                        <i class="bi bi-cash-stack me-2 fs-5"></i>Giá Phòng / Đêm
+                    </td>
+                    <td class="fw-bold text-danger fs-4 py-3">
+                        @(Model.LoaiPhong != null ? Model.LoaiPhong.GiaPhong.ToString("N0") + " VNĐ" : "N/A")
+                    </td>
+                </tr>
+
+                <!-- Sức Chứa Tối Đa -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3">
+                        <i class="bi bi-people me-2 fs-5"></i>Sức Chứa Tối Đa
+                    </td>
+                    <td class="py-3">
+                        <span class="badge bg-light text-dark border px-3 py-2 fs-6 fw-normal">
+                            @(Model.LoaiPhong != null ? Model.LoaiPhong.SucChua + " người" : "N/A")
+                        </span>
+                    </td>
+                </tr>
+
+                <!-- Trạng Thái Hiện Tại -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3">
+                        <i class="bi bi-check-circle me-2 fs-5"></i>Trạng Thái Hiện Tại
+                    </td>
+                    <td class="py-3">
+                        @if (Model.TrangThai == "Trống")
+                        {
+                            <span class="badge bg-success px-3 py-2 fs-6">Trống</span>
+                        }
+                        else if (Model.TrangThai == "Đang sử dụng" || Model.TrangThai == "Đang ở")
+                        {
+                            <span class="badge bg-secondary px-3 py-2 fs-6">Đang ở</span>
+                        }
+                        else if (Model.TrangThai == "Bảo trì")
+                        {
+                            <span class="badge bg-warning text-dark px-3 py-2 fs-6">Bảo trì</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary px-3 py-2 fs-6">@Model.TrangThai</span>
+                        }
+                    </td>
+                </tr>
+
+                <!-- Mô Tả Loại Phòng -->
+                <tr>
+                    <td class="text-secondary fs-5 py-3 align-top">
+                        <i class="bi bi-file-text me-2 fs-5"></i>Mô Tả Loại Phòng
+                    </td>
+                    <td class="text-secondary fs-5 py-3 align-top">
+                        @(Model.LoaiPhong?.MoTa ?? "Không có mô tả")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer đơn giản chỉ giữ nút Đóng với chữ to hơn -->
+<div class="modal-footer bg-light px-4 py-3 border-top-0 d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-5 rounded-2" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i> Đóng
+    </button>
+</div>

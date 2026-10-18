@@ -1,0 +1,77 @@
+﻿@model QuanLyKhachSan.Models.Entities.KhachHang
+
+<div class="row g-4">
+    <!-- Thông tin khách hàng -->
+    <div class="col-md-7">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-person-lines-fill me-1"></i> Thông tin khách hàng
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Mã KH</dt>
+                    <dd class="col-sm-8">@Model.MaKhachHang</dd>
+
+                    <dt class="col-sm-4">Họ tên</dt>
+                    <dd class="col-sm-8 fw-semibold text-primary">@Model.HoTen</dd>
+
+                    <dt class="col-sm-4">CCCD</dt>
+                    <dd class="col-sm-8">@(Model.Cccd ?? "Chưa cập nhật")</dd>
+
+                    <dt class="col-sm-4">Số điện thoại</dt>
+                    <dd class="col-sm-8">@(Model.Sdt ?? "Chưa cập nhật")</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@(Model.Email ?? "Chưa cập nhật")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin tài khoản -->
+    <div class="col-md-5">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-shield-lock me-1"></i> Tài khoản
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Username</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-secondary">
+                            @(Model.TaiKhoan?.Username ?? "Không có")
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-5">Vai trò</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-info text-dark">
+                            @(Model.TaiKhoan?.Role ?? "N/A")
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-5">Trạng thái</dt>
+                    <dd class="col-sm-7">
+                        @if (Model.TaiKhoan?.TrangThai == "HoatDong")
+                        {
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Hoạt động
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle"></i> @(Model.TaiKhoan?.TrangThai ?? "Khóa")
+                            </span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Đã bỏ nút Chỉnh sửa, chỉ giữ nút Đóng -->
+<div class="mt-4 d-flex justify-content-end">
+    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+</div>

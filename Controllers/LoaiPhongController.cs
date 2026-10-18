@@ -6,9 +6,11 @@ using QuanLyKhachSan.Models.Entities;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyKhachSan.Controllers
 {
+    [Authorize]
     public class LoaiPhongController : Controller
     {
         private readonly QLKhachSanContext _context;
@@ -21,12 +23,21 @@ namespace QuanLyKhachSan.Controllers
         }
 
         // 1. DANH SÁCH LOẠI PHÒNG
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.LoaiPhongs.ToListAsync());
+            var dsLoaiPhong = await _context.LoaiPhongs.ToListAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_LoaiPhongPartial", dsLoaiPhong);
+            }
+
+            return View(dsLoaiPhong);
         }
 
         // 2. CHI TIẾT LOẠI PHÒNG
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? maloaiphong)
         {
             if (maloaiphong == null) return NotFound();
@@ -37,16 +48,27 @@ namespace QuanLyKhachSan.Controllers
 
             if (loaiphong == null) return NotFound();
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DetailsPartial", loaiphong);
+            }
+
             return View(loaiphong);
         }
 
         // 3. GIAO DIỆN THÊM LOẠI PHÒNG (GET: Create)
+        [Authorize(Roles = "Admin,NhanVien")]
         public IActionResult Create()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", new LoaiPhong());
+            }
             return View();
         }
 
         // 4. XỬ LÝ THÊM LOẠI PHÒNG + UPLOAD ẢNH (POST: Create)
+        [Authorize(Roles = "Admin,NhanVien")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TenLoaiPhong,GiaPhong,SucChua,MoTa")] LoaiPhong loaiphong, IFormFile? anhFile)
@@ -75,12 +97,23 @@ namespace QuanLyKhachSan.Controllers
 
                 _context.Add(loaiphong);
                 await _context.SaveChangesAsync();
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true, message = "Thêm loại phòng thành công!" });
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial", loaiphong);
+            }
+
             return View(loaiphong);
         }
 
         // 5. GIAO DIỆN SỬA LOẠI PHÒNG (GET: Edit)
+        [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Edit(int? maloaiphong)
         {
             if (maloaiphong == null) return NotFound();
@@ -88,10 +121,16 @@ namespace QuanLyKhachSan.Controllers
             var loaiphong = await _context.LoaiPhongs.FindAsync(maloaiphong);
             if (loaiphong == null) return NotFound();
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", loaiphong);
+            }
+
             return View(loaiphong);
         }
 
         // 6. XỬ LÝ SỬA LOẠI PHÒNG + THAY ĐỔI ẢNH (POST: Edit)
+        [Authorize(Roles = "Admin,NhanVien")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int maloaiphong, [Bind("MaLoaiPhong,TenLoaiPhong,GiaPhong,SucChua,MoTa,Anh")] LoaiPhong loaiphong, IFormFile? anhFile)
@@ -141,12 +180,23 @@ namespace QuanLyKhachSan.Controllers
                     if (!LoaiPhongExists(loaiphong.MaLoaiPhong)) return NotFound();
                     else throw;
                 }
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true, message = "Cập nhật loại phòng thành công!" });
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EditPartial", loaiphong);
+            }
+
             return View(loaiphong);
         }
 
         // 7. GIAO DIỆN XÓA LOẠI PHÒNG (GET: Delete)
+        [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Delete(int? maloaiphong)
         {
             if (maloaiphong == null) return NotFound();
@@ -156,10 +206,15 @@ namespace QuanLyKhachSan.Controllers
 
             if (loaiphong == null) return NotFound();
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_DeletePartial", loaiphong);
+            }
             return View(loaiphong);
         }
 
         // 8. XỬ LÝ XÓA LOẠI PHÒNG (POST: Delete)
+        [Authorize(Roles = "Admin,NhanVien")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int maloaiphong)
@@ -179,6 +234,10 @@ namespace QuanLyKhachSan.Controllers
 
                 _context.LoaiPhongs.Remove(loaiphong);
                 await _context.SaveChangesAsync();
+            }
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true });
             }
 
             return RedirectToAction(nameof(Index));

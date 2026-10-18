@@ -1,0 +1,101 @@
+﻿@model QuanLyKhachSan.Models.Entities.PhieuDatPhong
+
+<!-- Modal Header tối màu sang trọng với gradient -->
+<div class="modal-header d-flex justify-content-between align-items-center text-white px-4 py-3 border-0"
+     style="background: linear-gradient(135deg, #212529, #343a40);">
+    <h5 class="modal-title mb-0 fw-bold fs-6" style="letter-spacing: 0.3px;">
+        <i class="bi bi-journal-text me-2 text-primary"></i> Chi tiết phiếu đặt: <span class="text-primary">#@Model.MaPhieu</span>
+    </h5>
+    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body chứa Bảng thông tin chi tiết -->
+<div class="modal-body p-0">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" style="border-collapse: collapse;">
+            <tbody>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-hash text-muted me-2"></i>Mã phiếu đặt
+                    </th>
+                    <td class="fw-bold py-3 px-4 text-dark" style="width: 62%;">#@Model.MaPhieu</td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-person text-muted me-2"></i>Khách hàng đặt
+                    </th>
+                    <td class="fw-bold text-dark fs-6 py-3 px-4" style="width: 62%;">@(Model.KhachHang?.HoTen ?? "N/A")</td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-door-open text-muted me-2"></i>Loại phòng chọn
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;"><span class="text-primary fw-bold">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</span></td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-calendar-check text-muted me-2"></i>Thời gian nhận phòng
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;"><span class="text-success fw-bold"><i class="bi bi-arrow-right-short"></i> @Model.NgayDen.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-calendar-x text-muted me-2"></i>Thời gian trả phòng
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;"><span class="text-danger fw-bold"><i class="bi bi-arrow-left-short"></i> @Model.NgayDi.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-people text-muted me-2"></i>Số lượng khách
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;"><span class="badge bg-light text-dark border px-2 py-1">@Model.SoNguoi người</span></td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-cash-stack text-muted me-2"></i>Tiền đặt cọc
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;"><span class="text-danger fw-bold fs-6">@Model.TienCoc.ToString("N0") VNĐ</span></td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-person-badge text-muted me-2"></i>Nhân viên xác nhận
+                    </th>
+                    <td class="py-3 px-4 text-dark" style="width: 62%;">@(Model.NhanVien?.HoTen ?? "Khách tự đặt Online")</td>
+                </tr>
+                <tr class="border-bottom" style="border-color: #f1f5f9;">
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-clock-history text-muted me-2"></i>Thời gian tạo phiếu
+                    </th>
+                    <td class="text-secondary py-3 px-4" style="width: 62%;">@Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+                <tr>
+                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
+                        <i class="bi bi-shield-check text-muted me-2"></i>Trạng thái
+                    </th>
+                    <td class="py-3 px-4" style="width: 62%;">
+                        @{
+                            var badgeClass = Model.TrangThai switch
+                            {
+                                "Chờ xác nhận" => "bg-warning text-dark",
+                                "Đã xác nhận" => "bg-info text-dark",
+                                "Đang ở" => "bg-primary",
+                                "Hoàn thành" => "bg-success",
+                                _ => "bg-secondary"
+                            };
+                        }
+                        <span class="badge @badgeClass rounded-pill px-3 py-2 fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.3px;">
+                            @Model.TrangThai
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Footer -->
+<div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-between align-items-center" style="border-color: #f1f5f9 !important;">
+    <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg me-1"></i> Đóng
+    </button>
+</div>

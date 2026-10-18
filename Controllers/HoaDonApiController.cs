@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 
 namespace QuanLyKhachSan.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/hoadon")]
     public class HoaDonApiController : ControllerBase

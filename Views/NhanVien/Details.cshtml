@@ -1,50 +1,46 @@
 @model QuanLyKhachSan.Models.Entities.NhanVien
 
 @{
-    ViewData["Title"] = "Chi tiết nhân viên";
+    ViewData["Title"] = "Chi tiết Nhân viên";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Thông tin chi tiết nhân viên</h4>
-            <span class="badge bg-light text-dark">ID: #@Model.MaNhanVien</span>
+<div class="container mt-4" style="max-width: 650px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Thông tin Chi tiết Nhân viên</h4>
         </div>
         <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <strong>Họ và tên:</strong>
-                    <p class="text-muted">@Model.HoTen</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Tên tài khoản:</strong>
-                    <p class="text-muted">@Model.Username</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Số CCCD/CMND:</strong>
-                    <p class="text-muted">@(Model.Cccd ?? "Chưa cập nhật")</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Số điện thoại:</strong>
-                    <p class="text-muted">@(Model.Sdt ?? "Chưa cập nhật")</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Địa chỉ Email:</strong>
-                    <p class="text-muted">@(Model.Email ?? "Chưa cập nhật")</p>
-                </div>
-                <div class="col-md-6">
-                    <strong>Trạng thái:</strong>
-                    <p><span class="badge @(Model.TrangThai == "Đang làm việc" ? "bg-success" : "bg-danger")">@(Model.TrangThai ?? "Chưa cập nhật")</span></p>
-                </div>
-            </div>
+            <dl class="row mb-0 fs-6">
+                <dt class="col-sm-4 text-muted">Mã nhân viên:</dt>
+                <dd class="col-sm-8 fw-bold">#@Model.MaNhanVien</dd>
+
+                <dt class="col-sm-4 text-muted">Họ và tên:</dt>
+                <dd class="col-sm-8 fw-bold text-primary">@Model.HoTen</dd>
+
+                <dt class="col-sm-4 text-muted">Mã Tài Khoản:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-secondary">ID: @Model.MaTaiKhoan</span>
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Số CCCD:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Cccd) ? "Chưa cập nhật" : Model.Cccd)</dd>
+
+                <dt class="col-sm-4 text-muted">Số điện thoại:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Sdt) ? "Chưa cập nhật" : Model.Sdt)</dd>
+
+                <dt class="col-sm-4 text-muted">Email:</dt>
+                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)</dd>
+            </dl>
         </div>
-        <div class="card-footer d-flex gap-2">
-            <a asp-controller="NhanVien" asp-action="Edit" asp-route-maNhanVien="@Model.MaNhanVien" class="btn btn-warning">
-                Sửa thông tin
+        <div class="card-footer bg-white d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Trở về
             </a>
-            <a asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
-                Quay lại danh sách
-            </a>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.MaNhanVien" class="btn btn-warning me-1">
+                    <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+                </a>
+            </div>
         </div>
     </div>
 </div>

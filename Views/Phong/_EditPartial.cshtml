@@ -1,0 +1,64 @@
+﻿@model QuanLyKhachSan.Models.Entities.Phong
+
+<!-- Header tối, tiêu đề chữ to -->
+<div class="modal-header bg-dark text-white px-4 py-3 align-items-center">
+    <h4 class="modal-title fs-4 fw-bold mb-0">
+        <i class="bi bi-pencil-square me-2"></i>Chỉnh Sửa Phòng: <span class="text-warning fw-bold">Phòng @Model.SoPhong</span>
+    </h4>
+    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Đã đổi <form> thành <div> để chống reload trang tuyệt đối -->
+<div id="editPhongFormContainer">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="editMaPhong" name="MaPhong" value="@Model.MaPhong" />
+
+    <div class="modal-body px-4 py-3">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+        <div class="row g-3">
+            <!-- Số Phòng -->
+            <div class="col-md-6">
+                <label asp-for="SoPhong" class="form-label fw-semibold fs-5 text-secondary">Số Phòng</label>
+                <input asp-for="SoPhong" id="editSoPhong" class="form-control form-control-lg fs-5" />
+                <span asp-validation-for="SoPhong" class="text-danger small"></span>
+            </div>
+
+            <!-- Tầng -->
+            <div class="col-md-6">
+                <label asp-for="Tang" class="form-label fw-semibold fs-5 text-secondary">Tầng</label>
+                <input asp-for="Tang" id="editTang" type="number" min="1" class="form-control form-control-lg fs-5" />
+                <span asp-validation-for="Tang" class="text-danger small"></span>
+            </div>
+
+            <!-- Loại Phòng -->
+            <div class="col-md-6">
+                <label asp-for="MaLoaiPhong" class="form-label fw-semibold fs-5 text-secondary">Loại Phòng</label>
+                <select asp-for="MaLoaiPhong" id="editMaLoaiPhong" class="form-select form-select-lg fs-5" asp-items="ViewBag.MaLoaiPhong"></select>
+                <span asp-validation-for="MaLoaiPhong" class="text-danger small"></span>
+            </div>
+
+            <!-- Trạng Thái -->
+            <div class="col-md-6">
+                <label asp-for="TrangThai" class="form-label fw-semibold fs-5 text-secondary">Trạng Thái</label>
+                <select asp-for="TrangThai" id="editTrangThai" class="form-select form-select-lg fs-5">
+                    <option value="Trống">Trống</option>
+                    <option value="Đang sử dụng">Đang sử dụng</option>
+                    <option value="Đang dọn dẹp">Đang dọn dẹp</option>
+                    <option value="Bảo trì">Bảo trì</option>
+                </select>
+                <span asp-validation-for="TrangThai" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer chứa nút Đóng và Lưu Thay Đổi -->
+    <div class="modal-footer bg-light px-4 py-3 border-top-0 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-5 rounded-2" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i> Đóng
+        </button>
+        <button type="button" id="btnSubmitEdit" class="btn btn-warning px-4 py-2 fs-5 fw-semibold rounded-2">
+            <i class="bi bi-check-lg me-1"></i> Lưu Thay Đổi
+        </button>
+    </div>
+</div>

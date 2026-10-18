@@ -1,0 +1,169 @@
+@model IEnumerable<QuanLyKhachSan.Models.Entities.TaiKhoan>
+
+@{
+    ViewData["Title"] = "Quản lý Tài Khoản";
+}
+
+<!-- Nhúng file CSS riêng -->
+<link rel="stylesheet" href="~/css/TaiKhoan/Index.css" />
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary fw-bold mb-0">
+            <i class="bi bi-people-fill me-2"></i>Danh Sách Tài Khoản
+        </h3>
+        <a asp-action="Create" class="btn btn-dark fw-bold px-3">
+            <i class="bi bi-plus-circle me-1"></i> + Tạo tài khoản mới
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Form tìm kiếm và lọc -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <label class="form-label text-muted fw-semibold mb-2">Từ khóa tìm kiếm</label>
+            <div class="row g-2 align-items-center">
+                <!-- Ô nhập từ khóa -->
+                <div class="col">
+                    <input type="text" id="searchKeyword" class="form-control" placeholder="Nhập tên đăng nhập..." />
+                </div>
+
+                <!-- Ô chọn quyền (Role) -->
+                <div class="col-md-3">
+                    <select id="filterRole" class="form-select">
+                        <option value="">-- Tất cả quyền --</option>
+                        <option value="Admin">Admin</option>
+                        <option value="NhanVien">Nhân viên</option>
+                        <option value="KhachHang">Khách hàng</option>
+                    </select>
+                </div>
+
+                <!-- Nút Lọc -->
+                <div class="col-auto">
+                    <button type="button" id="btnFilter" class="btn btn-dark px-4">
+                        <i class="bi bi-funnel-fill me-1"></i> Lọc
+                    </button>
+                </div>
+
+                <!-- Nút Reset (Làm mới) -->
+                <div class="col-auto">
+                    <button type="button" id="btnReset" class="btn btn-outline-secondary" title="Đặt lại bộ lọc">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khu vực chứa bảng dữ liệu được load bằng AJAX -->
+    <div id="taiKhoanTableContainer">
+        @Html.Partial("_TaiKhoanPartial", Model)
+    </div>
+</div>
+
+<!-- Modal hiển thị chi tiết tài khoản -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+            <!-- Header chuẩn giao diện tối như ảnh -->
+            <div class="modal-header py-3 px-4 text-white" style="background-color: #1b2838;">
+                <h5 class="modal-title fw-bold d-flex align-items-center fs-6" id="detailModalLabel">
+                    <i class="bi bi-card-heading text-info me-2 fs-5"></i>
+                    <span>Chi tiết tài khoản</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4" id="detailModalBody">
+                <!-- Nội dung chi tiết load bằng AJAX sẽ được đổ vào đây -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Đang tải...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer bg-light py-2 px-4 border-0">
+                <button type="button" class="btn btn-secondary px-4 btn-sm fw-semibold" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal chỉnh sửa tài khoản -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+            <div class="modal-header py-3 px-4 text-white" style="background-color: #1b2838;">
+                <h5 class="modal-title fw-bold d-flex align-items-center fs-6" id="editModalLabel">
+                    <i class="bi bi-pencil-square text-warning me-2 fs-5"></i>
+                    <span>Chỉnh sửa tài khoản</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4" id="editModalBody">
+                <!-- Form sửa sẽ được load bằng AJAX vào đây -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Đang tải...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer bg-light py-2 px-4 border-0">
+                <button type="button" class="btn btn-secondary px-3 btn-sm fw-semibold" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" id="btnSaveEdit" class="btn btn-primary px-4 btn-sm fw-semibold">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xóa tài khoản -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+            <!-- Cập nhật Header khớp style màu tối như ảnh mẫu -->
+            <div class="modal-header py-3 px-4 text-white" style="background-color: #1b2838;">
+                <h5 class="modal-title fw-bold d-flex align-items-center fs-6" id="deleteModalLabel">
+                    <i class="bi bi-trash text-warning me-2 fs-5"></i>
+                    <span>Xóa tài khoản</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4" id="deleteModalBody">
+                <!-- Nội dung xác nhận xóa sẽ được load bằng AJAX vào đây -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Đang tải...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer bg-light py-2 px-4 border-0">
+                <button type="button" class="btn btn-secondary px-3 btn-sm fw-semibold" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" id="btnConfirmDelete" class="btn btn-danger px-4 btn-sm fw-semibold">Xác Nhận Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Nhúng file JS riêng -->
+@section Scripts {
+    <script src="~/js/TaiKhoan/Index.js"></script>
+}
