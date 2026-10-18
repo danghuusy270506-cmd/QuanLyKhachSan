@@ -6,71 +6,57 @@
 }
 <link rel="stylesheet" href="~/css/NhanVien/Index.css" />
 
-<div class="container mt-4">
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+<!-- Nút thêm mới (nếu cần) - Giữ nguyên form giống Phòng -->
+<div class="d-flex justify-content-end mb-3">
+    <!-- Nếu bạn có chức năng thêm nhân viên, hãy thêm nút này và ID Modal tương ứng -->
+    <!-- <button type="button" id="btnOpenCreateModal" class="btn btn-dark fw-semibold px-3 py-2 rounded-2">
+        <i class="bi bi-plus-lg me-1"></i> Thêm Nhân Viên Mới
+    </button> -->
+</div>
 
-    <!-- BỘ LỌC TÌM KIẾM -->
-    <div class="card shadow-sm mb-3">
-        <div class="card-body">
-            <label class="form-label text-muted fw-bold small mb-2">Từ khóa tìm kiếm</label>
-            <form id="searchForm" class="row g-2 align-items-center">
-                <!-- Ô nhập thông tin tìm kiếm chiếm 7/12 cột -->
-                <div class="col-md-7">
-                    <input type="text" id="searchString" name="searchString" value="@searchString"
-                           class="form-control form-control-lg fs-6 py-2"
-                           placeholder="Nhập tên, số điện thoại, email hoặc CCCD..." />
-                </div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
-                <!-- Khối chứa nút Lọc ngắn lại (5/12 cột) và các nút cao to ra -->
-                <div class="col-md-5 d-flex gap-2">
-                    <button type="submit" class="btn btn-dark btn-lg flex-grow-1 py-2 fs-6 fw-semibold">
-                        <i class="bi bi-funnel-fill me-1"></i> Lọc
-                    </button>
-                    <button type="button" id="resetBtn" class="btn btn-outline-secondary btn-lg px-3 py-2" title="Làm mới">
-                        <i class="bi bi-arrow-counterclockwise fs-5"></i>
-                    </button>
-                </div>
-            </form>
+<!-- Khu vực Lọc dữ liệu -->
+@await Html.PartialAsync("_FilterPartial", new QuanLyKhachSan.Models.ViewModels.FilterViewModel
+{
+    ActionUrl = Url.Action("Index", "NhanVien"),
+    Placeholder = "Nhập tên, số điện thoại, email hoặc CCCD...",
+    SearchParamName = "searchString",
+    SearchValue = ViewBag.SearchString
+})
+<!-- Modal hiển thị chi tiết nhân viên -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="detailModalContent">
         </div>
     </div>
-    <!-- Modal hiển thị chi tiết nhân viên -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <!-- Đổi lại thành modal-content bình thường để bo góc chuẩn gọn gàng -->
-            <div class="modal-content" id="detailModalContent">
-                <!-- Nội dung chi tiết nhân viên từ Partial View sẽ đổ vào đây -->
-            </div>
+</div>
+
+<!-- Modal chỉnh sửa nhân viên -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="editModalContent">
         </div>
     </div>
+</div>
 
-    <!-- Modal chỉnh sửa nhân viên -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" id="editModalContent">
-                <!-- Nội dung form sửa từ Partial View sẽ đổ vào đây -->
-            </div>
+<!-- Modal xóa nhân viên -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-3 overflow-hidden" id="deleteModalContent">
         </div>
     </div>
+</div>
 
-    <!-- Modal xóa nhân viên -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" id="deleteModalContent">
-                <!-- Nội dung xác nhận xóa từ Partial View sẽ đổ vào đây -->
-            </div>
-        </div>
-    </div>
-
-    <!-- KHUNG CHỨA BẢNG DỮ LIỆU (Được cập nhật qua AJAX) -->
-    <div id="tableContainer">
-        <partial name="_NhanVienPartial" model="Model" />
-    </div>
+<!-- KHUNG CHỨA BẢNG DỮ LIỆU (Được cập nhật qua AJAX) -->
+<div id="tableContainer">
+    <partial name="_NhanVienPartial" model="Model" />
 </div>
 
 @section Scripts {

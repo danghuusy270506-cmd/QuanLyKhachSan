@@ -3,59 +3,59 @@
 @{
     ViewData["Title"] = "Danh Sách Phòng";
     var dsLoaiPhong = ViewBag.DanhSachLoaiPhong as List<string> ?? new List<string>();
+    var selectedLoaiPhong = ViewBag.tenLoaiPhong as string;
+    var selectedTrangThai = ViewBag.TrangThai as string;
+
+    // Sử dụng StringBuilder hoặc tag helper để tránh lỗi biên dịch C#
+    System.Text.StringBuilder sbFilters = new System.Text.StringBuilder();
+    sbFilters.Append("<div class='row g-2'>");
+
+    // Cột Loại Phòng
+    sbFilters.Append("<div class='col-6'>");
+    sbFilters.Append("<label class='form-label fw-semibold text-muted small'>Loại phòng</label>");
+    sbFilters.Append("<select name='tenLoaiPhong' class='form-select'>");
+    sbFilters.Append("<option value='Tất cả'>Tất cả loại phòng</option>");
+    foreach (var loai in dsLoaiPhong)
+    {
+        string selected = (selectedLoaiPhong == loai) ? "selected" : "";
+        sbFilters.Append($"<option value='{loai}' {selected}>{loai}</option>");
+    }
+    sbFilters.Append("</select>");
+    sbFilters.Append("</div>");
+
+    // Cột Trạng Thái
+    sbFilters.Append("<div class='col-6'>");
+    sbFilters.Append("<label class='form-label fw-semibold text-muted small'>Trạng thái</label>");
+    sbFilters.Append("<select name='trangThai' class='form-select'>");
+    sbFilters.Append($"<option value='Tất cả' {(selectedTrangThai == "Tất cả" || string.IsNullOrEmpty(selectedTrangThai) ? "selected" : "")}>Tất cả</option>");
+    sbFilters.Append($"<option value='Trống' {(selectedTrangThai == "Trống" ? "selected" : "")}>Trống</option>");
+    sbFilters.Append($"<option value='Đang ở' {(selectedTrangThai == "Đang ở" || selectedTrangThai == "Đang sử dụng" ? "selected" : "")}>Đang ở</option>");
+    sbFilters.Append($"<option value='Đang dọn dẹp' {(selectedTrangThai == "Đang dọn dẹp" ? "selected" : "")}>Đang dọn dẹp</option>");
+    sbFilters.Append($"<option value='Bảo trì' {(selectedTrangThai == "Bảo trì" ? "selected" : "")}>Bảo trì</option>");
+    sbFilters.Append("</select>");
+    sbFilters.Append("</div>");
+
+    sbFilters.Append("</div>");
+
+    ViewData["CustomFilters"] = sbFilters.ToString();
 }
 
 <link rel="stylesheet" href="~/css/Phong/Index.css" />
 
-    <div class="d-flex justify-content-end mb-3">
-        <button type="button" id="btnOpenCreateModal" class="btn btn-dark fw-semibold px-3 py-2 rounded-2">
-            <i class="bi bi-plus-lg me-1"></i> Thêm Phòng Mới
-        </button>
-    </div>
+<div class="d-flex justify-content-end mb-3">
+    <button type="button" id="btnOpenCreateModal" class="btn btn-dark fw-semibold px-3 py-2 rounded-2">
+        <i class="bi bi-plus-lg me-1"></i> Thêm Phòng Mới
+    </button>
+</div>
+
 <!-- Khu vực Lọc dữ liệu -->
-        <div class="filter-container card shadow-sm border-0 rounded-3 p-3 mb-4">
-            <div class="row g-3 align-items-end">
-                <!-- Lọc theo Số phòng -->
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold text-muted small">Số phòng</label>
-                    <input type="text" id="soPhongInput" class="form-control" placeholder="Nhập số phòng..." value="@ViewBag.soPhong" />
-                </div>
-
-                <!-- Lọc theo Loại phòng -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold text-muted small">Loại phòng</label>
-                <select id="loaiPhongFilter" class="form-select">
-                    <option value="Tất cả">Tất cả loại phòng</option>
-                    @foreach (var tenLoai in dsLoaiPhong)
-                    {
-                        <option value="@tenLoai" selected="@(ViewBag.TenLoaiPhong == tenLoai)">@tenLoai</option>
-                    }
-                </select>
-            </div>
-
-                <!-- Lọc theo Trạng thái -->
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold text-muted small">Trạng thái</label>
-                    <select id="trangThaiFilter" class="form-select">
-                        <option value="Tất cả">Tất cả</option>
-                        <option value="Trống" selected="@(ViewBag.TrangThai == "Trống")">Trống</option>
-                        <option value="Đang sử dụng" selected="@(ViewBag.TrangThai == "Đang sử dụng")">Đang sử dụng</option>
-                        <option value="Đang dọn dẹp" selected="@(ViewBag.TrangThai == "Đang dọn dẹp")">Đang dọn dẹp</option>
-                        <option value="Bảo trì" selected="@(ViewBag.TrangThai == "Bảo trì")">Bảo trì</option>
-                    </select>
-                </div>
-
-                <!-- Nút bấm Lọc & Xóa lọc -->
-                <div class="col-md-3 d-flex gap-2">
-                    <button type="button" id="btnFilter" class="btn btn-dark px-3 fw-semibold flex-grow-1">
-                        <i class="bi bi-funnel-fill me-1"></i> Lọc
-                    </button>
-                    <button type="button" id="btnReset" class="btn btn-outline-secondary px-3">
-                        <i class="bi bi-arrow-counterclockwise"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+@await Html.PartialAsync("_FilterPartial", new QuanLyKhachSan.Models.ViewModels.FilterViewModel
+{
+    ActionUrl = Url.Action("Index", "Phong"),
+    Placeholder = "Nhập số phòng...",
+    SearchParamName = "soPhong",
+    SearchValue = ViewBag.soPhong
+})
 
 <!-- Khung Modal hiển thị chi tiết phòng -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">

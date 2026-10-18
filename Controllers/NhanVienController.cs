@@ -24,7 +24,7 @@ namespace QuanLyKhachSan.Controllers
         // 1. DANH SÁCH NHÂN VIÊN (Chỉ dành riêng cho Admin)
         [HttpGet]
         [Authorize(Roles = "Admin,ADMIN")]
-        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 10)
         {
             if (page < 1) page = 1;
 

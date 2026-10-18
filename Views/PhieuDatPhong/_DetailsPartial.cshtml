@@ -9,87 +9,143 @@
     <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
-<!-- Modal Body chứa Bảng thông tin chi tiết -->
+<!-- Modal Body: Chia làm 2 cột -->
 <div class="modal-body p-0">
-    <div class="table-responsive">
-        <table class="table align-middle mb-0" style="border-collapse: collapse;">
-            <tbody>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-hash text-muted me-2"></i>Mã phiếu đặt
-                    </th>
-                    <td class="fw-bold py-3 px-4 text-dark" style="width: 62%;">#@Model.MaPhieu</td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-person text-muted me-2"></i>Khách hàng đặt
-                    </th>
-                    <td class="fw-bold text-dark fs-6 py-3 px-4" style="width: 62%;">@(Model.KhachHang?.HoTen ?? "N/A")</td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-door-open text-muted me-2"></i>Loại phòng chọn
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;"><span class="text-primary fw-bold">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</span></td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-calendar-check text-muted me-2"></i>Thời gian nhận phòng
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;"><span class="text-success fw-bold"><i class="bi bi-arrow-right-short"></i> @Model.NgayDen.ToString("dd/MM/yyyy")</span></td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-calendar-x text-muted me-2"></i>Thời gian trả phòng
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;"><span class="text-danger fw-bold"><i class="bi bi-arrow-left-short"></i> @Model.NgayDi.ToString("dd/MM/yyyy")</span></td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-people text-muted me-2"></i>Số lượng khách
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;"><span class="badge bg-light text-dark border px-2 py-1">@Model.SoNguoi người</span></td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-cash-stack text-muted me-2"></i>Tiền đặt cọc
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;"><span class="text-danger fw-bold fs-6">@Model.TienCoc.ToString("N0") VNĐ</span></td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-person-badge text-muted me-2"></i>Nhân viên xác nhận
-                    </th>
-                    <td class="py-3 px-4 text-dark" style="width: 62%;">@(Model.NhanVien?.HoTen ?? "Khách tự đặt Online")</td>
-                </tr>
-                <tr class="border-bottom" style="border-color: #f1f5f9;">
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-clock-history text-muted me-2"></i>Thời gian tạo phiếu
-                    </th>
-                    <td class="text-secondary py-3 px-4" style="width: 62%;">@Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
-                </tr>
-                <tr>
-                    <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 38%; background-color: #fafafa; border-color: #f1f5f9;">
-                        <i class="bi bi-shield-check text-muted me-2"></i>Trạng thái
-                    </th>
-                    <td class="py-3 px-4" style="width: 62%;">
-                        @{
-                            var badgeClass = Model.TrangThai switch
-                            {
-                                "Chờ xác nhận" => "bg-warning text-dark",
-                                "Đã xác nhận" => "bg-info text-dark",
-                                "Đang ở" => "bg-primary",
-                                "Hoàn thành" => "bg-success",
-                                _ => "bg-secondary"
-                            };
-                        }
-                        <span class="badge @badgeClass rounded-pill px-3 py-2 fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.3px;">
-                            @Model.TrangThai
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row g-0">
+        <!-- CỘT TRÁI: THÔNG TIN PHIẾU -->
+        <div class="col-md-5 border-end">
+            <div class="table-responsive h-100">
+                <table class="table align-middle mb-0" style="border-collapse: collapse;">
+                    <tbody>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-hash text-muted me-2"></i>Mã phiếu
+                            </th>
+                            <td class="fw-bold py-3 px-4 text-dark" style="width: 60%;">#@Model.MaPhieu</td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-person text-muted me-2"></i>Khách hàng
+                            </th>
+                            <td class="fw-bold text-dark fs-6 py-3 px-4" style="width: 60%;">@(Model.KhachHang?.HoTen ?? "N/A")</td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-door-open text-muted me-2"></i>Loại phòng
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;"><span class="text-primary fw-bold">@(Model.LoaiPhong?.TenLoaiPhong ?? "N/A")</span></td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-calendar-check text-muted me-2"></i>Nhận phòng
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;"><span class="text-success fw-bold"><i class="bi bi-arrow-right-short"></i> @Model.NgayDen.ToString("dd/MM/yyyy")</span></td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-calendar-x text-muted me-2"></i>Trả phòng
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;"><span class="text-danger fw-bold"><i class="bi bi-arrow-left-short"></i> @Model.NgayDi.ToString("dd/MM/yyyy")</span></td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-people text-muted me-2"></i>Số lượng khách
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;"><span class="badge bg-light text-dark border px-2 py-1">@Model.SoNguoi người</span></td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-cash-stack text-muted me-2"></i>Tiền đặt cọc
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;"><span class="text-danger fw-bold fs-6">@Model.TienCoc.ToString("N0") VNĐ</span></td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-person-badge text-muted me-2"></i>Nhân viên
+                            </th>
+                            <td class="py-3 px-4 text-dark" style="width: 60%;">@(Model.NhanVien?.HoTen ?? "Khách tự đặt Online")</td>
+                        </tr>
+                        <tr class="border-bottom" style="border-color: #f1f5f9;">
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-clock-history text-muted me-2"></i>Thời gian tạo
+                            </th>
+                            <td class="text-secondary py-3 px-4" style="width: 60%;">@Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <th class="fw-semibold text-secondary py-3 px-4 border-end" style="width: 40%; background-color: #fafafa; border-color: #f1f5f9;">
+                                <i class="bi bi-shield-check text-muted me-2"></i>Trạng thái
+                            </th>
+                            <td class="py-3 px-4" style="width: 60%;">
+                                @{
+                                    var badgeClass = Model.TrangThai switch
+                                    {
+                                        "Chờ xác nhận" => "bg-warning text-dark",
+                                        "Đã xác nhận" => "bg-info text-dark",
+                                        "Đang ở" => "bg-primary",
+                                        "Hoàn thành" => "bg-success",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @badgeClass rounded-pill px-3 py-2 fw-semibold" style="font-size: 0.85rem; letter-spacing: 0.3px;">
+                                    @Model.TrangThai
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: DỊCH VỤ ĐÃ SỬ DỤNG -->
+        <div class="col-md-7 bg-light">
+            @{
+                var danhSachDichVu = Model.ChiTietXepPhongs?
+                    .SelectMany(ct => ct.ChiTietXepPhong_DichVus ?? new List<QuanLyKhachSan.Models.Entities.ChiTietXepPhong_DichVu>())
+                    .ToList() ?? new List<QuanLyKhachSan.Models.Entities.ChiTietXepPhong_DichVu>();
+            }
+
+            @if (danhSachDichVu.Any())
+            {
+                <div class="p-3">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-cart-check text-success me-1"></i> Dịch vụ đã sử dụng</h6>
+                    <div class="table-responsive bg-white rounded border">
+                        <table class="table table-sm table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Tên dịch vụ</th>
+                                    <th class="text-center">SL</th>
+                                    <th class="text-end">Đơn giá / SL</th>
+                                    <th class="text-center" style="width: 60px;">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dv in danhSachDichVu)
+                                {
+                                    <tr>
+                                        <td class="ps-3 fw-semibold">@(dv.DichVu?.TenDichVu ?? "N/A")</td>
+                                        <td class="text-center">@dv.SoLuong</td>
+                                        <td class="text-end text-danger fw-bold">@dv.DonGia.ToString("N0") đ</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-service"
+                                                    data-id="@dv.Id" data-maphieu="@Model.MaPhieu" title="Xóa dịch vụ này">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="h-100 d-flex flex-column align-items-center justify-content-center text-muted py-5">
+                    <i class="bi bi-inbox fs-1 mb-2"></i>
+                    <p class="mb-0">Chưa có dịch vụ nào được sử dụng</p>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -98,4 +154,17 @@
     <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" data-bs-dismiss="modal">
         <i class="bi bi-x-lg me-1"></i> Đóng
     </button>
+
+    @{
+        var chiTietDauTien = Model.ChiTietXepPhongs?.FirstOrDefault();
+
+        @if (chiTietDauTien != null && Model.TrangThai == "Đang ở")
+        {
+            <button type="button" class="btn btn-primary ..."> Thêm dịch vụ </button>
+        }
+        else if (Model.TrangThai == "Hoàn thành")
+        {
+            <span class="text-success fw-semibold small"><i class="bi bi-check-circle"></i> Phiếu đã hoàn tất</span>
+        }
+    }
 </div>

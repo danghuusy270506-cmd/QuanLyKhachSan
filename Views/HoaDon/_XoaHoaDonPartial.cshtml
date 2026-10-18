@@ -1,7 +1,7 @@
 ﻿@model QuanLyKhachSan.Models.Entities.HoaDon
 
-<!-- Modal Header màu tối/đỏ thanh lịch với icon cảnh báo -->
-<div class="modal-header bg-dark text-white py-3 px-4">
+<!-- Modal Header -->
+<div class="modal-header bg-dark text-white py-3 px-4 border-0">
     <div class="d-flex align-items-center gap-2">
         <i class="bi bi-exclamation-triangle-fill text-danger fs-4"></i>
         <h5 class="modal-title fw-bold fs-5 mb-0" id="xoaHoaDonModalLabel">
@@ -15,52 +15,41 @@
     @Html.AntiForgeryToken()
     <input type="hidden" name="maHoaDon" value="@Model.MaHoaDon" />
 
-    <div class="modal-body p-0">
-        <!-- Thông báo cảnh báo -->
-        <div class="p-3 bg-danger bg-opacity-10 border-bottom border-danger border-opacity-25 text-danger d-flex align-items-center gap-2 px-4">
+    <div class="modal-body p-4 bg-light">
+
+        <!-- Cảnh báo -->
+        <div class="p-3 mb-4 bg-danger-subtle border border-danger-subtle text-danger rounded-3 d-flex align-items-center gap-2">
             <i class="bi bi-info-circle-fill fs-5"></i>
-            <span class="fw-medium">Bạn có chắc chắn muốn xóa hóa đơn này không? Hành động này không thể hoàn tác.</span>
+            <span class="fw-semibold small">Bạn có chắc chắn muốn xóa hóa đơn này không? Hành động này không thể hoàn tác.</span>
         </div>
 
-        <!-- Danh sách thông tin dạng dòng phẳng -->
-        <div class="list-group list-group-flush">
-            <!-- Mã hóa đơn -->
-            <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
-                <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
-                    <i class="bi bi-hash fs-5 text-secondary"></i>
-                    <span>Mã hóa đơn</span>
+        <!-- Khối thông tin -->
+        <div class="bg-white rounded-3 shadow-sm border border-light p-3 mb-2">
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div class="text-muted">
+                    <i class="bi bi-hash me-2"></i> Mã hóa đơn
                 </div>
-                <div class="fw-bold text-dark" style="width: 60%;">
-                    #@Model.MaHoaDon
-                </div>
+                <div class="fw-bold text-dark">#@Model.MaHoaDon</div>
             </div>
 
-            <!-- Mã phiếu đặt -->
-            <div class="list-group-item d-flex align-items-center py-3 px-4 border-bottom">
-                <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
-                    <i class="bi bi-bookmark-check fs-5 text-secondary"></i>
-                    <span>Mã phiếu đặt phòng</span>
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div class="text-muted">
+                    <i class="bi bi-bookmark-check me-2"></i> Mã phiếu đặt phòng
                 </div>
-                <div class="fw-bold text-dark" style="width: 60%;">
-                    #@Model.MaPhieu
-                </div>
+                <div class="fw-bold text-dark">#@Model.MaPhieu</div>
             </div>
 
-            <!-- Tổng tiền -->
-            <div class="list-group-item d-flex align-items-center py-3 px-4">
-                <div class="text-secondary fw-medium d-flex align-items-center gap-2" style="width: 40%;">
-                    <i class="bi bi-cash-stack fs-5 text-secondary"></i>
-                    <span>Tổng tiền</span>
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <div class="text-muted">
+                    <i class="bi bi-cash-stack me-2"></i> Tổng tiền
                 </div>
-                <div class="fw-bold text-danger fs-6" style="width: 60%;">
-                    @Model.TongTien.ToString("N0") VNĐ
-                </div>
+                <div class="fw-bold text-danger fs-5">@Model.TongTien.ToString("N0") VNĐ</div>
             </div>
         </div>
     </div>
 
     <!-- Modal Footer -->
-    <div class="modal-footer d-flex justify-content-between align-items-center px-4 py-3 border-top-0">
+    <div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-between align-items-center">
         <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
             <i class="bi bi-x-lg"></i> Hủy
         </button>
@@ -70,3 +59,14 @@
         </button>
     </div>
 </form>
+
+<style>
+    /* Bổ sung màu nền nhạt cho cảnh báo nếu Bootstrap cũ chưa hỗ trợ */
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+    }
+
+    .border-danger-subtle {
+        border-color: #f5c2c7 !important;
+    }
+</style>

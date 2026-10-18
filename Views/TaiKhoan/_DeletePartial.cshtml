@@ -4,19 +4,120 @@
     @Html.AntiForgeryToken()
     <input type="hidden" name="mataikhoan" value="@Model.MaTaiKhoan" />
 
-    <p class="text-danger fw-bold mb-3">Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể hoàn tác!</p>
+    <!-- Cảnh báo -->
+    <div class="p-3 mb-4 bg-danger-subtle border border-danger-subtle text-danger rounded-3 d-flex align-items-center gap-2">
+        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+        <span class="fs-6 fw-semibold">Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể hoàn tác!</span>
+    </div>
 
-    <dl class="row mb-0">
-        <dt class="col-sm-4">Mã Tài Khoản:</dt>
-        <dd class="col-sm-8">#@Model.MaTaiKhoan</dd>
+    <!-- Khối thông tin tài khoản -->
+    <div class="d-flex flex-column gap-3">
 
-        <dt class="col-sm-4">Tên Đăng Nhập:</dt>
-        <dd class="col-sm-8 fw-bold">@Model.Username</dd>
+        <div class="d-flex justify-content-between align-items-center pb-3 border-bottom border-light">
+            <div class="text-muted fw-semibold">
+                <i class="bi bi-hash me-2 fs-5"></i> Mã Tài Khoản
+            </div>
+            <div class="fw-bold text-dark fs-5">#@Model.MaTaiKhoan</div>
+        </div>
 
-        <dt class="col-sm-4">Quyền Hạn:</dt>
-        <dd class="col-sm-8">@Model.Role</dd>
+        <div class="d-flex justify-content-between align-items-center pb-3 border-bottom border-light">
+            <div class="text-muted fw-semibold">
+                <i class="bi bi-person me-2 fs-5"></i> Tên đăng nhập
+            </div>
+            <div class="fw-bold text-dark fs-5">@Model.Username</div>
+        </div>
 
-        <dt class="col-sm-4">Trạng Thái:</dt>
-        <dd class="col-sm-8">@Model.TrangThai</dd>
-    </dl>
+        <div class="d-flex justify-content-between align-items-center pb-3 border-bottom border-light">
+            <div class="text-muted fw-semibold">
+                <i class="bi bi-shield-check me-2 fs-5"></i> Quyền hạn
+            </div>
+            <div>
+                @if (Model.Role == "ADMIN" || Model.Role == "Admin")
+                {
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill fw-semibold">ADMIN</span>
+                }
+                else if (Model.Role == "NhanVien")
+                {
+                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-2 rounded-pill fw-semibold">NHÂN VIÊN</span>
+                }
+                else
+                {
+                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2 rounded-pill fw-semibold">KHÁCH HÀNG</span>
+                }
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted fw-semibold">
+                <i class="bi bi-activity me-2 fs-5"></i> Trạng thái
+            </div>
+            <div>
+                @if (Model.TrangThai == "HoatDong")
+                {
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold">Hoạt động</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2 rounded-pill fw-semibold">Bị khóa</span>
+                }
+            </div>
+        </div>
+
+    </div>
 </form>
+
+<style>
+    /* Bổ sung CSS cho các class subtle (nếu Bootstrap cũ chưa hỗ trợ) */
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+    }
+
+    .border-danger-subtle {
+        border-color: #f5c2c7 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+    }
+
+    .border-warning-subtle {
+        border-color: #ffecb5 !important;
+    }
+
+    .text-warning-emphasis {
+        color: #664d03 !important;
+    }
+
+    .bg-info-subtle {
+        background-color: #cff4fc !important;
+    }
+
+    .border-info-subtle {
+        border-color: #b6effb !important;
+    }
+
+    .text-info-emphasis {
+        color: #055160 !important;
+    }
+
+    .bg-success-subtle {
+        background-color: #d1e7dd !important;
+    }
+
+    .border-success-subtle {
+        border-color: #badbcc !important;
+    }
+
+    .bg-secondary-subtle {
+        background-color: #e2e3e5 !important;
+    }
+
+    .border-secondary-subtle {
+        border-color: #d3d6d8 !important;
+    }
+
+    /* Tinh chỉnh cho icon thẳng hàng với chữ */
+    i {
+        vertical-align: middle;
+    }
+</style>

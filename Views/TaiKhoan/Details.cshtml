@@ -8,55 +8,171 @@
 
 @if (!isAjax)
 {
-    <h1>Chi tiết tài khoản</h1>
-    <hr />
+    <div class="container mt-4">
+        <h1 class="fw-bold text-dark">Chi tiết tài khoản</h1>
+        <hr />
+    </div>
 }
 
-<div class="p-2">
-    <dl class="row mb-0">
-        <dt class="col-sm-4 text-muted">Mã Tài Khoản:</dt>
-        <dd class="col-sm-8 fw-bold">#@Model.MaTaiKhoan</dd>
+<div class="@(isAjax ? "p-4 bg-light" : "mt-4")">
 
-        <dt class="col-sm-4 text-muted">Tên đăng nhập:</dt>
-        <dd class="col-sm-8 fw-semibold">@Model.Username</dd>
+    <!-- Khối 1: Thông tin đăng nhập -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4 mb-4">
 
-        <dt class="col-sm-4 text-muted">Mật khẩu (đã mã hóa):</dt>
-        <dd class="col-sm-8 text-break text-muted small">@Model.Password</dd>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-hash me-2 fs-5"></i> Mã Tài Khoản
+            </div>
+            <div class="fw-bold text-dark fs-5">#@Model.MaTaiKhoan</div>
+        </div>
 
-        <dt class="col-sm-4 text-muted">Quyền (Role):</dt>
-        <dd class="col-sm-8">
-            @if (Model.Role == "ADMIN" || Model.Role == "Admin")
-            {
-                <span class="badge bg-danger">ADMIN</span>
-            }
-            else if (Model.Role == "NhanVien")
-            {
-                <span class="badge bg-warning text-dark">NHÂN VIÊN</span>
-            }
-            else
-            {
-                <span class="badge bg-info text-dark">KHÁCH HÀNG</span>
-            }
-        </dd>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-person me-2 fs-5"></i> Tên đăng nhập
+            </div>
+            <div class="fw-bold text-dark fs-5">@Model.Username</div>
+        </div>
 
-        <dt class="col-sm-4 text-muted">Trạng thái:</dt>
-        <dd class="col-sm-8">
-            @if (Model.TrangThai == "HoatDong")
-            {
-                <span class="badge bg-success">Hoạt động</span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">Bị khóa</span>
-            }
-        </dd>
-    </dl>
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-key me-2 fs-5"></i> Mật khẩu
+            </div>
+            <div class="text-muted fst-italic fs-6">
+                <i class="bi bi-lock-fill me-1"></i> Đã mã hóa (Bảo mật)
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Khối 2: Quyền & Trạng thái -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="p-4 bg-white rounded-3 shadow-sm border border-light h-100">
+                <div class="text-muted fs-6 fw-semibold mb-2">
+                    <i class="bi bi-shield-check me-2 fs-5"></i> Quyền (Role)
+                </div>
+                <div>
+                    @if (Model.Role == "ADMIN" || Model.Role == "Admin")
+                    {
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="bi bi-shield-lock-fill me-1"></i> ADMIN
+                        </span>
+                    }
+                    else if (Model.Role == "NhanVien")
+                    {
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="bi bi-person-badge-fill me-1"></i> NHÂN VIÊN
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="bi bi-person-fill me-1"></i> KHÁCH HÀNG
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="p-4 bg-white rounded-3 shadow-sm border border-light h-100">
+                <div class="text-muted fs-6 fw-semibold mb-2">
+                    <i class="bi bi-activity me-2 fs-5"></i> Trạng thái
+                </div>
+                <div>
+                    @if (Model.TrangThai == "HoatDong")
+                    {
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="bi bi-check-circle-fill me-1"></i> Hoạt động
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="bi bi-lock-fill me-1"></i> Bị khóa
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @if (!isAjax)
 {
-    <div class="mt-3">
-        <a asp-action="Edit" asp-route-mataikhoan="@Model?.MaTaiKhoan" class="btn btn-warning">Chỉnh sửa</a> |
-        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+    <div class="mt-4 mb-5 d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+        </a>
+        <a asp-action="Edit" asp-route-mataikhoan="@Model?.MaTaiKhoan" class="btn btn-dark px-4 py-2 fw-semibold rounded-pill shadow-sm">
+            <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+        </a>
     </div>
 }
+
+<style>
+    /* Bổ sung CSS */
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+    }
+
+    .border-danger-subtle {
+        border-color: #f5c2c7 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+    }
+
+    .border-warning-subtle {
+        border-color: #ffecb5 !important;
+    }
+
+    .text-warning-emphasis {
+        color: #664d03 !important;
+    }
+
+    .bg-info-subtle {
+        background-color: #cff4fc !important;
+    }
+
+    .border-info-subtle {
+        border-color: #b6effb !important;
+    }
+
+    .text-info-emphasis {
+        color: #055160 !important;
+    }
+
+    .bg-success-subtle {
+        background-color: #d1e7dd !important;
+    }
+
+    .border-success-subtle {
+        border-color: #badbcc !important;
+    }
+
+    .bg-secondary-subtle {
+        background-color: #e2e3e5 !important;
+    }
+
+    .border-secondary-subtle {
+        border-color: #d3d6d8 !important;
+    }
+    .modal-body i, .container i, .d-flex i {
+        vertical-align: middle;
+    }
+    .modal-body .bg-white {
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; 
+    }
+
+    .modal-body .border-bottom {
+        border-bottom-color: #cbd5e1 !important;
+    }
+    .modal-body .text-muted {
+        color: #475569 !important;
+        font-size: 1rem !important; 
+    }
+</style>

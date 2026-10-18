@@ -1,77 +1,120 @@
 ﻿@model QuanLyKhachSan.Models.Entities.KhachHang
 
-<div class="row g-4">
-    <!-- Thông tin khách hàng -->
-    <div class="col-md-7">
-        <div class="card shadow-sm h-100 border-0">
-            <div class="card-header bg-primary text-white">
-                <i class="bi bi-person-lines-fill me-1"></i> Thông tin khách hàng
+<!-- Modal Body nền xám nhạt -->
+<div class="modal-body p-4 bg-light">
+
+    <div class="row g-4">
+        <!-- Khối 1: Thông tin khách hàng -->
+        <div class="col-md-7">
+            <!-- Thêm class border-secondary-subtle để viền đậm hơn -->
+            <div class="bg-white rounded-3 shadow border border-secondary-subtle p-4 h-100">
+
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <i class="bi bi-person-lines-fill text-primary fs-4 me-2"></i>
+                    <h6 class="fw-bold text-dark fs-5 mb-0">Thông tin cá nhân</h6>
+                </div>
+
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-hash me-2 text-secondary"></i>Mã khách hàng</div>
+                        <div class="fw-bold text-dark fs-5">#@Model.MaKhachHang</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-person me-2 text-secondary"></i>Họ tên</div>
+                        <div class="fw-bold text-dark fs-5">@Model.HoTen</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-card-text me-2 text-secondary"></i>CCCD</div>
+                        <div class="fw-medium text-dark fs-6">@(string.IsNullOrEmpty(Model.Cccd) ? "Chưa cập nhật" : Model.Cccd)</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-telephone me-2 text-secondary"></i>Số điện thoại</div>
+                        <div class="fw-medium text-dark fs-6">@(string.IsNullOrEmpty(Model.Sdt) ? "Chưa cập nhật" : Model.Sdt)</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-envelope me-2 text-secondary"></i>Email</div>
+                        <div class="fw-medium text-dark fs-6 text-end" style="word-break: break-all;">@(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)</div>
+                    </div>
+                </div>
+
             </div>
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Mã KH</dt>
-                    <dd class="col-sm-8">@Model.MaKhachHang</dd>
+        </div>
 
-                    <dt class="col-sm-4">Họ tên</dt>
-                    <dd class="col-sm-8 fw-semibold text-primary">@Model.HoTen</dd>
+        <!-- Khối 2: Thông tin tài khoản -->
+        <div class="col-md-5">
+            <div class="bg-white rounded-3 shadow border border-secondary-subtle p-4 h-100">
 
-                    <dt class="col-sm-4">CCCD</dt>
-                    <dd class="col-sm-8">@(Model.Cccd ?? "Chưa cập nhật")</dd>
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <i class="bi bi-shield-lock text-secondary fs-4 me-2"></i>
+                    <h6 class="fw-bold text-dark fs-5 mb-0">Tài khoản liên kết</h6>
+                </div>
 
-                    <dt class="col-sm-4">Số điện thoại</dt>
-                    <dd class="col-sm-8">@(Model.Sdt ?? "Chưa cập nhật")</dd>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-person-badge me-2 text-secondary"></i>Username</div>
+                        <div>
+                            <span class="badge bg-secondary text-white px-3 py-2 rounded-pill fw-bold fs-6">
+                                @(Model.TaiKhoan?.Username ?? "Không có")
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-shield-check me-2 text-secondary"></i>Vai trò</div>
+                        <div>
+                            @if (Model.TaiKhoan?.Role == "ADMIN" || Model.TaiKhoan?.Role == "Admin")
+                            {
+                                <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-bold fs-6">ADMIN</span>
+                            }
+                            else if (Model.TaiKhoan?.Role == "NhanVien")
+                            {
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold fs-6">NHÂN VIÊN</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info text-dark px-3 py-2 rounded-pill fw-bold fs-6">KHÁCH HÀNG</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-dark fw-semibold fs-6"><i class="bi bi-activity me-2 text-secondary"></i>Trạng thái</div>
+                        <div>
+                            @if (Model.TaiKhoan?.TrangThai == "HoatDong")
+                            {
+                                <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold fs-6">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Hoạt động
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary text-white px-3 py-2 rounded-pill fw-bold fs-6">
+                                    <i class="bi bi-lock-fill me-1"></i> @(Model.TaiKhoan?.TrangThai ?? "Bị khóa")
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
 
-                    <dt class="col-sm-4">Email</dt>
-                    <dd class="col-sm-8">@(Model.Email ?? "Chưa cập nhật")</dd>
-                </dl>
             </div>
         </div>
     </div>
 
-    <!-- Thông tin tài khoản -->
-    <div class="col-md-5">
-        <div class="card shadow-sm h-100 border-0">
-            <div class="card-header bg-dark text-white">
-                <i class="bi bi-shield-lock me-1"></i> Tài khoản
-            </div>
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-5">Username</dt>
-                    <dd class="col-sm-7">
-                        <span class="badge bg-secondary">
-                            @(Model.TaiKhoan?.Username ?? "Không có")
-                        </span>
-                    </dd>
-
-                    <dt class="col-sm-5">Vai trò</dt>
-                    <dd class="col-sm-7">
-                        <span class="badge bg-info text-dark">
-                            @(Model.TaiKhoan?.Role ?? "N/A")
-                        </span>
-                    </dd>
-
-                    <dt class="col-sm-5">Trạng thái</dt>
-                    <dd class="col-sm-7">
-                        @if (Model.TaiKhoan?.TrangThai == "HoatDong")
-                        {
-                            <span class="badge bg-success">
-                                <i class="bi bi-check-circle"></i> Hoạt động
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">
-                                <i class="bi bi-x-circle"></i> @(Model.TaiKhoan?.TrangThai ?? "Khóa")
-                            </span>
-                        }
-                    </dd>
-                </dl>
-            </div>
-        </div>
-    </div>
 </div>
 
-<!-- Đã bỏ nút Chỉnh sửa, chỉ giữ nút Đóng -->
-<div class="mt-4 d-flex justify-content-end">
-    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+<!-- Modal Footer -->
+<div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-end align-items-center">
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg"></i> Đóng
+    </button>
 </div>
+
+<style>
+    /* Đảm bảo icon thẳng hàng */
+    i {
+        vertical-align: middle;
+    }
+
+    /* Làm đậm viền của các khung card */
+    .border-secondary-subtle {
+        border-color: #cbd5e1 !important; /* Xám đậm hơn thay vì xám rất nhạt */
+    }
+</style>

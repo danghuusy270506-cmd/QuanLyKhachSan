@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<QuanLyKhachSan.Models.Entities.TaiKhoan>
 
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark text-uppercase fs-7">
+            <table class="table custom-table align-middle mb-0">
+                <thead>
                     <tr>
-                        <th class="ps-3 py-3">Mã TK</th>
-                        <th>Tên đăng nhập</th>
-                        <th>Số điện thoại / Thông tin</th>
+                        <th class="ps-4">Mã TK</th>
+                        <th>Tên Đăng Nhập</th>
+                        <th>Thông Tin</th>
                         <th>Quyền (Role)</th>
-                        <th>Trạng thái</th>
-                        <th class="text-end pe-3">Thao tác</th>
+                        <th>Trạng Thái</th>
+                        <th class="text-center" style="width: 280px;">Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,60 +23,52 @@
                     }
                     else
                     {
-                        @foreach (var item in Model)
+                        foreach (var item in Model)
                         {
                             <tr>
-                                <td class="ps-3 fw-bold text-secondary">#@item.MaTaiKhoan</td>
+                                <td class="ps-4 fw-bold text-dark">#@item.MaTaiKhoan</td>
                                 <td>
-                                    <span class="badge bg-light text-dark border px-2 py-1">@item.Username</span>
+                                    <span class="badge-loai-phong">@item.Username</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-success bg-opacity-75 text-white">@item.Username</span>
+                                    <span class="badge-loai-phong">@item.Username</span>
                                 </td>
                                 <td>
                                     @if (item.Role == "ADMIN" || item.Role == "Admin")
                                     {
-                                        <span class="badge bg-danger">ADMIN</span>
+                                        <span class="custom-badge-status" style="background-color: #dc2626; color: #fff;">ADMIN</span>
                                     }
                                     else if (item.Role == "NhanVien")
                                     {
-                                        <span class="badge bg-warning text-dark">NHÂN VIÊN</span>
+                                        <span class="custom-badge-status" style="background-color: #f59e0b; color: #fff;">NHÂN VIÊN</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-info text-dark">KHÁCH HÀNG</span>
+                                        <span class="custom-badge-status" style="background-color: #0ea5e9; color: #fff;">KHÁCH HÀNG</span>
                                     }
                                 </td>
                                 <td>
                                     @if (item.TrangThai == "HoatDong")
                                     {
-                                        <span class="badge bg-success">Hoạt động</span>
+                                        <span class="custom-badge-status status-active">Hoạt động</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">Bị khóa</span>
+                                        <span class="custom-badge-status status-locked">Bị khóa</span>
                                     }
                                 </td>
-                                <td class="text-end pe-3">
-                                    <button type="button"
-                                            class="btn btn-outline-info btn-sm btn-view-detail d-inline-flex align-items-center gap-1 px-2 py-1"
-                                            data-id="@item.MaTaiKhoan"
-                                            style="border-color: #0dcaf0; color: #0dcaf0;">
-                                        <i class="bi bi-eye fs-6"></i>
-                                        <span>Chi tiết</span>
-                                    </button>
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-warning me-1 btn-edit-modal"
-                                            data-id="@item.MaTaiKhoan"
-                                            title="Sửa">
-                                        <i class="bi bi-pencil"></i> Sửa
-                                    </button>
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-danger btn-delete-modal"
-                                            data-id="@item.MaTaiKhoan"
-                                            title="Xóa">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </button>
+                                <td class="text-center">
+                                    <div class="d-inline-flex gap-1">
+                                        <a href="javascript:void(0);" class="btn-action btn-action-view btn-view-detail" data-id="@item.MaTaiKhoan" title="Xem chi tiết">
+                                            <i class="bi bi-eye"></i> Chi tiết
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn-action btn-action-edit btn-edit-modal" data-id="@item.MaTaiKhoan" title="Sửa">
+                                            <i class="bi bi-pencil"></i> Sửa
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn-action btn-action-delete btn-delete-modal" data-id="@item.MaTaiKhoan" title="Xóa">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -87,25 +79,25 @@
     </div>
 </div>
 
-@* Thanh phân trang *@
+<!-- Phân trang căn giữa -->
 @if (ViewBag.TotalPages > 1)
 {
-    <nav class="d-flex justify-content-center mt-4">
-        <ul class="pagination">
-            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
-                <a class="page-link ajax-link" href="javascript:void(0);" data-page="@(ViewBag.PageNumber - 1)">Trước</a>
-            </li>
-
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
-                    <a class="page-link ajax-link" href="javascript:void(0);" data-page="@i">@i</a>
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination custom-pagination mb-0">
+                <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                    <a class="page-link ajax-link" href="javascript:void(0);" data-page="@(ViewBag.PageNumber - 1)">Trước</a>
                 </li>
-            }
-
-            <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
-                <a class="page-link ajax-link" href="javascript:void(0);" data-page="@(ViewBag.PageNumber + 1)">Sau</a>
-            </li>
-        </ul>
-    </nav>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                        <a class="page-link ajax-link" href="javascript:void(0);" data-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link ajax-link" href="javascript:void(0);" data-page="@(ViewBag.PageNumber + 1)">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 }

@@ -1,37 +1,88 @@
-﻿<div class="modal-header bg-dark text-white">
-    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Xác nhận Xóa Nhân viên</h5>
+﻿@model QuanLyKhachSan.Models.Entities.NhanVien
+
+<!-- Modal Header -->
+<div class="modal-header bg-dark text-white py-3 px-4 border-0">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-exclamation-triangle-fill text-danger fs-4"></i>
+        <h5 class="modal-title fw-bold fs-5 mb-0">
+            Xóa nhân viên: <span class="text-danger">#@Model.MaNhanVien</span>
+        </h5>
+    </div>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<div class="modal-body">
-    <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa thông tin nhân viên dưới đây khỏi hệ thống?</p>
 
-    <div class="alert alert-light border">
-        <dl class="row mb-0">
-            <dt class="col-sm-4 text-muted">Mã nhân viên:</dt>
-            <dd class="col-sm-8">#@Model.MaNhanVien</dd>
+<div class="modal-body p-4 bg-light">
 
-            <dt class="col-sm-4 text-muted">Họ và Tên:</dt>
-            <dd class="col-sm-8 fw-bold">@Model.HoTen</dd>
+    <!-- Cảnh báo -->
+    <div class="p-3 mb-4 bg-danger-subtle border border-danger-subtle text-danger rounded-3 d-flex align-items-center gap-2">
+        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+        <span class="fs-6 fw-semibold">Bạn có chắc chắn muốn xóa thông tin nhân viên này khỏi hệ thống không? Hành động này không thể hoàn tác!</span>
+    </div>
 
-            <dt class="col-sm-4 text-muted">Số điện thoại:</dt>
-            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Sdt) ? "—" : Model.Sdt)</dd>
+    <!-- Khối thông tin nhân viên -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4">
 
-            <dt class="col-sm-4 text-muted">Email:</dt>
-            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Email) ? "—" : Model.Email)</dd>
-        </dl>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-hash me-2 fs-5"></i> Mã nhân viên
+            </div>
+            <div class="fw-bold text-dark fs-5">#@Model.MaNhanVien</div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-person me-2 fs-5"></i> Họ và Tên
+            </div>
+            <div class="fw-bold text-dark fs-5">@Model.HoTen</div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-telephone me-2 fs-5"></i> Số điện thoại
+            </div>
+            <div class="text-dark fs-6">
+                @(string.IsNullOrEmpty(Model.Sdt) ? "—" : Model.Sdt)
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-envelope me-2 fs-5"></i> Email
+            </div>
+            <div class="text-dark fs-6">
+                @(string.IsNullOrEmpty(Model.Email) ? "—" : Model.Email)
+            </div>
+        </div>
+
     </div>
 
     <!-- Form gửi yêu cầu Xóa thông qua AJAX -->
-    <form id="deleteNhanVienForm">
+    <form id="deleteNhanVienForm" class="d-none">
         @Html.AntiForgeryToken()
         <input type="hidden" id="MaNhanVienDelete" name="MaNhanVien" value="@Model.MaNhanVien" />
     </form>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-        <i class="bi bi-x-circle me-1"></i> Hủy bỏ
+
+<!-- Modal Footer -->
+<div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-between align-items-center">
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-6 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg"></i> Hủy bỏ
     </button>
-    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
-        <i class="bi bi-trash-fill me-1"></i> Đồng ý Xóa
+    <button type="button" id="confirmDeleteBtn" class="btn btn-danger px-4 py-2 fs-6 fw-semibold rounded-pill shadow-sm d-inline-flex align-items-center gap-2">
+        <i class="bi bi-trash3-fill"></i> Đồng ý xóa
     </button>
 </div>
+
+<style>
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+    }
+
+    .border-danger-subtle {
+        border-color: #f5c2c7 !important;
+    }
+
+    .modal-body i {
+        vertical-align: middle;
+    }
+</style>

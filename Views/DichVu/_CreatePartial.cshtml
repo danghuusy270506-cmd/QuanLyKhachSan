@@ -1,0 +1,47 @@
+﻿@model QuanLyKhachSan.Models.Entities.DichVu
+
+<style>
+    /* Ẩn khung báo lỗi nếu không có lỗi (không có thẻ li) */
+    .validation-summary-valid {
+        display: none !important;
+    }
+</style>
+
+<form asp-action="Create" method="post" id="createDichVuForm">
+    <!-- Tự động ẩn khi không có lỗi -->
+    <div asp-validation-summary="All" class="alert alert-danger validation-summary-valid" role="alert"></div>
+
+    <div class="row">
+        <!-- Tên dịch vụ (Chiếm toàn bộ dòng) -->
+        <div class="col-12 mb-3">
+            <label asp-for="TenDichVu" class="form-label fw-semibold"></label>
+            <input asp-for="TenDichVu" class="form-control" placeholder="Ví dụ: Giặt ủi, ăn sáng..." />
+            <span asp-validation-for="TenDichVu" class="text-danger small"></span>
+        </div>
+
+        <!-- Mô tả -->
+        <div class="col-12 mb-3">
+            <label asp-for="MoTa" class="form-label fw-semibold"></label>
+            <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Mô tả ngắn về dịch vụ"></textarea>
+            <span asp-validation-for="MoTa" class="text-danger small"></span>
+        </div>
+
+        <!-- Đơn giá -->
+        <div class="col-12 mb-4">
+            <label asp-for="DonGia" class="form-label fw-semibold">Đơn giá (VNĐ)</label>
+            <div class="input-group">
+                <input asp-for="DonGia" class="form-control" type="number" min="0" step="1000" placeholder="0" />
+                <span class="input-group-text">đ</span>
+            </div>
+            <span asp-validation-for="DonGia" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <!-- Nút bấm thiết kế lại cho đẹp -->
+    <div class="d-flex justify-content-end gap-2 mt-2">
+        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" id="btnCreateDichVu" class="btn btn-primary px-4">
+            <i class="bi bi-check-lg me-1"></i> Lưu dịch vụ
+        </button>
+    </div>
+</form>

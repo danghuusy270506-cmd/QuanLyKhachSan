@@ -1,124 +1,127 @@
-﻿$(document).ready(function () {
-    // Hàm chung để gọi AJAX tải lại bảng dữ liệu (hỗ trợ cả phân trang và lọc)
-    function loadTaiKhoanData(page, keyword, role) {
-        $.ajax({
-            url: '/TaiKhoan/Index',
-            type: 'GET',
-            data: {
-                page: page,
-                keyword: keyword,
-                role: role
-            },
-            success: function (result) {
-                // Thay thế nội dung cũ bằng partial view trả về từ server
-                $('#taiKhoanTableContainer').html(result);
+﻿document.addEventListener('DOMContentLoaded', function () {
+    // ================================================================
+    //  PHẦN SEARCH & LỌC AJAX (Dùng Form Lọc Chung)
+    // ================================================================
+    const searchForm = document.getElementById('searchForm');
+    const tableContainer = document.getElementById('taiKhoanTableContainer');
+    const btnClear = document.getElementById('btnClear'); // Nút làm mới chung
 
-                // Cập nhật lại URL trên thanh địa chỉ trình duyệt
-                var queryParams = "?page=" + page;
-                if (keyword) queryParams += "&keyword=" + encodeURIComponent(keyword);
-                if (role) queryParams += "&role=" + encodeURIComponent(role);
+    // Hàm load dữ liệu tài khoản tổng quát
+    window.loadTaiKhoanData = function (page = 1) {
+        if (!searchForm || !tableContainer) return;
 
-                window.history.pushState({ page: page, keyword: keyword, role: role }, "", "/TaiKhoan/Index" + queryParams);
-            },
-            error: function (xhr, status, error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
-                alert("Không thể tải dữ liệu. Vui lòng thử lại!");
-            }
+        // Lấy action URL từ form (VD: /TaiKhoan/Index)
+        let baseUrl = searchForm.getAttribute('action') || '/TaiKhoan/Index';
+
+        // Lấy toàn bộ dữ liệu từ các thẻ input/select trong form
+        const formData = new FormData(searchForm);
+        const params = new URLSearchParams(formData);
+
+        // Thêm tham số page
+        params.append('page', page);
+
+        const url = `${baseUrl}?${params.toString()}`;
+
+        // Hiệu ứng loading
+        tableContainer.style.opacity = '0.5';
+
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Lỗi khi tải dữ liệu');
+                return response.text();
+            })
+            .then(html => {
+                tableContainer.innerHTML = html;
+                tableContainer.style.opacity = '1';
+
+                // Cập nhật URL trên thanh địa chỉ trình duyệt (Không bắt buộc)
+                window.history.pushState({}, "", url);
+            })
+            .catch(error => {
+                console.error('Lỗi khi tìm kiếm AJAX:', error);
+                tableContainer.style.opacity = '1';
+                alert('Có lỗi xảy ra khi tải dữ liệu!');
+            });
+    };
+
+    // Bắt sự kiện Submit Form (Bấm nút Lọc hoặc Enter)
+    if (searchForm) {
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            loadTaiKhoanData(1);
         });
     }
 
-    // Bắt sự kiện click vào các nút phân trang (Ủy quyền sự kiện)
-    $(document).on('click', '.ajax-link', function (e) {
+    // Bắt sự kiện bấm nút Làm mới (Xóa lọc)
+    if (btnClear) {
+        btnClear.addEventListener('click', function (e) {
+            e.preventDefault();
+            searchForm.reset(); // Xóa trắng tất cả input/select
+            loadTaiKhoanData(1);
+        });
+    }
+
+    // Bắt sự kiện Phân trang AJAX (class ajax-link)
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.ajax-link');
+        if (!btn) return;
         e.preventDefault();
 
-        var page = $(this).data('page');
-        if (!page || page < 1) return;
-
-        var keyword = $('#searchKeyword').val();
-        var role = $('#filterRole').val();
-
-        loadTaiKhoanData(page, keyword, role);
-    });
-
-    // Bắt sự kiện click nút "Lọc"
-    $('#btnFilter').click(function () {
-        var keyword = $('#searchKeyword').val();
-        var role = $('#filterRole').val();
-        loadTaiKhoanData(1, keyword, role);
-    });
-
-    // Cho phép nhấn Enter ở ô tìm kiếm để lọc luôn
-    $('#searchKeyword').keypress(function (e) {
-        if (e.which === 13) {
-            $('#btnFilter').click();
-            return false;
+        const page = btn.dataset.page;
+        if (page && page > 0) {
+            loadTaiKhoanData(page);
         }
     });
 
-    // Bắt sự kiện click nút "Reset" (Làm mới bộ lọc)
-    $('#btnReset').click(function () {
-        $('#searchKeyword').val('');
-        $('#filterRole').val('');
-        loadTaiKhoanData(1, '', '');
-    });
+    // ================================================================
+    //  MODAL CHI TIẾT
+    // ================================================================
+    $(document).on('click', '.btn-view-detail', function () {
+        var id = $(this).data('id');
 
-    $(document).ready(function () {
-        // ... (các đoạn code cũ giữ nguyên)
-
-        // 5. Bắt sự kiện click nút "Chi tiết" để mở Modal bằng AJAX
-        $(document).on('click', '.btn-view-detail', function () {
-            var id = $(this).data('id');
-
-            // Hiển thị trạng thái đang tải trước khi AJAX trả về kết quả
-            $('#detailModalBody').html(`
+        $('#detailModalBody').html(`
             <div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
+                <div class="spinner-border text-primary" role="status"></div>
             </div>
         `);
 
-            // Mở Modal Bootstrap
-            var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
-            myModal.show();
+        var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
 
-            // Gọi AJAX lấy nội dung chi tiết
-            $.ajax({
-                url: '/TaiKhoan/Details',
-                type: 'GET',
-                data: { mataikhoan: id },
-                success: function (result) {
-                    $('#detailModalBody').html(result);
-                },
-                error: function (xhr) {
-                    if (xhr.status === 403) {
-                        $('#detailModalBody').html('<div class="alert alert-danger">Bạn không có quyền xem chi tiết tài khoản này!</div>');
-                    } else {
-                        $('#detailModalBody').html('<div class="alert alert-danger">Không thể tải dữ liệu chi tiết. Vui lòng thử lại sau!</div>');
-                    }
+        $.ajax({
+            url: '/TaiKhoan/Details',
+            type: 'GET',
+            data: { mataikhoan: id },
+            success: function (result) {
+                $('#detailModalBody').html(result);
+            },
+            error: function (xhr) {
+                if (xhr.status === 403) {
+                    $('#detailModalBody').html('<div class="alert alert-danger m-3">Bạn không có quyền xem chi tiết tài khoản này!</div>');
+                } else {
+                    $('#detailModalBody').html('<div class="alert alert-danger m-3">Không thể tải dữ liệu chi tiết.</div>');
                 }
-            });
+            }
         });
     });
 
-    // Bắt sự kiện click nút "Sửa" để mở Modal bằng AJAX
+    // ================================================================
+    //  MODAL SỬA
+    // ================================================================
     $(document).on('click', '.btn-edit-modal', function () {
         var id = $(this).data('id');
 
-        // Hiển thị loading trước khi AJAX trả về
         $('#editModalBody').html(`
             <div class="text-center py-4">
-                <div class="spinner-border text-warning" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
+                <div class="spinner-border text-warning" role="status"></div>
             </div>
         `);
 
-        // Mở Modal Bootstrap
         var editModal = new bootstrap.Modal(document.getElementById('editModal'));
         editModal.show();
 
-        // Gọi AJAX lấy nội dung form Edit
         $.ajax({
             url: '/TaiKhoan/Edit',
             type: 'GET',
@@ -127,13 +130,13 @@
                 $('#editModalBody').html(result);
             },
             error: function () {
-                $('#editModalBody').html('<div class="alert alert-danger">Không thể tải dữ liệu form sửa. Vui lòng thử lại!</div>');
+                $('#editModalBody').html('<div class="alert alert-danger m-3">Không thể tải dữ liệu form sửa.</div>');
             }
         });
     });
 
-    // Xử lý sự kiện bấm nút "Lưu thay đổi" trong Modal Sửa
-    $('#btnSaveEdit').click(function () {
+    // Submit Sửa
+    $(document).on('click', '#btnSaveEdit', function () {
         var $form = $('#editTaiKhoanForm');
         if ($form.length === 0) return;
 
@@ -145,20 +148,14 @@
             data: formData,
             success: function (response) {
                 if (typeof response === 'object' && response.success) {
-                    // 1. Đóng modal
                     var modalEl = document.getElementById('editModal');
                     var modal = bootstrap.Modal.getInstance(modalEl);
-                    modal.hide();
+                    if (modal) modal.hide();
 
-                    // 2. Tải lại bảng dữ liệu ngầm mà không hiển thị thông báo alert
-                    var currentPage = $('.pagination .active .ajax-link').data('page') || 1;
-                    var keyword = $('#searchKeyword').val();
-                    var role = $('#filterRole').val();
-                    loadTaiKhoanData(currentPage, keyword, role);
-
-                    // Đã bỏ dòng alert(response.message); tại đây
+                    // Tải lại bảng dữ liệu ngầm mà không hiển thị thông báo alert
+                    var currentPage = $('.custom-pagination .page-item.active .page-link').data('page') || 1;
+                    loadTaiKhoanData(currentPage);
                 } else {
-                    // Nếu validation lỗi, server trả về lại partial view chứa lỗi
                     $('#editModalBody').html(response);
                 }
             },
@@ -168,24 +165,21 @@
         });
     });
 
-    //Bắt sự kiện click nút "Xóa" trên bảng để mở Modal bằng AJAX
+    // ================================================================
+    //  MODAL XÓA
+    // ================================================================
     $(document).on('click', '.btn-delete-modal', function () {
         var id = $(this).data('id');
 
-        // Hiển thị trạng thái đang tải
         $('#deleteModalBody').html(`
             <div class="text-center py-4">
-                <div class="spinner-border text-danger" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
+                <div class="spinner-border text-danger" role="status"></div>
             </div>
         `);
 
-        // Mở Modal Bootstrap
         var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
 
-        // Gọi AJAX lấy nội dung xác nhận xóa
         $.ajax({
             url: '/TaiKhoan/Delete',
             type: 'GET',
@@ -194,13 +188,13 @@
                 $('#deleteModalBody').html(result);
             },
             error: function () {
-                $('#deleteModalBody').html('<div class="alert alert-danger">Không thể tải dữ liệu xóa. Vui lòng thử lại!</div>');
+                $('#deleteModalBody').html('<div class="alert alert-danger m-3">Không thể tải dữ liệu xóa.</div>');
             }
         });
     });
 
-    //Xử lý sự kiện bấm nút "Xác Nhận Xóa" trong Modal
-    $('#btnConfirmDelete').click(function () {
+    // Submit Xóa
+    $(document).on('click', '#btnConfirmDelete', function () {
         var $form = $('#deleteTaiKhoanForm');
         if ($form.length === 0) return;
 
@@ -212,16 +206,12 @@
             data: formData,
             success: function (response) {
                 if (typeof response === 'object' && response.success) {
-                    // Đóng modal
                     var modalEl = document.getElementById('deleteModal');
                     var modal = bootstrap.Modal.getInstance(modalEl);
-                    modal.hide();
+                    if (modal) modal.hide();
 
-                    // Tải lại bảng dữ liệu ngầm trang hiện tại
-                    var currentPage = $('.pagination .active .ajax-link').data('page') || 1;
-                    var keyword = $('#searchKeyword').val();
-                    var role = $('#filterRole').val();
-                    loadTaiKhoanData(currentPage, keyword, role);
+                    var currentPage = $('.custom-pagination .page-item.active .page-link').data('page') || 1;
+                    loadTaiKhoanData(currentPage);
                 } else {
                     alert(response.message || "Đã xảy ra lỗi khi xóa tài khoản!");
                 }

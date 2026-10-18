@@ -1,0 +1,98 @@
+﻿@model QuanLyKhachSan.Models.Entities.DichVu
+
+<script>
+    // Sửa lỗi gán ID nếu thẻ không tồn tại
+    var titleEl = document.getElementById('modalTitleEditCode');
+        if (titleEl) {
+            titleEl.innerText = '@Model.MaDichVu';
+        }
+</script>
+
+<form id="editDichVuForm" asp-action="Edit" asp-route-madichvu="@Model.MaDichVu" method="post">
+
+    <!-- Modal Body -->
+    <div class="modal-body p-4 bg-light">
+
+        <!-- Tổng hợp lỗi  -->
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-danger-subtle bg-danger-subtle text-danger mb-4"></div>
+
+        <!-- Khối form nhập liệu  -->
+        <div class="bg-white rounded-3 shadow-sm border border-light p-4">
+            <input type="hidden" asp-for="MaDichVu" />
+
+            <!-- Mã dịch vụ  -->
+            <div class="mb-4">
+                <label class="form-label fs-6 fw-semibold text-muted">Mã dịch vụ</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light"><i class="bi bi-hash"></i></span>
+                    <input value="@Model.MaDichVu" class="form-control bg-light fw-bold" readonly />
+                </div>
+            </div>
+
+            <!-- Tên dịch vụ -->
+            <div class="mb-4">
+                <label asp-for="TenDichVu" class="form-label fs-6 fw-semibold text-muted">
+                    Tên dịch vụ <span class="text-danger">*</span>
+                </label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
+                    <input asp-for="TenDichVu" class="form-control" placeholder="Nhập tên dịch vụ..." />
+                </div>
+                <span asp-validation-for="TenDichVu" class="text-danger small fw-medium mt-1 d-block"></span>
+            </div>
+
+            <!-- Mô tả -->
+            <div class="mb-4">
+                <label asp-for="MoTa" class="form-label fs-6 fw-semibold text-muted">Mô tả</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light"><i class="bi bi-card-text"></i></span>
+                    <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Nhập mô tả chi tiết..."></textarea>
+                </div>
+                <span asp-validation-for="MoTa" class="text-danger small fw-medium mt-1 d-block"></span>
+            </div>
+
+            <!-- Đơn giá -->
+            <div class="mb-2">
+                <label asp-for="DonGia" class="form-label fs-6 fw-semibold text-muted">
+                    Đơn giá <span class="text-danger">*</span>
+                </label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light"><i class="bi bi-cash-stack"></i></span>
+                    <input asp-for="DonGia" class="form-control fw-bold text-danger" type="number" min="0" step="1000" placeholder="0" />
+                    <span class="input-group-text bg-light fw-bold">VNĐ</span>
+                </div>
+                <span asp-validation-for="DonGia" class="text-danger small fw-medium mt-1 d-block"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-6 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg"></i> Hủy
+        </button>
+        <button type="submit" class="btn btn-primary px-4 py-2 fs-6 fw-semibold rounded-pill shadow-sm d-inline-flex align-items-center gap-2" id="btnSaveEdit">
+            <i class="bi bi-check-circle-fill fs-5"></i> Lưu thay đổi
+        </button>
+    </div>
+</form>
+
+<style>
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+    }
+
+    .border-danger-subtle {
+        border-color: #f5c2c7 !important;
+    }
+
+    .input-group-lg > .form-control,
+    .input-group-lg > .input-group-text {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .input-group-text {
+        color: #64748b;
+    }
+</style>

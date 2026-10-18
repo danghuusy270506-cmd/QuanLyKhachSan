@@ -25,62 +25,55 @@
     }
 
     <!-- Bộ lọc hóa đơn -->
-    <form id="formLocHoaDon" asp-controller="HoaDon" asp-action="Index" method="get" class="hoa-don-filter mb-3">
-        <div class="row g-2 align-items-end flex-nowrap">
+    <div class="filter-container card shadow-sm border-0 rounded-3 p-3 mb-4">
+        <form id="formLocHoaDon" asp-controller="HoaDon" asp-action="Index" method="get">
+            <div class="row g-3 align-items-end">
 
-            <!-- Mã hóa đơn / mã phiếu -->
-            <div class="col" style="flex: 0 0 210px;">
-                <label class="form-label">Mã hóa đơn / mã phiếu</label>
-                <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control form-control-sm" placeholder="Nhập mã..." maxlength="10" />
-            </div>
-            <!-- Ngày -->
-            <div class="col-auto" style="width: 90px;">
-                <label class="form-label">Ngày</label>
-                <input type="number" name="ngay" value="@ViewBag.NgayLoc" class="form-control form-control-sm" placeholder="Ngày" min="1" max="31" />
-            </div>
+                <!-- Mã hóa đơn / mã phiếu -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-muted small">Mã hóa đơn / phiếu</label>
+                    <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control" placeholder="Nhập mã..." maxlength="10" />
+                </div>
 
-            <!-- Tháng -->
-            <div class="col-auto" style="width: 115px;">
-                <label class="form-label">Tháng</label>
-                <select name="thang" class="form-select">
-                    <option value="">Tất cả</option>
-                    @for (int i = 1; i <= 12; i++)
-                    {
-                        <option value="@i" selected="@(ViewBag.ThangLoc != null && (int)ViewBag.ThangLoc == i)">Tháng @i</option>
-                    }
-                </select>
-            </div>
+                <!-- Cụm Ngày / Tháng / Năm -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-muted small">Ngày / Tháng / Năm</label>
+                    <div class="d-flex gap-2">
+                        <input type="number" name="ngay" value="@ViewBag.NgayLoc" class="form-control" placeholder="Ngày" min="1" max="31" style="width: 33%;" title="Ngày" />
+                        <select name="thang" class="form-select" style="width: 34%;" title="Tháng">
+                            <option value="">Tháng</option>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i" selected="@(ViewBag.ThangLoc != null && (int)ViewBag.ThangLoc == i)">@i</option>
+                            }
+                        </select>
+                        <input type="number" name="nam" value="@ViewBag.NamLoc" class="form-control" placeholder="Năm" min="2000" max="2100" style="width: 33%;" title="Năm" />
+                    </div>
+                </div>
 
-            <!-- Năm -->
-            <div class="col-auto" style="width: 110px;">
-                <label class="form-label">Năm</label>
-                <input type="number" name="nam" value="@ViewBag.NamLoc" class="form-control form-control-sm" placeholder="Năm" min="2000" max="2100" />
-            </div>
+                <!-- Trạng thái -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-muted small">Trạng thái</label>
+                    <select name="trangThai" class="form-select">
+                        <option value="" selected="@(string.IsNullOrEmpty(ViewBag.TrangThaiLoc as string))">Tất cả trạng thái</option>
+                        <option value="ChuaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "ChuaThanhToan")">Chưa thanh toán</option>
+                        <option value="DaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "DaThanhToan")">Đã thanh toán</option>
+                    </select>
+                </div>
 
-            <!-- Trạng thái -->
-            <div class="col-auto" style="width: 180px;">
-                <label class="form-label">Trạng thái</label>
-                <select name="trangThai" class="form-select form-select-sm">
-                    <option value="" selected="@(string.IsNullOrEmpty(ViewBag.TrangThaiLoc as string))">Tất cả</option>
-                    <option value="ChuaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "ChuaThanhToan")">Chưa thanh toán</option>
-                    <option value="DaThanhToan" selected="@(ViewBag.TrangThaiLoc as string == "DaThanhToan")">Đã thanh toán</option>
-                </select>
-            </div>
-            <!-- Nút lọc -->
-            <div class="col-auto d-flex align-items-end">
-                <button type="submit" class="btn btn-dark btn-sm px-3 py-2 d-inline-flex align-items-center gap-1 shadow-sm btn-loc-action">
-                    <i class="bi bi-funnel-fill"></i> Lọc
-                </button>
-            </div>
-            <!-- Nút xóa lọc -->
-            <div class="col-auto d-flex align-items-end">
-                <button type="button" id="btnXoaLoc" class="btn btn-outline-secondary btn-sm px-3 py-2 d-inline-flex align-items-center gap-1 btn-xoa-loc-action" title="Xóa điều kiện lọc">
-                    <i class="bi bi-arrow-counterclockwise"></i> Xóa lọc
-                </button>
-            </div>
+                <!-- Nút Lọc & Xóa lọc -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-dark px-3 fw-semibold flex-grow-1">
+                        <i class="bi bi-funnel-fill me-1"></i> Lọc
+                    </button>
+                    <button type="button" id="btnXoaLoc" class="btn btn-outline-secondary px-3" title="Xóa điều kiện lọc">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </div>
 
-        </div>
-    </form>
+            </div>
+        </form>
+    </div>
 
     <!-- Bảng và phân trang được tải bằng AJAX -->
     <div id="danhSachHoaDon">

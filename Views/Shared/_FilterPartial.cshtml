@@ -1,0 +1,44 @@
+﻿@model QuanLyKhachSan.Models.ViewModels.FilterViewModel
+
+@{
+    // Nếu không có bộ lọc phụ thì mở rộng ô nhập liệu
+    bool hasCustomFilters = ViewData["CustomFilters"] != null;
+    string inputCol = hasCustomFilters ? "col-md-4" : "col-md-8";
+    string customCol = hasCustomFilters ? "col-md-4" : "d-none";
+    string btnFilterCol = hasCustomFilters ? "col-md-3" : "col-md-3";
+}
+
+<div class="filter-container card shadow-sm border-0 rounded-3 p-3 mb-4">
+    <form id="searchForm" action="@Model.ActionUrl" method="get" class="row g-3 align-items-end">
+
+        <!-- 1. Ô nhập từ khóa -->
+        <div class="@inputCol">
+            <label class="form-label fw-semibold text-muted small">Từ khóa tìm kiếm</label>
+            <input type="text" id="tuKhoa" name="@Model.SearchParamName" value="@Model.SearchValue"
+                   class="form-control" placeholder="@Model.Placeholder" autocomplete="off" />
+        </div>
+
+        <!-- 2. Vùng chứa bộ lọc phụ (Nếu có) -->
+        @if (hasCustomFilters)
+        {
+            <div class="@customCol">
+                @Html.Raw(ViewData["CustomFilters"].ToString())
+            </div>
+        }
+
+        <!-- 3. Nút Lọc -->
+        <div class="@btnFilterCol">
+            <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold">
+                <i class="bi bi-funnel-fill me-1"></i> Lọc
+            </button>
+        </div>
+
+        <!-- 4. Nút Làm mới -->
+        <div class="col-md-1">
+            <button type="button" id="btnClear" class="btn btn-outline-secondary w-100 py-2" title="Xóa lọc">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+        </div>
+
+    </form>
+</div>

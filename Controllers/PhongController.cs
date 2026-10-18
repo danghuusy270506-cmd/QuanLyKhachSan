@@ -20,7 +20,7 @@ namespace QuanLyKhachSan.Controllers
 
         // 1. DANH SÁCH PHÒNG
         [HttpGet]
-        public async Task<IActionResult> Index(string soPhong,string tenLoaiPhong, string trangThai, int page = 1, int pageSize=5)
+        public async Task<IActionResult> Index(string soPhong,string tenLoaiPhong, string trangThai, int page = 1, int pageSize=10)
         {
             var query = _context.Phongs.Include(p => p.LoaiPhong).AsQueryable();
             // Lọc theo từ khóa

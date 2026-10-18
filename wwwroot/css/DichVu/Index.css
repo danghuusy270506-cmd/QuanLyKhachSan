@@ -1,181 +1,201 @@
-﻿/* Tổng thể trang */
-.service-page {
+﻿/* =========================================================
+   TỔNG THỂ TRANG & FORM LỌC (Đồng bộ với Phòng)
+   ========================================================= */
+body {
     background-color: #f8fafc;
-    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Form lọc */
-.service-filter .form-control,
-.service-filter .form-select {
-    border-radius: 6px;
+/* Khung Form Lọc */
+.filter-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-label {
+    font-size: 0.95rem !important;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    font-size: 0.95rem !important;
+    border-radius: 8px;
+    padding: 10px 14px;
     border: 1px solid #cbd5e1;
-    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
-/* Nút Lọc kiểu Dark Blue giống ảnh */
-.btn-filter-dark {
-    background-color: #1e293b;
-    color: #ffffff;
-    border: 1px solid #1e293b;
-    border-radius: 6px;
-    padding: 6px 16px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-    .btn-filter-dark:hover {
-        background-color: #0f172a;
-        color: #ffffff;
+    .form-control:focus {
+        border-color: #1e293b;
+        box-shadow: 0 0 0 0.2rem rgba(30, 41, 59, 0.1);
     }
 
-/* Nút Xóa lọc */
-.btn-reset-light {
-    background-color: #ffffff;
-    color: #475569;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 0.9rem;
+/* Nút Lọc màu tối */
+.btn-dark {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-    .btn-reset-light:hover {
+    .btn-dark:hover {
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+    }
+
+/* Nút Reset (Outline) */
+.btn-outline-secondary {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+    .btn-outline-secondary:hover {
         background-color: #f1f5f9;
         color: #1e293b;
     }
 
-/* Bảng hiển thị */
-.service-card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    background: transparent;
-}
-
-.service-table-wrap {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.service-table {
+/* =========================================================
+   BẢNG DỮ LIỆU (Đồng bộ với Phòng)
+   ========================================================= */
+.custom-table {
     margin-bottom: 0;
-    border-collapse: separate;
+    width: 100%;
+    border-collapse: separate !important;
     border-spacing: 0;
 }
 
-    /* Header bảng màu xanh đen tối */
-    .service-table thead th {
+    .custom-table thead th {
         background-color: #1e293b !important;
         color: #ffffff !important;
-        font-size: 0.82rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        padding: 14px 16px;
-        border: none;
+        font-weight: 600;
+        font-size: 0.85rem !important;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px 18px;
+        border: none !important;
+        vertical-align: middle;
     }
 
-    /* Cấu trúc hàng zebra */
-    .service-table tbody tr:nth-child(odd) {
-        background-color: #ffffff;
+    .custom-table tbody td {
+        padding: 16px 18px;
+        vertical-align: middle;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #1e293b;
+        border-bottom: none !important;
     }
 
-    .service-table tbody tr:nth-child(even) {
-        background-color: #f8fafc;
+    /* Hiệu ứng đan xen màu nền (zebra striping) */
+    .custom-table tbody tr:nth-child(odd) td {
+        background-color: #f1f5f9 !important;
     }
 
-    .service-table tbody tr:hover {
-        background-color: #f1f5f9;
+    .custom-table tbody tr:nth-child(even) td {
+        background-color: #ffffff !important;
     }
 
-    .service-table tbody td {
-        padding: 14px 16px;
-        color: #334155;
-        font-size: 0.9rem;
-        border-top: 1px solid #f1f5f9;
+    .custom-table tbody tr:hover td {
+        background-color: #e2e8f0 !important;
+        transition: background-color 0.15s ease;
     }
 
-.service-code {
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.service-name {
-    font-weight: 600;
-    color: #0f172a;
-}
-
-.service-price {
-    font-weight: 700;
-    color: #0f172a;
-}
-
-/* Nhóm nút bấm Thao tác giống ảnh */
-.service-actions {
+/* =========================================================
+   NÚT THAO TÁC (Chi tiết, Sửa, Xóa)
+   ========================================================= */
+.btn-action {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+    border-radius: 6px;
     display: inline-flex;
     align-items: center;
-    gap: 0;
+    gap: 4px;
+    background-color: #ffffff;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
 }
 
-    .service-actions .btn-action {
-        padding: 4px 10px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        background-color: #ffffff;
-        border: 1px solid;
-        transition: all 0.15s ease-in-out;
+    .btn-action:hover {
+        text-decoration: none !important;
     }
 
-        .service-actions .btn-action:first-child {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
-
-        .service-actions .btn-action:not(:first-child) {
-            margin-left: -1px;
-        }
-
-        .service-actions .btn-action:last-child {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-/* Nút Chi tiết (Viền Xanh Dương Nhạt) */
-.btn-action-info {
+.btn-action-view {
     color: #0ea5e9;
-    border-color: #38bdf8;
+    border: 1px solid #38bdf8;
 }
 
-    .btn-action-info:hover {
+    .btn-action-view:hover {
         background-color: #0ea5e9;
+        color: #fff;
+    }
+
+.btn-action-edit {
+    color: #b7791f;
+    border: 1px solid #ecc94b;
+}
+
+    .btn-action-edit:hover {
+        background-color: #ffc107;
+        color: #000000;
+    }
+
+.btn-action-delete {
+    color: #dc2626;
+    border: 1px solid #f87171;
+}
+
+    .btn-action-delete:hover {
+        background-color: #dc2626;
+        color: #fff;
+    }
+
+/* =========================================================
+   PHÂN TRANG
+   ========================================================= */
+.custom-pagination {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .custom-pagination .page-item .page-link {
+        border: 1px solid #e2e8f0;
+        background-color: #ffffff;
+        color: #1e293b;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .custom-pagination .page-item.active .page-link {
+        background-color: #1e293b;
+        border-color: #1e293b;
         color: #ffffff;
     }
 
-/* Nút Sửa (Viền Vàng/Cam) */
-.btn-action-warning {
-    color: #d97706;
-    border-color: #fcd34d;
-}
-
-    .btn-action-warning:hover {
-        background-color: #f59e0b;
-        color: #ffffff;
+    .custom-pagination .page-item.disabled .page-link {
+        background-color: #f8fafc;
+        color: #94a3b8;
+        border-color: #e2e8f0;
+        cursor: not-allowed;
     }
 
-/* Nút Xóa (Viền Đỏ) */
-.btn-action-danger {
-    color: #ef4444;
-    border-color: #fca5a5;
-}
-
-    .btn-action-danger:hover {
-        background-color: #ef4444;
-        color: #ffffff;
+    .custom-pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+        background-color: #f1f5f9;
     }
-
-/* Chú thích thông tin trang ở góc dưới */
-.service-footer-info {
-    color: #64748b;
-    font-size: 0.85rem;
-    margin-top: 12px;
-}

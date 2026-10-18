@@ -1,0 +1,65 @@
+﻿@model QuanLyKhachSan.Models.Entities.ChiTietXepPhong_DichVu
+
+<style>
+    /* Ẩn hoàn toàn khung báo lỗi khi không có lỗi */
+    .validation-summary-valid {
+        display: none !important;
+    }
+</style>
+
+<form asp-controller="SuDungDichVu" asp-action="Create" method="post" id="formAddService">
+    <input type="hidden" asp-for="MaChiTietXepPhong" />
+    <input type="hidden" name="maPhieu" value="@ViewBag.MaPhieu" />
+
+    <!-- Header của Form -->
+    <div class="modal-header d-flex justify-content-between align-items-center text-white px-4 py-3 border-0"
+         style="background: linear-gradient(135deg, #212529, #343a40);">
+        <h5 class="modal-title mb-0 fw-bold fs-6" style="letter-spacing: 0.3px;">
+            <i class="bi bi-cart-plus me-2 text-primary"></i> Thêm dịch vụ vào phòng: <span class="text-primary">@ViewBag.TenPhong</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white shadow-none btn-cancel-add-service" data-maphieu="@ViewBag.MaPhieu" aria-label="Close"></button>
+    </div>
+
+    <!-- Body của Form -->
+    <div class="modal-body p-4">
+
+        <!-- Chỉ cần thẻ div này, không cần id hay JS -->
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+
+        <div class="row">
+            <!-- Cột chọn dịch vụ -->
+            <div class="col-md-8 mb-3">
+                <label asp-for="MaDichVu" class="form-label fw-semibold">
+                    <i class="bi bi-box-seam text-muted me-1"></i> Chọn dịch vụ <span class="text-danger">*</span>
+                </label>
+                <select asp-for="MaDichVu" class="form-select form-select-lg" asp-items="ViewBag.MaDichVu">
+                    <option value="">-- Chọn dịch vụ --</option>
+                </select>
+                <span asp-validation-for="MaDichVu" class="text-danger small"></span>
+            </div>
+
+            <!-- Cột nhập số lượng -->
+            <div class="col-md-4 mb-3">
+                <label asp-for="SoLuong" class="form-label fw-semibold">
+                    <i class="bi bi-hash text-muted me-1"></i> Số lượng <span class="text-danger">*</span>
+                </label>
+                <input asp-for="SoLuong" class="form-control form-control-lg" type="number" min="1" value="1" />
+                <span asp-validation-for="SoLuong" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="alert alert-info py-2 mb-0 mt-2 border-0 bg-light">
+            <i class="bi bi-info-circle text-primary me-1"></i> Lưu ý: Đơn giá dịch vụ sẽ được tự động tính vào hóa đơn khi Check-out.
+        </div>
+    </div>
+
+    <!-- Footer của Form -->
+    <div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-end gap-2" style="border-color: #f1f5f9 !important;">
+        <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold btn-cancel-add-service" data-maphieu="@ViewBag.MaPhieu">
+            <i class="bi bi-x-lg me-1"></i> Hủy
+        </button>
+        <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold" id="btnSaveService">
+            <i class="bi bi-check-lg me-1"></i> Lưu dịch vụ
+        </button>
+    </div>
+</form>

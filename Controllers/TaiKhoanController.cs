@@ -29,7 +29,7 @@ namespace QuanLyKhachSan.Controllers
         [Authorize(Roles = "Admin,ADMIN")]
         public async Task<IActionResult> Index(int? page, string keyword, string role)
         {
-            int pageSize = 5;
+            int pageSize = 10;
             int pageNumber = (page ?? 1) < 1 ? 1 : (page ?? 1);
 
             var query = _context.TaiKhoans.AsQueryable();
@@ -158,10 +158,10 @@ namespace QuanLyKhachSan.Controllers
                 if (isAdmin)
                 {
                     ViewBag.RoleList = new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
-                        new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
-                    };
+            {
+                new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
+                new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
+            };
                 }
                 return View(model);
             }
@@ -185,17 +185,34 @@ namespace QuanLyKhachSan.Controllers
                 _context.TaiKhoans.Add(taiKhoan);
                 await _context.SaveChangesAsync(); // SQL sinh MaTaiKhoan
 
-                // BƯỚC B: Tạo và lưu KhachHang kết nối MaTaiKhoan
-                var khachHang = new KhachHang
+                // BƯỚC B: Tạo dữ liệu tương ứng với Role (Nhân viên hoặc Khách hàng)
+                if (assignedRole == "NhanVien")
                 {
-                    HoTen = model.HoTen,
-                    Sdt = model.Sdt,
-                    Email = model.Email,
-                    Cccd = model.Cccd,
-                    MaTaiKhoan = taiKhoan.MaTaiKhoan
-                };
+                    var nhanVien = new NhanVien
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        Cccd = model.Cccd,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                        // Nếu bảng NhanVien của bạn có các trường bắt buộc khác, hãy thêm vào đây
+                        // Ví dụ: ChucVu = "Nhân viên", NgayVaoLam = DateTime.Now, ...
+                    };
+                    _context.NhanViens.Add(nhanVien);
+                }
+                else // Mặc định là KhachHang
+                {
+                    var khachHang = new KhachHang
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        Cccd = model.Cccd,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                    };
+                    _context.KhachHangs.Add(khachHang);
+                }
 
-                _context.KhachHangs.Add(khachHang);
                 await _context.SaveChangesAsync();
 
                 // BƯỚC C: Commit Transaction
@@ -220,10 +237,10 @@ namespace QuanLyKhachSan.Controllers
                 if (isAdmin)
                 {
                     ViewBag.RoleList = new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
-                        new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
-                    };
+            {
+                new SelectListItem { Value = "KhachHang", Text = "Khách hàng" },
+                new SelectListItem { Value = "NhanVien", Text = "Nhân viên" }
+            };
                 }
                 return View(model);
             }

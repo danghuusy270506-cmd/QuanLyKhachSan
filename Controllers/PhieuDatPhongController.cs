@@ -103,6 +103,9 @@ namespace QuanLyKhachSan.Controllers
                 .Include(p => p.KhachHang)
                 .Include(p => p.LoaiPhong)
                 .Include(p => p.NhanVien)
+                .Include(p => p.ChiTietXepPhongs)
+                .ThenInclude(ct => ct.ChiTietXepPhong_DichVus)
+                .ThenInclude(dv => dv.DichVu)
                 .FirstOrDefaultAsync(m => m.MaPhieu == maphieu);
 
             if (phieudatphong == null) return NotFound();

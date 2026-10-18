@@ -34,7 +34,7 @@ namespace QuanLyKhachSan.Controllers
                     || dv.MaDichVu.Contains(tuKhoa));
             }
 
-            var danhSach = await truyVan.OrderBy(dv => dv.TenDichVu).ToListAsync();
+            var danhSach = await truyVan.OrderByDescending(dv => dv.MaDichVu).ToListAsync();
             ViewData["TuKhoa"] = tuKhoa;
 
             // Kiểm tra nếu request là AJAX thì trả về PartialView
@@ -56,13 +56,26 @@ namespace QuanLyKhachSan.Controllers
 
             var dichVu = await _context.DichVus.AsNoTracking()
                 .FirstOrDefaultAsync(dv => dv.MaDichVu == madichvu);
-            return dichVu == null ? NotFound() : View(dichVu);
+
+            if (dichVu == null) return NotFound();
+
+            // Nếu là AJAX → trả về PartialView để nhét vào modal
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_DetailsPartial", dichVu);
+
+            return View(dichVu);
         }
 
-        // GET: /DichVu/Create (Chỉ Admin và NhanVien)
+        // GET: /DichVu/Create
         [HttpGet]
         [Authorize(Roles = "Admin,NhanVien")]
-        public IActionResult Create() => View(new DichVu());
+        public IActionResult Create()
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_CreatePartial", new DichVu()); // Trả về Partial cho Modal
+
+            return View(new DichVu());
+        }
 
         // POST: /DichVu/Create (Chỉ Admin và NhanVien)
         [HttpPost]
@@ -70,9 +83,18 @@ namespace QuanLyKhachSan.Controllers
         [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Create([Bind("TenDichVu,MoTa,DonGia")] DichVu dichVu)
         {
-            if (!ModelState.IsValid) return View(dichVu);
+            // 👇 THÊM DÒNG NÀY: Bỏ qua kiểm tra bắt buộc cho MaDichVu vì mình sẽ tự sinh
+            ModelState.Remove("MaDichVu");
 
-            // Sinh mã DVxxx dựa trên mã lớn nhất hiện có.
+            if (!ModelState.IsValid)
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return PartialView("_CreatePartial", dichVu);
+
+                return View(dichVu);
+            }
+
+            // ... (Phần code tự sinh mã DV001, DV002... giữ nguyên) ...
             var cacMa = await _context.DichVus.AsNoTracking()
                 .Select(dv => dv.MaDichVu).ToListAsync();
             var soTiepTheo = cacMa
@@ -85,6 +107,12 @@ namespace QuanLyKhachSan.Controllers
             dichVu.MaDichVu = $"DV{soTiepTheo:D3}";
             _context.DichVus.Add(dichVu);
             await _context.SaveChangesAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = $"Đã thêm dịch vụ '{dichVu.TenDichVu}'.", id = dichVu.MaDichVu });
+            }
+
             TempData["ThongBaoThanhCong"] = $"Đã thêm dịch vụ '{dichVu.TenDichVu}'.";
             return RedirectToAction(nameof(Index));
         }
@@ -96,7 +124,10 @@ namespace QuanLyKhachSan.Controllers
         {
             if (string.IsNullOrWhiteSpace(madichvu)) return NotFound();
             var dichVu = await _context.DichVus.FindAsync(madichvu);
-            return dichVu == null ? NotFound() : View(dichVu);
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_EditPartial", dichVu);
+
+            return View(dichVu);
         }
 
         // POST: /DichVu/Edit/DV001 (Chỉ Admin và NhanVien)
@@ -108,17 +139,27 @@ namespace QuanLyKhachSan.Controllers
             if (string.IsNullOrWhiteSpace(madichvu) || madichvu != duLieuGuiLen.MaDichVu)
                 return NotFound();
 
-            if (!ModelState.IsValid) return View(duLieuGuiLen);
+            if (!ModelState.IsValid)
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return PartialView("_EditPartial", duLieuGuiLen);
+                return View(duLieuGuiLen);
+            }
 
             var dichVu = await _context.DichVus.FindAsync(madichvu);
             if (dichVu == null) return NotFound();
 
-            // Chỉ cập nhật các trường cho phép
             dichVu.TenDichVu = duLieuGuiLen.TenDichVu.Trim();
             dichVu.MoTa = duLieuGuiLen.MoTa?.Trim();
             dichVu.DonGia = duLieuGuiLen.DonGia;
 
             await _context.SaveChangesAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = $"Đã cập nhật dịch vụ '{dichVu.TenDichVu}'." });
+            }
+
             TempData["ThongBaoThanhCong"] = $"Đã cập nhật dịch vụ '{dichVu.TenDichVu}'.";
             return RedirectToAction(nameof(Index));
         }
@@ -131,7 +172,13 @@ namespace QuanLyKhachSan.Controllers
             if (string.IsNullOrWhiteSpace(madichvu)) return NotFound();
             var dichVu = await _context.DichVus.AsNoTracking()
                 .FirstOrDefaultAsync(dv => dv.MaDichVu == madichvu);
-            return dichVu == null ? NotFound() : View(dichVu);
+
+            if (dichVu == null) return NotFound();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_DeletePartial", dichVu);
+
+            return View(dichVu);
         }
 
         // POST: /DichVu/Delete/DV001 (Chỉ Admin và NhanVien)
@@ -147,16 +194,30 @@ namespace QuanLyKhachSan.Controllers
             // Dịch vụ đã xuất hiện trên hóa đơn/lượt lưu trú thì không xóa để giữ lịch sử.
             var daDuocSuDung = await _context.ChiTietXepPhong_DichVus
                 .AnyAsync(ct => ct.MaDichVu == madichvu);
+
             if (daDuocSuDung)
             {
-                TempData["ThongBaoLoi"] = $"Không thể xóa dịch vụ '{dichVu.TenDichVu}' vì đã có phát sinh sử dụng. Bạn có thể sửa tên hoặc đơn giá cho các lần sử dụng sau.";
+                // Nếu là AJAX, trả về JSON báo lỗi
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = $"Không thể xóa dịch vụ '{dichVu.TenDichVu}' vì đã có phát sinh sử dụng." });
+                }
+
+                TempData["ThongBaoLoi"] = $"Không thể xóa dịch vụ '{dichVu.TenDichVu}' vì đã có phát sinh sử dụng.";
                 return RedirectToAction(nameof(Index));
             }
 
             _context.DichVus.Remove(dichVu);
             await _context.SaveChangesAsync();
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = $"Đã xóa dịch vụ '{dichVu.TenDichVu}'." });
+            }
+
             TempData["ThongBaoThanhCong"] = $"Đã xóa dịch vụ '{dichVu.TenDichVu}'.";
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

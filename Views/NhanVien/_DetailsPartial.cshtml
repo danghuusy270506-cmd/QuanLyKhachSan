@@ -1,38 +1,108 @@
 ﻿@model QuanLyKhachSan.Models.Entities.NhanVien
 
-<div class="modal-header bg-dark text-white py-3 px-4">
-    <h5 class="modal-title fs-6">
-        <i class="bi bi-person-badge me-2"></i>Chi tiết nhân viên: <span class="text-info">#@Model.MaNhanVien</span>
-    </h5>
+<!-- Modal Header -->
+<div class="modal-header bg-dark text-white py-3 px-4 border-0">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-person-vcard text-info fs-4"></i>
+        <h5 class="modal-title fw-bold fs-5 mb-0">
+            Chi tiết nhân viên: <span class="text-info">#@Model.MaNhanVien</span>
+        </h5>
+    </div>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
-<div class="modal-body p-4 bg-white">
-    <dl class="row mb-0 fs-6 gy-2">
-        <dt class="col-sm-3 text-muted">Mã nhân viên:</dt>
-        <dd class="col-sm-9 fw-bold">#@Model.MaNhanVien</dd>
+<!-- Modal Body nền xám nhạt -->
+<div class="modal-body p-4 bg-light">
 
-        <dt class="col-sm-3 text-muted">Họ và tên:</dt>
-        <dd class="col-sm-9 fw-bold text-primary">@Model.HoTen</dd>
+    <!-- Khối 1: Thông tin cơ bản -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4 mb-4">
 
-        <dt class="col-sm-3 text-muted">Mã Tài Khoản:</dt>
-        <dd class="col-sm-9">
-            <span class="badge bg-secondary">ID: @Model.MaTaiKhoan</span>
-        </dd>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-hash me-2 fs-5"></i> Mã nhân viên
+            </div>
+            <div class="fw-bold text-dark fs-5">#@Model.MaNhanVien</div>
+        </div>
 
-        <dt class="col-sm-3 text-muted">Số CCCD:</dt>
-        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Cccd) ? "Chưa cập nhật" : Model.Cccd)</dd>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-person me-2 fs-5"></i> Họ và tên
+            </div>
+            <div class="fw-bold text-dark fs-5">@Model.HoTen</div>
+        </div>
 
-        <dt class="col-sm-3 text-muted">Số điện thoại:</dt>
-        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Sdt) ? "Chưa cập nhật" : Model.Sdt)</dd>
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-card-text me-2 fs-5"></i> Số CCCD
+            </div>
+            <div class="text-dark fs-6">
+                @(string.IsNullOrEmpty(Model.Cccd) ? "Chưa cập nhật" : Model.Cccd)
+            </div>
+        </div>
 
-        <dt class="col-sm-3 text-muted">Email:</dt>
-        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)</dd>
-    </dl>
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-telephone me-2 fs-5"></i> Số điện thoại
+            </div>
+            <div class="text-dark fs-6">
+                @(string.IsNullOrEmpty(Model.Sdt) ? "Chưa cập nhật" : Model.Sdt)
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Khối 2: Tài khoản & Email -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4">
+        <div class="row align-items-center">
+
+            <!-- Cột Email -->
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="text-muted fs-6 fw-semibold mb-1">
+                    <i class="bi bi-envelope me-2 fs-5"></i> Địa chỉ Email
+                </div>
+                <div class="fw-semibold text-dark fs-6 text-break">
+                    @(string.IsNullOrEmpty(Model.Email) ? "Chưa cập nhật" : Model.Email)
+                </div>
+            </div>
+
+            <!-- Cột Tài khoản -->
+            <div class="col-md-6 text-md-end">
+                <div class="text-muted fs-6 fw-semibold mb-2">
+                    <i class="bi bi-shield-lock me-2 fs-5"></i> Mã tài khoản
+                </div>
+                <div>
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2 rounded-pill fs-6 fw-bold">
+                        <i class="bi bi-key-fill me-1"></i> ID: @Model.MaTaiKhoan
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<div class="modal-footer bg-light justify-content-start py-3 px-4">
-    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
-        <i class="bi bi-x-lg me-1"></i> Đóng
+<!-- Modal Footer -->
+<!-- Bạn có thể giữ lại nút Đóng nếu muốn -->
+<div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-between align-items-center">
+    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Thông tin nhân viên được bảo mật</span>
+    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+        <i class="bi bi-x-lg"></i> Đóng
     </button>
 </div>
+
+<style>
+    /* Bổ sung CSS cho các class subtle */
+    .bg-secondary-subtle {
+        background-color: #e2e3e5 !important;
+    }
+
+    .border-secondary-subtle {
+        border-color: #d3d6d8 !important;
+    }
+
+    /* Tinh chỉnh cho icon thẳng hàng với chữ */
+    .modal-body i {
+        vertical-align: middle;
+    }
+</style>

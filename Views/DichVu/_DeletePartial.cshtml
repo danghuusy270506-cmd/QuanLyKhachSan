@@ -1,0 +1,81 @@
+﻿@model QuanLyKhachSan.Models.Entities.DichVu
+
+<script>
+    var titleEl = document.getElementById('modalTitleDeleteCode');
+    if (titleEl) {
+            titleEl.innerText = '@Model.MaDichVu';
+        }
+</script>
+
+<!-- Modal Body nền xám nhạt -->
+<div class="modal-body p-4 bg-light">
+
+    <!-- Cảnh báo màu vàng nhạt (Tăng cỡ chữ) -->
+    <div class="p-3 mb-4 bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-3 d-flex align-items-start gap-2">
+        <i class="bi bi-info-circle-fill fs-4 mt-1"></i>
+        <span class="fs-6 fw-medium">Nếu dịch vụ đã được sử dụng trong lượt lưu trú, hệ thống sẽ không cho xóa để bảo toàn lịch sử.</span>
+    </div>
+
+    <!-- Khối thông tin dịch vụ (Card trắng) -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4">
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-tag me-2 fs-5"></i> Tên dịch vụ
+            </div>
+            <!-- Chữ to, đậm hơn -->
+            <div class="fw-bold text-dark fs-5">@Model.TenDichVu</div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-card-text me-2 fs-5"></i> Mô tả
+            </div>
+            <div class="text-dark text-end fs-6" style="max-width: 60%;">
+                @(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả" : Model.MoTa)
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-cash-stack me-2 fs-5"></i> Đơn giá
+            </div>
+            <!-- Số tiền to hơn, màu đỏ nổi bật -->
+            <div class="fw-bold text-danger fs-4">@Model.DonGia.ToString("N0") đ</div>
+        </div>
+
+    </div>
+</div>
+
+<form id="deleteDichVuForm" asp-action="Delete" asp-route-madichvu="@Model.MaDichVu" method="post">
+    <input type="hidden" name="madichvu" value="@Model.MaDichVu" />
+
+    <!-- Modal Footer (Tăng kích thước nút) -->
+    <div class="modal-footer bg-white py-3 px-4 border-top d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-outline-secondary px-4 py-2 fs-6 fw-medium rounded-pill d-inline-flex align-items-center gap-1" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg"></i> Hủy
+        </button>
+        <button type="submit" class="btn btn-danger px-4 py-2 fs-6 fw-semibold rounded-pill shadow-sm d-inline-flex align-items-center gap-2" id="btnConfirmDelete">
+            <i class="bi bi-trash3-fill"></i> Xác nhận xóa
+        </button>
+    </div>
+</form>
+
+<style>
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+    }
+
+    .border-warning-subtle {
+        border-color: #ffecb5 !important;
+    }
+
+    .text-warning-emphasis {
+        color: #664d03 !important;
+    }
+
+    /* Tinh chỉnh cho icon thẳng hàng với chữ */
+    .modal-body i {
+        vertical-align: middle;
+    }
+</style>

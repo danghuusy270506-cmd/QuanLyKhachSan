@@ -6,9 +6,7 @@ function fetchData(url) {
     container.style.opacity = "0.5";
 
     fetch(url, {
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
-        }
+        headers: { "X-Requested-With": "XMLHttpRequest" }
     })
         .then(response => {
             if (!response.ok) throw new Error("Lỗi khi tải dữ liệu.");
@@ -32,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const filterForm = document.getElementById("filterForm");
 
-    // 1. Submit form Lọc
     if (filterForm) {
         filterForm.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -42,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 2. Phân trang & Làm mới bộ lọc bằng Event Delegation
     document.addEventListener("click", function (e) {
         const pageLink = e.target.closest("#phieuDatPhongContainer .pagination a");
         if (pageLink) {
@@ -61,11 +57,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     });
-
-    console.log("PhieuDatPhong Index JS Loaded Successfully.");
 });
 
-// Hàm hỗ trợ mở Modal an toàn qua AJAX (Đã sửa backdrop thành true để cho phép click ra ngoài)
 function openModal(url, data = {}) {
     $.ajax({
         url: url,
@@ -73,7 +66,6 @@ function openModal(url, data = {}) {
         data: data,
         headers: { "X-Requested-With": "XMLHttpRequest" },
         success: function (response) {
-            // Nếu lỡ nhận được JSON lỗi thay vì HTML form
             if (typeof response === 'object' && response.success === false) {
                 alert(response.message || 'Có lỗi xảy ra.');
                 return;
@@ -82,7 +74,6 @@ function openModal(url, data = {}) {
             $('#detailModalContent').html(response);
             var myModalEl = document.getElementById('detailModal');
 
-            // Lấy instance hiện tại hoặc tạo mới với backdrop: true (cho phép click ra ngoài) và keyboard: true (phím ESC)
             var myModal = bootstrap.Modal.getInstance(myModalEl);
             if (!myModal) {
                 myModal = new bootstrap.Modal(myModalEl, {
@@ -98,27 +89,22 @@ function openModal(url, data = {}) {
     });
 }
 
-// 1. Mở Modal Tạo Phiếu Đặt Mới
 $(document).on('click', '.btn-create-phieu', function () {
     openModal('/PhieuDatPhong/Create');
 });
 
-// 2. Mở Modal Chi Tiết
 $(document).on('click', '.btn-view-details', function () {
     openModal('/PhieuDatPhong/Details', { maphieu: $(this).data('id') });
 });
 
-// 3. Mở Modal Sửa
 $(document).on('click', '.btn-edit-details', function () {
     openModal('/PhieuDatPhong/Edit', { maphieu: $(this).data('id') });
 });
 
-// 4. Mở Modal Xóa
 $(document).on('click', '.btn-delete-details', function () {
     openModal('/PhieuDatPhong/Delete', { maphieu: $(this).data('id') });
 });
 
-// Xử lý Submit Form Tạo Mới qua AJAX
 $(document).on('submit', '#createPhieuForm', function (e) {
     e.preventDefault();
     var form = $(this);
@@ -131,8 +117,6 @@ $(document).on('submit', '#createPhieuForm', function (e) {
             if (response && response.success) {
                 var modal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
                 if (modal) modal.hide();
-
-                // Load lại bảng
                 fetchData(window.location.pathname + window.location.search);
             } else {
                 $('#detailModalContent').html(response);
@@ -144,7 +128,6 @@ $(document).on('submit', '#createPhieuForm', function (e) {
     });
 });
 
-// Xử lý Submit Form Sửa qua AJAX
 $(document).on('submit', '#editPhieuForm', function (e) {
     e.preventDefault();
     var form = $(this);
@@ -157,7 +140,6 @@ $(document).on('submit', '#editPhieuForm', function (e) {
             if (response && response.success) {
                 var modal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
                 if (modal) modal.hide();
-
                 fetchData(window.location.pathname + window.location.search);
             } else {
                 $('#detailModalContent').html(response);
@@ -169,7 +151,6 @@ $(document).on('submit', '#editPhieuForm', function (e) {
     });
 });
 
-// Xử lý Submit Form Xóa qua AJAX
 $(document).on('submit', '#deletePhieuForm', function (e) {
     e.preventDefault();
     var form = $(this);
@@ -182,7 +163,6 @@ $(document).on('submit', '#deletePhieuForm', function (e) {
             if (response && response.success) {
                 var modal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
                 if (modal) modal.hide();
-
                 fetchData(window.location.pathname + window.location.search);
             } else {
                 alert(response.message || 'Xóa không thành công!');
@@ -194,7 +174,6 @@ $(document).on('submit', '#deletePhieuForm', function (e) {
     });
 });
 
-// Xử lý nút Check-out qua AJAX
 $(document).on('click', '.btn-checkout-ajax', function (e) {
     e.preventDefault();
     var btn = $(this);
@@ -224,7 +203,6 @@ $(document).on('click', '.btn-checkout-ajax', function (e) {
     });
 });
 
-// Xử lý nút Xác nhận đổi trạng thái sang "Đã xác nhận" qua AJAX
 $(document).on('click', '.btn-xac-nhan', function (e) {
     e.preventDefault();
     var btn = $(this);
@@ -254,17 +232,155 @@ $(document).on('click', '.btn-xac-nhan', function (e) {
     });
 });
 
-// Tự động ràng buộc ngày đi phải lớn hơn hoặc bằng ngày đến
 $(document).on('change', '#ngayDenInput', function () {
     var ngayDen = $(this).val();
     if (ngayDen) {
-        // Đặt thuộc tính min cho ô Ngày Đi là Ngày Đến vừa chọn
         $('#ngayDiInput').attr('min', ngayDen);
-
-        // Nếu Ngày Đi hiện tại nhỏ hơn Ngày Đến thì tự xóa hoặc cập nhật bằng Ngày Đến
         var ngayDi = $('#ngayDiInput').val();
         if (ngayDi && ngayDi < ngayDen) {
             $('#ngayDiInput').val(ngayDen);
         }
     }
+});
+
+// =====================================================================
+// XỬ LÝ THÊM / XÓA DỊCH VỤ TỪ MODAL CHI TIẾT
+// =====================================================================
+
+// 1. Bấm nút "Thêm dịch vụ" trong Modal Chi tiết
+$(document).on('click', '.btn-add-service', function (e) {
+    e.preventDefault();
+    var maChiTiet = $(this).data('id');
+    var maPhieu = $(this).data('maphieu');
+
+    var modalContent = $('#detailModalContent');
+    var modalDialog = modalContent.closest('.modal-dialog');
+
+    // Phóng to Modal
+    modalDialog.addClass('modal-lg');
+
+    modalContent.html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><div class="mt-2 text-muted">Đang tải form...</div></div>');
+
+    $.ajax({
+        url: '/SuDungDichVu/Create',
+        type: 'GET',
+        data: { maChiTietXepPhong: maChiTiet, maPhieu: maPhieu },
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function (html) {
+            modalContent.html(html);
+        },
+        error: function () {
+            modalContent.html('<div class="alert alert-danger m-3">Không thể tải form thêm dịch vụ.</div>');
+        }
+    });
+});
+
+// 2. Submit form thêm dịch vụ
+$(document).on('submit', '#formAddService', function (e) {
+    e.preventDefault();
+    var form = $(this);
+    var btnSave = $('#btnSaveService');
+    var originalText = btnSave.html();
+
+    btnSave.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function (response) {
+            if (response && response.success) {
+                var maPhieu = form.find('input[name="maPhieu"]').val();
+
+                // Thu nhỏ modal lại và load lại nội dung chi tiết
+                $('#detailModal .modal-dialog').removeClass('modal-lg');
+
+                $.ajax({
+                    url: '/PhieuDatPhong/Details',
+                    type: 'GET',
+                    data: { maphieu: maPhieu },
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    success: function (html) {
+                        $('#detailModalContent').html(html);
+                        fetchData(window.location.pathname + window.location.search);
+                    }
+                });
+            } else {
+                $('#detailModalContent').html(response);
+            }
+        },
+        error: function () {
+            alert('Đã xảy ra lỗi khi thêm dịch vụ!');
+            btnSave.prop('disabled', false).html(originalText);
+        }
+    });
+});
+
+// 3. Nút Hủy trong form thêm dịch vụ
+$(document).on('click', '.btn-cancel-add-service', function (e) {
+    e.preventDefault();
+    var maPhieu = $(this).data('maphieu');
+
+    $('#detailModal .modal-dialog').removeClass('modal-lg');
+
+    $.ajax({
+        url: '/PhieuDatPhong/Details',
+        type: 'GET',
+        data: { maphieu: maPhieu },
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function (html) {
+            $('#detailModalContent').html(html);
+        },
+        error: function () {
+            alert('Lỗi khi tải lại chi tiết phiếu!');
+        }
+    });
+});
+
+// 4. Xử lý nút Xóa Dịch vụ (Thùng rác đỏ)
+$(document).on('click', '.btn-delete-service', function (e) {
+    e.preventDefault();
+
+    if (!confirm('Bạn có chắc chắn muốn xóa dịch vụ này khỏi phòng? Hành động này không thể hoàn tác.')) {
+        return;
+    }
+
+    var btn = $(this);
+    var id = btn.data('id');
+    var maPhieu = btn.data('maphieu');
+
+    btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status"></span>');
+
+    // Lấy token chống giả mạo
+    var token = $('input[name="__RequestVerificationToken"]').first().val() || '';
+
+    $.ajax({
+        url: '/SuDungDichVu/Delete',
+        type: 'POST',
+        data: { id: id, __RequestVerificationToken: token },
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function (response) {
+            if (response && response.success) {
+                // Load lại giao diện chi tiết phiếu để cập nhật danh sách
+                $.ajax({
+                    url: '/PhieuDatPhong/Details',
+                    type: 'GET',
+                    data: { maphieu: maPhieu },
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    success: function (html) {
+                        $('#detailModalContent').html(html);
+                        fetchData(window.location.pathname + window.location.search);
+                    }
+                });
+            } else {
+                alert(response.message || 'Xóa dịch vụ thất bại!');
+                btn.prop('disabled', false).html('<i class="bi bi-trash3"></i>');
+            }
+        },
+        error: function () {
+            alert('Lỗi kết nối khi xóa dịch vụ!');
+            btn.prop('disabled', false).html('<i class="bi bi-trash3"></i>');
+        }
+    });
 });

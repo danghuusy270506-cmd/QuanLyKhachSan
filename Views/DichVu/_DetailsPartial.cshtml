@@ -1,0 +1,83 @@
+﻿@model QuanLyKhachSan.Models.Entities.DichVu
+
+<script>
+    // Cập nhật mã dịch vụ lên Header của Modal
+    var titleEl = document.getElementById('modalTitleServiceCode');
+        if (titleEl) {
+            titleEl.innerText = '@Model.MaDichVu';
+        }
+</script>
+
+<!-- Modal Body -->
+<div class="modal-body p-4 bg-light">
+
+    <!-- Khối thông tin cơ bản -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4 mb-4">
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-tag me-2 fs-5"></i> Tên dịch vụ
+            </div>
+            <div class="fw-bold text-dark fs-5">@Model.TenDichVu</div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-card-text me-2 fs-5"></i> Mô tả
+            </div>
+            <div class="text-dark text-end fs-6" style="max-width: 60%;">
+                @(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả" : Model.MoTa)
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3">
+            <div class="text-muted fs-6 fw-semibold">
+                <i class="bi bi-hash me-2 fs-5"></i> Mã dịch vụ
+            </div>
+            <div class="fw-bold text-dark fs-5">#@Model.MaDichVu</div>
+        </div>
+
+    </div>
+
+    <!-- Khối Giá và Trạng thái -->
+    <div class="bg-white rounded-3 shadow-sm border border-light p-4">
+        <div class="row align-items-center">
+
+            <!-- Cột Giá -->
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="text-muted fs-6 fw-semibold mb-1">
+                    <i class="bi bi-cash-stack me-2 fs-5"></i> Đơn giá
+                </div>
+                <div class="fw-bold text-danger fs-3">@Model.DonGia.ToString("N0") VNĐ</div>
+            </div>
+
+            <!-- Cột Trạng thái -->
+            <div class="col-md-6 text-md-end">
+                <div class="text-muted fs-6 fw-semibold mb-2">
+                    <i class="bi bi-shield-check me-2 fs-5"></i> Trạng thái
+                </div>
+                <div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-4 py-2 rounded-pill fs-6 fw-bold">
+                        <i class="bi bi-check-circle-fill me-1"></i> Đang hoạt động
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Bổ sung CSS -->
+<style>
+    .bg-success-subtle {
+        background-color: #d1e7dd !important;
+    }
+
+    .border-success-subtle {
+        border-color: #badbcc !important;
+    }
+    .modal-body i {
+        vertical-align: middle;
+    }
+</style>
