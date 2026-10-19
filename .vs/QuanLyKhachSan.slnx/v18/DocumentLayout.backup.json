@@ -1,7 +1,28 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\home\\staffindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\home\\staffindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\home\\_staffsodophong.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\home\\_staffsodophong.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\home\\_staffphieuganday.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\home\\_staffphieuganday.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|c:\\users\\huung\\onedrive\\desktop\\quanlykhachsan\\views\\home\\_staffcardthongke.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0E844992-EE55-7382-EA6C-BD1C696EB713}|QuanLyKhachSan.csproj|solutionrelative:views\\home\\_staffcardthongke.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +43,67 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_StaffSoDoPhong.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffSoDoPhong.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\_StaffSoDoPhong.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffSoDoPhong.cshtml",
+              "RelativeToolTip": "Views\\Home\\_StaffSoDoPhong.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAAD4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T03:40:10.532Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAA3wJAAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-19T03:32:25.052Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_StaffPhieuGanDay.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffPhieuGanDay.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\_StaffPhieuGanDay.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffPhieuGanDay.cshtml",
+              "RelativeToolTip": "Views\\Home\\_StaffPhieuGanDay.cshtml",
+              "ViewState": "AgIAAAUAAAAAAAAAAADwvywAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T03:31:23.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_StaffCardThongKe.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffCardThongKe.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\_StaffCardThongKe.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\_StaffCardThongKe.cshtml",
+              "RelativeToolTip": "Views\\Home\\_StaffCardThongKe.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAADwv1IAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T03:25:55.859Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StaffIndex.cshtml",
+              "DocumentMoniker": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\StaffIndex.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\StaffIndex.cshtml",
+              "ToolTip": "C:\\Users\\Huung\\OneDrive\\Desktop\\QuanLyKhachSan\\Views\\Home\\StaffIndex.cshtml",
+              "RelativeToolTip": "Views\\Home\\StaffIndex.cshtml",
+              "ViewState": "AgIAACAAAAAAAAAAAADwv00AAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-19T03:11:17.156Z",
+              "EditorCaption": ""
             }
           ]
         }

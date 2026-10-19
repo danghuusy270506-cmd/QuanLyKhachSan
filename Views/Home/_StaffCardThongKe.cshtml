@@ -1,0 +1,83 @@
+﻿@model QuanLyKhachSan.Models.ViewModels.StaffDashboardViewModel
+
+<style>
+    .stat-card {
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+        }
+</style>
+
+<div class="row g-3 mb-4">
+    <!-- Thẻ 1: Phiếu chờ xác nhận -->
+    <div class="col-md-3">
+        <a asp-controller="PhieuDatPhong" asp-action="Index" asp-route-trangThai="Chờ xác nhận" class="text-decoration-none">
+            <div class="card border-start border-4 border-warning shadow-sm h-100 border-top-0 border-end-0 border-bottom-0 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Phiếu chờ xác nhận</div>
+                            <div class="fs-2 fw-bold text-dark">@Model.PhieuChoXacNhan</div>
+                        </div>
+                        <i class="bi bi-hourglass-split fs-1 text-warning opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Thẻ 2: Khách đến (Check-in) -->
+    <div class="col-md-3">
+        <a asp-controller="PhieuDatPhong" asp-action="Index" asp-route-ngayDen="@DateTime.Today.ToString("yyyy-MM-dd")" asp-route-trangThai="Đã xác nhận" class="text-decoration-none">
+            <div class="card border-start border-4 border-success shadow-sm h-100 border-top-0 border-end-0 border-bottom-0 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Khách đến (Check-in)</div>
+                            <div class="fs-2 fw-bold text-dark">@Model.CheckInHomNay</div>
+                        </div>
+                        <i class="bi bi-box-arrow-in-right fs-1 text-success opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Thẻ 3: Khách đi (Check-out) -->
+    <div class="col-md-3">
+        <a asp-controller="PhieuDatPhong" asp-action="Index" asp-route-ngayDi="@DateTime.Today.ToString("yyyy-MM-dd")" asp-route-trangThai="Đang ở" class="text-decoration-none">
+            <div class="card border-start border-4 border-info shadow-sm h-100 border-top-0 border-end-0 border-bottom-0 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Khách đi (Check-out)</div>
+                            <div class="fs-2 fw-bold text-dark">@Model.CheckOutHomNay</div>
+                        </div>
+                        <i class="bi bi-box-arrow-right fs-1 text-info opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Thẻ 4: Hóa đơn chưa thanh toán -->
+    <div class="col-md-3">
+        <a asp-controller="HoaDon" asp-action="Index" asp-route-trangThai="ChuaThanhToan" class="text-decoration-none">
+            <div class="card border-start border-4 border-danger shadow-sm h-100 border-top-0 border-end-0 border-bottom-0 stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">HĐ chưa thanh toán</div>
+                            <div class="fs-2 fw-bold text-dark">@Model.HoaDonChuaThanhToan</div>
+                        </div>
+                        <i class="bi bi-receipt fs-1 text-danger opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

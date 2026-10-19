@@ -1,0 +1,98 @@
+﻿@model List<QuanLyKhachSan.Models.Entities.Phong>
+@using System.Linq
+
+<div class="room-map-container">
+    @{
+        // Nhóm các phòng theo Loại phòng
+        var groupedRooms = Model.GroupBy(p => p.LoaiPhong?.TenLoaiPhong ?? "Chưa xác định").ToList();
+    }
+
+    @foreach (var group in groupedRooms)
+    {
+        <div class="room-group mb-4">
+            <!-- Header của nhóm phòng -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="mb-0 fw-bold text-dark">@group.Key</h5>
+                    <span class="text-muted small">@group.Count() Phòng</span>
+                </div>
+            </div>
+
+            <!-- Danh sách các phòng trong nhóm -->
+            <div class="row g-3">
+                @foreach (var p in group)
+                {
+                    // Xác định màu sắc dựa trên trạng thái thực tế trong DB của bạn
+                    var bgColor = p.TrangThai == "Trống" ? "#1b8c4c" // Xanh lá (Available)
+                                : p.TrangThai == "Đang ở" ? "#6b2c91" // Tím (Occupied)
+                                : p.TrangThai == "Đã đặt" ? "#0b4a8f" // Xanh đậm (Booked)
+                                : "#6c757d"; // Xám (Bảo trì/Dọn dẹp)
+
+                    var textStatus = p.TrangThai == "Trống" ? "Available"
+                                   : p.TrangThai == "Đang ở" ? "Occupied"
+                                   : p.TrangThai == "Đã đặt" ? "Booked"
+                                   : p.TrangThai;
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="card room-card h-100 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                            <!-- Phần trên: Màu nền & Icon -->
+                            <div class="p-3 text-white position-relative" style="background-color: @bgColor; min-height: 110px;">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-white text-dark shadow-sm"><i class="bi bi-person"></i> @p.LoaiPhong?.SucChua</span>
+                                    <span class="badge bg-white text-dark shadow-sm">@textStatus</span>
+                                </div>
+                                <div class="room-number position-absolute" style="bottom: 10px; left: 15px; font-size: 1.5rem; font-weight: 700;">
+                                    @p.SoPhong
+                                </div>
+                                <!-- Icon giường (có thể thay đổi tùy loại phòng) -->
+                                <div class="position-absolute" style="bottom: 5px; right: 10px; font-size: 3rem; opacity: 0.3;">
+                                    <i class="bi bi-door-closed"></i>
+                                </div>
+                            </div>
+
+                            <!-- Phần dưới: Thông tin chi tiết -->
+                            <div class="card-body p-3 bg-white">
+                                <h6 class="fw-bold mb-1">@p.LoaiPhong?.TenLoaiPhong</h6>
+                                <p class="text-muted small mb-2">@p.LoaiPhong?.SucChua người</p>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <button type="button" class="btn btn-link text-decoration-none small fw-semibold p-0 btn-view-room" 
+        style="color: #0b4a8f;" 
+        data-id="@p.MaPhong">
+    Xem chi tiết
+</button
+
+                                    <button type="button" class="btn btn-sm btn-outline-secondary phong-btn"
+                                            data-sophong="@p.SoPhong"
+                                            data-loaiphong="@p.LoaiPhong?.TenLoaiPhong"
+                                            data-trangthai="@p.TrangThai">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .room-card {
+        transition: transform 0.2s;
+    }
+
+        .room-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .room-group {
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 1rem;
+    }
+
+        .room-group:last-child {
+            border-bottom: none;
+        }
+</style>

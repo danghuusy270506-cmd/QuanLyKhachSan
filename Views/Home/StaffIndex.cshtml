@@ -1,5 +1,114 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model QuanLyKhachSan.Models.ViewModels.StaffDashboardViewModel
 @{
+    ViewData["Title"] = "Tổng quan Lễ tân";
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold text-dark">Xin chào, @User.Identity?.Name!</h4>
+            <p class="text-muted mb-0">Hôm nay là @DateTime.Now.ToString("dddd, dd/MM/yyyy")</p>
+        </div>
+    </div>
+
+    <!-- 4 thẻ thống kê -->
+    <partial name="_StaffCardThongKe" model="Model" />
+
+    <!-- Phiếu đặt gần đây (Đưa lên trên) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <partial name="_StaffPhieuGanDay" model="Model.PhieuGanDay" />
+        </div>
+    </div>
+
+    <!-- SƠ ĐỒ PHÒNG MỚI (Chiếm toàn bộ chiều ngang) -->
+    <partial name="_StaffSoDoPhong" model="Model.PhongHomNay" />
+</div>
+<!-- Modal Sơ đồ phòng -->
+<div class="modal fade" id="phongModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Phòng <span id="mdSoPhong"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Loại phòng: <strong id="mdLoaiPhong"></strong></p>
+                <p class="mb-2">Trạng thái: <span id="mdTrangThai" class="badge bg-secondary"></span></p>
+            </div>
+            <div class="modal-footer" id="mdActions"></div>
+        </div>
+    </div>
+</div>
+<!-- Modal Rỗng để hứng nội dung Chi tiết phòng từ AJAX -->
+<div class="modal fade" id="roomDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="roomDetailModalContent">
+            <!-- Nội dung AJAX sẽ được load vào đây -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.phong-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    var soPhong = this.getAttribute('data-sophong');
+                    var loai = this.getAttribute('data-loaiphong');
+                    var tt = this.getAttribute('data-trangthai');
+
+                    document.getElementById('mdSoPhong').textContent = soPhong;
+                    document.getElementById('mdLoaiPhong').textContent = loai || "Đang cập nhật";
+                    
+                    var badge = document.getElementById('mdTrangThai');
+                    badge.textContent = tt;
+                    badge.className = 'badge ' + (tt === 'Trống' ? 'bg-success' 
+                        : (tt === 'Đang ở' || tt === 'Đang sử dụng') ? 'bg-warning text-dark' 
+                        : (tt && tt.indexOf('Đang dọn') === 0) ? 'bg-info text-dark' : 'bg-secondary');
+
+                    var actions = document.getElementById('mdActions');
+                    actions.innerHTML = '';
+                    
+                    if (tt === 'Trống') {
+                        actions.innerHTML = `<button type="button" class="btn btn-success" onclick="alert('Vui lòng sang trang Phiếu đặt phòng để Check-in')">Nhận phòng</button>`;
+                    } else if (tt === 'Đang ở' || tt === 'Đang sử dụng') {
+                        actions.innerHTML = `<button type="button" class="btn btn-danger" onclick="alert('Vui lòng sang trang Phiếu đặt phòng để Check-out')">Trả phòng</button>`;
+                    } else if (tt && tt.indexOf('Đang dọn') === 0) {
+                        actions.innerHTML = `<button type="button" class="btn btn-info" onclick="alert('Đã đánh dấu dọn xong!')">Đánh dấu đã dọn</button>`;
+                    }
+
+                    var myModal = new bootstrap.Modal(document.getElementById('phongModal'));
+                    myModal.show();
+                });
+            });
+        });
+
+        // XỬ LÝ XEM CHI TIẾT PHÒNG BẰNG AJAX
+$(document).on('click', '.btn-view-room', function (e) {
+    e.preventDefault();
+    var maPhong = $(this).data('id');
+    
+    // Hiển thị modal trước và show trạng thái đang tải
+    var modalContent = $('#roomDetailModalContent');
+    modalContent.html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><div class="mt-2 text-muted">Đang tải chi tiết...</div></div>');
+    
+    var roomModal = new bootstrap.Modal(document.getElementById('roomDetailModal'));
+    roomModal.show();
+
+    // Gọi AJAX lấy Partial View từ PhongController
+    $.ajax({
+        url: '/Phong/Details', // Đổi thành /Phong/Details nếu Controller của bạn tên là Phong
+        type: 'GET',
+        data: { id: maPhong },
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        success: function (html) {
+            modalContent.html(html);
+        },
+        error: function () {
+            modalContent.html('<div class="alert alert-danger m-3">Không thể tải chi tiết phòng. Vui lòng kiểm tra lại Controller.</div>');
+        }
+    });
+});
+    </script>
 }

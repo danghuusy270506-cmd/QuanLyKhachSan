@@ -31,6 +31,13 @@ namespace QuanLyKhachSan.Controllers
                 return RedirectToAction("Index", "LoaiPhong");
             }
 
+            // Nhân viên -> trang Staff
+            if (User.IsInRole("NhanVien"))
+            {
+                return RedirectToAction("StaffIndex", "Home");
+            }
+
+
             var homNay = DateTime.Today;
             var ngayMai = homNay.AddDays(1);
             var dauThang = new DateTime(homNay.Year, homNay.Month, 1);
@@ -126,11 +133,94 @@ namespace QuanLyKhachSan.Controllers
         {
             return View();
         }
-        public IActionResult StaffIndex()
+
+        [Authorize(Roles = "Admin,NhanVien")]
+        public async Task<IActionResult> StaffIndex()
         {
-            return View();
+            var homNay = DateTime.Today;
+            var ngayMai = homNay.AddDays(1);
+
+            var model = new StaffDashboardViewModel
+            {
+                // 1. Đếm số liệu thật
+                PhieuChoXacNhan = await _context.PhieuDatPhongs.CountAsync(p => p.TrangThai == "Chờ xác nhận"),
+
+                // Đếm số lượng phiếu có ngày đến hôm nay (chưa check-in)
+                CheckInHomNay = await _context.PhieuDatPhongs.CountAsync(p =>
+                    p.NgayDen >= homNay && p.NgayDen < ngayMai && p.TrangThai == "Đã xác nhận"),
+
+                // Đếm số lượng phòng khách dự kiến trả hôm nay (chưa check-out)
+                CheckOutHomNay = await _context.ChiTietXepPhongs.CountAsync(ct =>
+                    ct.NgayTra == null && ct.PhieuDatPhong.NgayDi >= homNay && ct.PhieuDatPhong.NgayDi < ngayMai),
+
+                // Đếm hóa đơn chưa thanh toán
+                HoaDonChuaThanhToan = await _context.HoaDons.CountAsync(h => h.TrangThai == "ChuaThanhToan"),
+
+
+                // 2. Lấy danh sách Phiếu đặt gần đây (thay thế cho phần Việc cần làm)
+                PhieuGanDay = await _context.PhieuDatPhongs
+                    .Include(p => p.KhachHang)
+                    .Include(p => p.LoaiPhong)
+                    .OrderByDescending(p => p.NgayDat)
+                    .Take(5)
+                    .ToListAsync(),
+
+                // 3. Lấy sơ đồ phòng
+                PhongHomNay = await _context.Phongs
+                    .Include(p => p.LoaiPhong)
+                    .OrderBy(p => p.Tang).ThenBy(p => p.SoPhong)
+                    .ToListAsync()
+            };
+
+            ViewData["Title"] = "Tổng quan Lễ tân";
+            return View(model);
         }
 
+        // --- API AJAX: Xác nhận thanh toán hóa đơn ---
+        [HttpPost]
+        [Authorize(Roles = "Admin,NhanVien")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XacNhanThanhToan(string maHoaDon)
+        {
+            var hoaDon = await _context.HoaDons
+                .Include(hd => hd.PhieuDatPhong)
+                .ThenInclude(p => p.ChiTietXepPhongs)
+                .ThenInclude(ct => ct.Phong)
+                .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
+
+            if (hoaDon == null || hoaDon.TrangThai == "DaThanhToan")
+                return Json(new { success = false, message = "Hóa đơn không hợp lệ hoặc đã thanh toán." });
+
+            hoaDon.TrangThai = "DaThanhToan";
+            hoaDon.ThoiGianThanhToan = DateTime.Now;
+
+            if (hoaDon.PhieuDatPhong != null)
+            {
+                hoaDon.PhieuDatPhong.TrangThai = "Hoàn thành";
+                foreach (var ct in hoaDon.PhieuDatPhong.ChiTietXepPhongs)
+                {
+                    if (ct.Phong != null && ct.NgayTra != null)
+                        ct.Phong.TrangThai = "Đang dọn";
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
+
+        // --- API AJAX: Duyệt phiếu đặt phòng ---
+        [HttpPost]
+        [Authorize(Roles = "Admin,NhanVien")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XacNhanPhieu(int maPhieu)
+        {
+            var phieu = await _context.PhieuDatPhongs.FindAsync(maPhieu);
+            if (phieu == null || phieu.TrangThai != "Chờ xác nhận")
+                return Json(new { success = false, message = "Phiếu không hợp lệ hoặc đã được xử lý." });
+
+            phieu.TrangThai = "Đã xác nhận";
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
+        }
 
         [AllowAnonymous] // Ai cũng có thể xem trang chính sách bảo mật
         public IActionResult Privacy()

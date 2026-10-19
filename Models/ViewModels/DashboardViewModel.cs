@@ -30,4 +30,18 @@ namespace QuanLyKhachSan.Models.ViewModels
         public decimal DoanhThu { get; set; }
         public double ChieuCaoCot { get; set; }
     }
+
+    //Nhan Vien
+    public class StaffDashboardViewModel
+    {
+        public int CheckInHomNay { get; set; }
+        public int CheckOutHomNay { get; set; }
+        public int PhieuChoXacNhan { get; set; }
+        public int PhongTrong { get; set; }
+        public int HoaDonChuaThanhToan { get; set; }
+        public List<PhieuDatPhong> PhieuGanDay { get; set; } = new();
+        public List<PhieuDatPhong> PhieuCanXuLy { get; set; } = new();
+        public List<PhieuDatPhong> PhieuChoDuyet { get; set; } = new();
+        public List<Phong> PhongHomNay { get; set; } = new();
+    }
 }

@@ -1,0 +1,45 @@
+﻿@model List<QuanLyKhachSan.Models.Entities.PhieuDatPhong>
+
+<div class="card h-100 shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history text-primary me-2"></i>Phiếu đặt gần đây</h6>
+        <a asp-controller="PhieuDatPhong" asp-action="Index" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+    </div>
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                Chưa có phiếu đặt phòng nào.
+            </div>
+        }
+        else
+        {
+            <div class="list-group list-group-flush">
+                @foreach (var p in Model)
+                {
+                    var badgeColor = p.TrangThai == "Chờ xác nhận" ? "bg-warning text-dark"
+                                   : p.TrangThai == "Đã xác nhận" ? "bg-info text-dark"
+                                   : p.TrangThai == "Đang ở" ? "bg-primary"
+                                   : p.TrangThai == "Hoàn thành" ? "bg-success"
+                                   : "bg-secondary";
+
+                    <div class="list-group-item p-3 d-flex justify-content-between align-items-center hover-bg-light">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">#@p.MaPhieu - @p.KhachHang?.HoTen</h6>
+                            <div class="small text-muted">
+                                @p.LoaiPhong?.TenLoaiPhong • Đặt lúc @p.NgayDat.ToString("dd/MM HH:mm")
+                            </div>
+                        </div>
+                        <span class="badge @badgeColor rounded-pill px-3">@p.TrangThai</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-bg-light:hover {
+        background-color: #f8fafc;
+    }
+</style>
