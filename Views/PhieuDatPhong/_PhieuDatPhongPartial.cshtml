@@ -41,6 +41,7 @@
                                 <td class="text-center">@item.SoNguoi</td>
                                 <td class="fw-bold">@item.TienCoc.ToString("N0") đ</td>
                                 <td>
+                                    
                                     @if (item.TrangThai == "Chờ xác nhận")
                                     {
                                         <span class="badge-status badge-cho-xac-nhan">@item.TrangThai</span>
@@ -53,14 +54,23 @@
                                     {
                                         <span class="badge-status badge-dang-o">@item.TrangThai</span>
                                     }
+                                    else if (item.TrangThai == "Chờ thanh toán")
+                                    {
+                                        <span class="badge-status badge-cho-xac-nhan">@item.TrangThai</span>
+                                    }
                                     else if (item.TrangThai == "Hoàn thành")
                                     {
                                         <span class="badge-status badge-hoan-thanh">@item.TrangThai</span>
                                     }
-                                    else
+                                    else if (item.TrangThai == "Đã hủy")
                                     {
                                         <span class="badge-status badge-da-huy">@item.TrangThai</span>
                                     }
+                                    else
+                                    {
+                                        <span class="badge-status">@item.TrangThai</span>
+                                    }
+
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center align-items-center gap-2">

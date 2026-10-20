@@ -35,6 +35,32 @@ namespace QuanLyKhachSan.Controllers
                 .Include(p => p.LoaiPhong)
                 .Include(p => p.NhanVien)
                 .AsQueryable();
+            // Giới hạn dữ liệu theo vai trò
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await _context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(
+                    p => p.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien")
+                     && !User.IsInRole("Admin")
+                     && !User.IsInRole("ADMIN"))
+            {
+                return Forbid();
+            }
 
             if (!string.IsNullOrEmpty(maPhieu))
             {
@@ -81,10 +107,17 @@ namespace QuanLyKhachSan.Controllers
             ViewBag.ngayDen = ngayDen?.ToString("yyyy-MM-dd");
             ViewBag.ngayDi = ngayDi?.ToString("yyyy-MM-dd");
             ViewData["ListLoaiPhong"] = new SelectList(_context.LoaiPhongs, "MaLoaiPhong", "TenLoaiPhong", maLoaiPhong);
+
             ViewData["ListTrangThai"] = new SelectList(new List<string>
-            {
-                "Chờ xác nhận", "Đã xác nhận", "Đang ở", "Hoàn thành", "Đã hủy"
+{
+                "Chờ xác nhận",
+                "Đã xác nhận",
+                "Đang ở",
+                "Chờ thanh toán",
+                "Hoàn thành",
+                "Đã hủy"
             }, trangThai);
+
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -97,15 +130,47 @@ namespace QuanLyKhachSan.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? maphieu)
         {
-            if (maphieu == null) return NotFound();
+            if (maphieu == null)
+                return NotFound();
 
-            var phieudatphong = await _context.PhieuDatPhongs
+            var query = _context.PhieuDatPhongs
                 .Include(p => p.KhachHang)
                 .Include(p => p.LoaiPhong)
                 .Include(p => p.NhanVien)
-                .FirstOrDefaultAsync(m => m.MaPhieu == maphieu);
+                .AsQueryable();
 
-            if (phieudatphong == null) return NotFound();
+            // Khách hàng chỉ được xem phiếu của chính mình
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await _context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(
+                    p => p.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien")
+                     && !User.IsInRole("Admin")
+                     && !User.IsInRole("ADMIN"))
+            {
+                return Forbid();
+            }
+
+            var phieudatphong = await query
+                .FirstOrDefaultAsync(p => p.MaPhieu == maphieu);
+
+            if (phieudatphong == null)
+                return NotFound();
 
             return PartialView("_DetailsPartial", phieudatphong);
         }
@@ -190,20 +255,133 @@ namespace QuanLyKhachSan.Controllers
                     return RedirectToAction("Authentication", "DangNhap");
                 }
                 phieudatphong.MaKhachHang = khachHang.MaKhachHang;
+                // Khách hàng không được tự quyết định tiền đặt cọc
+                phieudatphong.TienCoc = 0m;
+
+                // Bỏ lỗi validation của giá trị TienCoc do khách gửi lên
+                ModelState.Remove(nameof(PhieuDatPhong.TienCoc));
             }
 
             phieudatphong.NgayDat = DateTime.Now;
             phieudatphong.TrangThai = "Chờ xác nhận";
 
             // Validate logic ngày đến & ngày đi
-            if (phieudatphong.NgayDi <= phieudatphong.NgayDen)
+
+            // Kiểm tra ngày nhận phòng không được ở trong quá khứ
+            if (phieudatphong.NgayDen.Date < DateTime.Today)
             {
-                ModelState.AddModelError("NgayDi", "Ngày đi phải sau ngày đến.");
+                ModelState.AddModelError(
+                    nameof(phieudatphong.NgayDen),
+                    "Ngày nhận phòng không được ở trong quá khứ.");
             }
+
+            // Ngày trả phòng phải sau ngày nhận phòng
+            if (phieudatphong.NgayDi.Date <= phieudatphong.NgayDen.Date)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.NgayDi),
+                    "Ngày trả phòng phải sau ngày nhận phòng.");
+            }
+
 
             if (phieudatphong.MaKhachHang <= 0)
             {
                 ModelState.AddModelError("MaKhachHang", "Vui lòng chọn khách hàng.");
+            }
+
+            // Kiểm tra loại phòng được chọn có tồn tại không
+            var loaiPhong = await _context.LoaiPhongs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    lp => lp.MaLoaiPhong == phieudatphong.MaLoaiPhong);
+
+            if (loaiPhong == null)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.MaLoaiPhong),
+                    "Vui lòng chọn loại phòng hợp lệ.");
+            }
+            else if (phieudatphong.SoNguoi > loaiPhong.SucChua)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.SoNguoi),
+                    $"Loại phòng này chỉ dành cho tối đa " +
+                    $"{loaiPhong.SucChua} người.");
+            }
+
+            // Kiểm tra phòng khả dụng theo từng ngày lưu trú
+            if (ModelState.IsValid && loaiPhong != null)
+            {
+                var ngayDen = phieudatphong.NgayDen.Date;
+                var ngayDi = phieudatphong.NgayDi.Date;
+
+                // Các trạng thái phòng được tính vào nguồn phòng
+                int soPhongKhaDung = await _context.Phongs
+                    .CountAsync(p =>
+                        p.MaLoaiPhong == loaiPhong.MaLoaiPhong &&
+                        (p.TrangThai == "Trống" ||
+                         p.TrangThai == "Đang ở" ||
+                         p.TrangThai == "Đang sử dụng"));
+
+                if (soPhongKhaDung == 0)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        "Loại phòng hiện không có phòng khả dụng.");
+                }
+                else
+                {
+                    // Các phiếu đang giữ nhu cầu đặt phòng
+                    string[] trangThaiDangDat =
+                    {
+                        "Chờ xác nhận",
+                        "Đã xác nhận",
+                        "Đang ở"
+                    };
+
+                    // Lấy các phiếu cùng loại phòng có ngày giao nhau
+                    var cacPhieuTrungLich =
+                        await _context.PhieuDatPhongs
+                            .AsNoTracking()
+                            .Where(p =>
+                                p.MaLoaiPhong == loaiPhong.MaLoaiPhong &&
+                                trangThaiDangDat.Contains(p.TrangThai) &&
+                                p.NgayDen.Date < ngayDi &&
+                                p.NgayDi.Date > ngayDen)
+                            .Select(p => new
+                            {
+                                p.NgayDen,
+                                p.NgayDi
+                            })
+                            .ToListAsync();
+
+                    int soPhieuTrungNhieuNhat = 0;
+
+                    // Tính số phiếu đồng thời trong từng đêm
+                    for (var ngay = ngayDen;
+                         ngay < ngayDi;
+                         ngay = ngay.AddDays(1))
+                    {
+                        int soPhieuTrongDem = cacPhieuTrungLich.Count(p =>
+                            p.NgayDen.Date <= ngay &&
+                            p.NgayDi.Date > ngay);
+
+                        if (soPhieuTrongDem > soPhieuTrungNhieuNhat)
+                        {
+                            soPhieuTrungNhieuNhat = soPhieuTrongDem;
+                        }
+                    }
+
+                    // Phải còn ít nhất một phòng cho yêu cầu mới
+                    if (soPhieuTrungNhieuNhat >= soPhongKhaDung)
+                    {
+                        ModelState.AddModelError(
+                            string.Empty,
+                            "Loại phòng đã hết khả năng phục vụ " +
+                            "trong khoảng ngày đã chọn. " +
+                            "Vui lòng chọn ngày khác.");
+                    }
+                }
             }
 
             if (ModelState.IsValid)
@@ -264,6 +442,110 @@ namespace QuanLyKhachSan.Controllers
         public async Task<IActionResult> Edit(int maphieu, [Bind("MaPhieu,NgayDat,NgayDen,NgayDi,TienCoc,SoNguoi,TrangThai,MaKhachHang,MaNhanVien,MaLoaiPhong")] PhieuDatPhong phieudatphong)
         {
             if (maphieu != phieudatphong.MaPhieu) return NotFound();
+
+            // Khi sửa phiếu, ngày trả phải sau ngày nhận
+            if (phieudatphong.NgayDi.Date <= phieudatphong.NgayDen.Date)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.NgayDi),
+                    "Ngày trả phòng phải sau ngày nhận phòng.");
+            }
+
+            // Kiểm tra loại phòng được chọn khi sửa phiếu
+            var loaiPhongChon = await _context.LoaiPhongs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    lp => lp.MaLoaiPhong == phieudatphong.MaLoaiPhong);
+
+            if (loaiPhongChon == null)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.MaLoaiPhong),
+                    "Vui lòng chọn loại phòng hợp lệ.");
+            }
+            else if (phieudatphong.SoNguoi > loaiPhongChon.SucChua)
+            {
+                ModelState.AddModelError(
+                    nameof(phieudatphong.SoNguoi),
+                    $"Loại phòng này chỉ dành cho tối đa " +
+                    $"{loaiPhongChon.SucChua} người.");
+            }
+
+            // Kiểm tra lịch trùng khi sửa phiếu
+            string[] trangThaiDangDat =
+            {
+                "Chờ xác nhận",
+                "Đã xác nhận",
+                "Đang ở"
+            };
+
+            if (ModelState.IsValid &&
+                loaiPhongChon != null &&
+                trangThaiDangDat.Contains(phieudatphong.TrangThai))
+            {
+                var ngayDen = phieudatphong.NgayDen.Date;
+                var ngayDi = phieudatphong.NgayDi.Date;
+
+                // Tổng số phòng được tính vào nguồn phòng khả dụng
+                int soPhongKhaDung = await _context.Phongs
+                    .CountAsync(p =>
+                        p.MaLoaiPhong == loaiPhongChon.MaLoaiPhong &&
+                        (p.TrangThai == "Trống" ||
+                         p.TrangThai == "Đang ở" ||
+                         p.TrangThai == "Đang sử dụng"));
+
+                if (soPhongKhaDung == 0)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        "Loại phòng hiện không có phòng khả dụng.");
+                }
+                else
+                {
+                    // Loại trừ chính phiếu đang sửa
+                    var cacPhieuTrungLich =
+                        await _context.PhieuDatPhongs
+                            .AsNoTracking()
+                            .Where(p =>
+                                p.MaPhieu != phieudatphong.MaPhieu &&
+                                p.MaLoaiPhong == loaiPhongChon.MaLoaiPhong &&
+                                trangThaiDangDat.Contains(p.TrangThai) &&
+                                p.NgayDen.Date < ngayDi &&
+                                p.NgayDi.Date > ngayDen)
+                            .Select(p => new
+                            {
+                                p.NgayDen,
+                                p.NgayDi
+                            })
+                            .ToListAsync();
+
+                    int soPhieuTrungNhieuNhat = 0;
+
+                    // Tìm đêm có nhiều phiếu trùng lịch nhất
+                    for (var ngay = ngayDen;
+                         ngay < ngayDi;
+                         ngay = ngay.AddDays(1))
+                    {
+                        int soPhieuTrongDem = cacPhieuTrungLich.Count(p =>
+                            p.NgayDen.Date <= ngay &&
+                            p.NgayDi.Date > ngay);
+
+                        if (soPhieuTrongDem > soPhieuTrungNhieuNhat)
+                        {
+                            soPhieuTrungNhieuNhat = soPhieuTrongDem;
+                        }
+                    }
+
+                    if (soPhieuTrungNhieuNhat >= soPhongKhaDung)
+                    {
+                        ModelState.AddModelError(
+                            string.Empty,
+                            "Loại phòng đã hết khả năng phục vụ " +
+                            "trong khoảng ngày đã chọn. " +
+                            "Vui lòng chọn ngày khác.");
+                    }
+                }
+            }
 
             if (ModelState.IsValid)
             {
@@ -340,23 +622,96 @@ namespace QuanLyKhachSan.Controllers
             return _context.PhieuDatPhongs.Any(e => e.MaPhieu == maphieu);
         }
 
-        // 9. XỬ LÝ ĐỔI TRẠNG THÁI SANG "ĐÃ XÁC NHẬN"
+
+
+        // Xác nhận phiếu đặt phòng và kiểm tra sức chứa
         [Authorize(Roles = "Admin,NhanVien")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> XacNhan(int maphieu)
         {
-            var phieu = await _context.PhieuDatPhongs.FindAsync(maphieu);
+            var phieu = await _context.PhieuDatPhongs
+                .FirstOrDefaultAsync(p => p.MaPhieu == maphieu);
+
             if (phieu == null)
             {
-                return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng." });
+                return Json(new
+                {
+                    success = false,
+                    message = "Không tìm thấy phiếu đặt phòng."
+                });
             }
 
+            // Chỉ xác nhận phiếu đang chờ xác nhận
+            if (phieu.TrangThai != "Chờ xác nhận")
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Phiếu không còn ở trạng thái chờ xác nhận."
+                });
+            }
+
+            // Tổng số phòng thuộc loại này, loại trừ phòng bảo trì
+            int tongSoPhong = await _context.Phongs
+                .CountAsync(p =>
+                    p.MaLoaiPhong == phieu.MaLoaiPhong &&
+                    (p.TrangThai == "Trống" ||
+                     p.TrangThai == "Đang ở" ||
+                     p.TrangThai == "Đang sử dụng"));
+
+            if (tongSoPhong == 0)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Loại phòng này hiện không có phòng khả dụng."
+                });
+            }
+
+            // Đếm các phiếu đã xác nhận hoặc đang ở
+            // có thời gian lưu trú chồng lấn với phiếu hiện tại
+            string[] trangThaiDaGiuPhong =
+            {
+                "Đã xác nhận",
+                "Đang ở"
+            };
+
+            int soPhieuDaGiuPhong =
+                await _context.PhieuDatPhongs
+                    .AsNoTracking()
+                    .CountAsync(p =>
+                        p.MaPhieu != phieu.MaPhieu &&
+                        p.MaLoaiPhong == phieu.MaLoaiPhong &&
+                        trangThaiDaGiuPhong.Contains(p.TrangThai) &&
+                        p.NgayDen.Date < phieu.NgayDi.Date &&
+                        p.NgayDi.Date > phieu.NgayDen.Date);
+
+            // Nếu toàn bộ sức chứa đã được các phiếu khác sử dụng,
+            // không cho xác nhận thêm
+            if (soPhieuDaGiuPhong >= tongSoPhong)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Không thể xác nhận phiếu vì loại phòng đã hết " +
+                        "khả năng phục vụ trong khoảng ngày đã chọn."
+                });
+            }
+
+            // Cập nhật trạng thái khi tất cả kiểm tra đều hợp lệ
             phieu.TrangThai = "Đã xác nhận";
-            _context.Update(phieu);
+
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true });
+            return Json(new
+            {
+                success = true,
+                message = "Xác nhận phiếu đặt phòng thành công."
+            });
         }
+
+
     }
 }

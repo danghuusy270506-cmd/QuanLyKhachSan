@@ -47,12 +47,52 @@ namespace QuanLyKhachSan.Controllers
                 ViewBag.Error = "Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!";
                 return View();
             }
-
             // Tìm tài khoản theo Username
             var user = await _context.TaiKhoans
                 .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            // Không tìm thấy tài khoản
+            if (user == null)
+            {
+                ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác!";
+                return View();
+            }
+
+            // Kiểm tra định dạng mật khẩu đã lưu
+            string storedPassword = user.Password ?? string.Empty;
+
+            // Mật khẩu BCrypt thông thường bắt đầu bằng "$2"
+            bool isBcryptHash = storedPassword.StartsWith(
+                "$2", StringComparison.Ordinal);
+
+            bool passwordValid = false;
+
+            if (isBcryptHash)
+            {
+                // Xác minh mật khẩu BCrypt
+                try
+                {
+                    passwordValid = BCrypt.Net.BCrypt.Verify(
+                        password, storedPassword);
+                }
+                catch (BCrypt.Net.SaltParseException)
+                {
+                    // Hash bị sai định dạng: không cho đăng nhập
+                    passwordValid = false;
+                }
+            }
+            else
+            {
+                // Tương thích tạm thời với tài khoản cũ
+                // có mật khẩu lưu dạng văn bản thường
+                passwordValid = string.Equals(
+                    password,
+                    storedPassword,
+                    StringComparison.Ordinal);
+            }
+
+            // Mật khẩu không đúng hoặc hash không hợp lệ
+            if (!passwordValid)
             {
                 ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác!";
                 return View();
@@ -63,6 +103,13 @@ namespace QuanLyKhachSan.Controllers
             {
                 ViewBag.Error = "Tài khoản của bạn đã bị khóa!";
                 return View();
+            }
+            if (!isBcryptHash)
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(
+                    password, 10);
+
+                await _context.SaveChangesAsync();
             }
 
             // A. TẠO MÃ JWT TOKEN TỪ SERVICE AUTHENTICATION
@@ -95,7 +142,7 @@ namespace QuanLyKhachSan.Controllers
             }
 
             // D. TẠO THÔNG BÁO FLASH MESSAGE
-            TempData["SuccessMessage"] = $"Bạn đang đăng nhập với tư cách là {user.Role}";
+            TempData["SuccessMessage"] = "Đăng nhập thành công!";
 
             // E. ĐIỀU HƯỚNG TỚI TRANG HOME TƯƠNG ỨNG VỚI ROLE
             if (user.Role == "Admin")
@@ -112,18 +159,27 @@ namespace QuanLyKhachSan.Controllers
             }
         }
 
-        // 3. Xử lý Đăng xuất (Chỉ cần xóa Cookie Token)
-        [HttpGet]
+        // 3. Đăng xuất
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DangXuat()
         {
-            // xoa token trong cookie
-            Response.Cookies.Delete("AccessToken");
+            // Xóa JWT cookie
+            Response.Cookies.Delete(
+                "AccessToken",
+                new CookieOptions
+                {
+                    Path = "/",
+                    HttpOnly = true,
+                    Secure = Request.IsHttps,
+                    SameSite = SameSiteMode.Strict
+                });
 
             TempData["SuccessMessage"] = "Đăng xuất thành công!";
 
-            // diều hướng về
-            return RedirectToAction("Authentication");
+            // Trở về website công khai sau khi đăng xuất
+            return RedirectToAction("ClientIndex", "Home");
         }
+
     }
 }

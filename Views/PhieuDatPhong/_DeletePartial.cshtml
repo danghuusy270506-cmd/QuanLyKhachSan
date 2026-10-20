@@ -34,10 +34,15 @@
             <label class="form-label small text-muted mb-1">Số Người</label>
             <div class="form-control bg-light text-dark border shadow-sm py-2 fw-medium">@Model.SoNguoi</div>
         </div>
-        <div class="col-md-6">
-            <label class="form-label small text-muted mb-1">Tiền Cọc (VNĐ)</label>
-            <div class="form-control bg-light text-dark border shadow-sm py-2 fw-medium">@Model.TienCoc.ToString("N0")</div>
-        </div>
+        @if (User.IsInRole("Admin") ||
+             User.IsInRole("ADMIN") ||
+             User.IsInRole("NhanVien"))
+        {
+            <div class="col-md-6">
+                <label class="form-label small text-muted mb-1">Tiền Cọc (VNĐ)</label>
+                <div class="form-control bg-light text-dark border shadow-sm py-2 fw-medium">@Model.TienCoc.ToString("N0")</div>
+            </div>
+        }
         <div class="col-12">
             <label class="form-label small text-muted mb-1">Trạng Thái</label>
             <div class="form-control bg-light text-dark border shadow-sm py-2 fw-medium">

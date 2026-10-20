@@ -1,5 +1,249 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Trang chủ";
 }
+
+<!-- HERO: PHẦN GIỚI THIỆU CHÍNH -->
+<section class="client-home-hero">
+    <div class="client-container client-home-hero-content">
+
+        <span class="client-home-eyebrow">
+            YOUR JOURNEY, OUR HOSPITALITY
+        </span>
+
+        <h1>
+            Nghỉ dưỡng theo cách của bạn.
+            <span>Trải nghiệm theo cách riêng.</span>
+        </h1>
+
+        <p>
+            Khám phá không gian lưu trú tinh tế,
+            lựa chọn căn phòng phù hợp và tận hưởng
+            những khoảnh khắc thư thái trong chuyến đi của bạn.
+        </p>
+
+        <div class="client-home-actions">
+            <a class="client-btn client-btn-gold"
+               asp-controller="ClientLoaiPhong"
+               asp-action="Index">
+                Khám phá loại phòng
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+            @if (User.Identity?.IsAuthenticated != true)
+            {
+                <a class="client-btn client-btn-outline-light"
+                   asp-controller="DangNhap"
+                   asp-action="Authentication">
+                    Đăng nhập
+                </a>
+            }
+            else if (User.IsInRole("KhachHang"))
+            {
+                <a class="client-btn client-btn-outline-light"
+                   asp-controller="ClientLoaiPhong"
+                   asp-action="Index">
+                    Đặt phòng ngay
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            }
+            else if (User.IsInRole("NhanVien") ||
+                     User.IsInRole("Admin") ||
+                     User.IsInRole("ADMIN"))
+            {
+                <a class="client-btn client-btn-outline-light"
+                   asp-controller="Home"
+                   asp-action="Index">
+                    Vào khu vực quản trị
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            }
+        </div>
+
+    </div>
+</section>
+
+<!-- GIỚI THIỆU -->
+<section class="client-home-intro">
+    <div class="client-container">
+
+        <span class="client-home-section-label">
+            WELCOME TO HOTEL & STAY
+        </span>
+
+        <h2>
+            Không chỉ là nơi lưu trú,
+            <br />
+            mà còn là trải nghiệm đáng nhớ.
+        </h2>
+
+        <p class="client-home-intro-text">
+            Từ không gian nghỉ ngơi thoải mái đến các dịch vụ
+            tiện nghi, chúng tôi mong muốn mang đến cho bạn
+            một kỳ nghỉ thuận tiện và trọn vẹn.
+        </p>
+
+        <div class="client-home-benefits">
+
+            <article class="client-home-benefit">
+                <i class="bi bi-house-heart"></i>
+                <h3>Không gian thoải mái</h3>
+                <p>
+                    Lựa chọn loại phòng phù hợp với nhu cầu
+                    nghỉ ngơi của bạn.
+                </p>
+            </article>
+
+            <article class="client-home-benefit">
+                <i class="bi bi-calendar2-check"></i>
+                <h3>Đặt phòng thuận tiện</h3>
+                <p>
+                    Xem thông tin phòng trước khi tạo
+                    phiếu đặt phòng.
+                </p>
+            </article>
+
+            <article class="client-home-benefit">
+                <i class="bi bi-stars"></i>
+                <h3>Dịch vụ chu đáo</h3>
+                <p>
+                    Tìm hiểu những dịch vụ đang được
+                    cung cấp tại khách sạn.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- KHÁM PHÁ -->
+<section class="client-home-experiences"
+         id="client-experiences">
+
+    <div class="client-container">
+
+        <div class="client-home-section-heading">
+            <span class="client-home-section-label">
+                DISCOVER YOUR STAY
+            </span>
+
+            <h2>Khám phá không gian lưu trú</h2>
+
+            <p>
+                Tìm hiểu các loại phòng và chọn không gian
+                phù hợp cho chuyến đi tiếp theo.
+            </p>
+        </div>
+
+        <div class="client-home-card-grid">
+
+            <article class="client-home-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=85"
+                    alt="Không gian phòng ngủ khách sạn"
+                    loading="lazy" />
+
+                <div class="client-home-card-content">
+                    <span>YOUR PRIVATE SPACE</span>
+
+                    <h3>Phòng nghỉ tinh tế</h3>
+
+                    <p>
+                        Khám phá những không gian nghỉ ngơi
+                        phù hợp với nhu cầu của bạn.
+                    </p>
+
+                    <a asp-controller="ClientLoaiPhong"
+                       asp-action="Index"
+                       class="client-home-text-link">
+                        Xem loại phòng
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+            </article>
+
+            <article class="client-home-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=85"
+                    alt="Không gian khách sạn sang trọng"
+                    loading="lazy" />
+
+                <div class="client-home-card-content">
+                    <span>COMFORT & ELEGANCE</span>
+
+                    <h3>Tiện nghi lưu trú</h3>
+
+                    <p>
+                        Tìm hiểu thông tin và tiện nghi
+                        của từng loại phòng.
+                    </p>
+
+                    <a asp-controller="ClientLoaiPhong"
+                       asp-action="Index"
+                       class="client-home-text-link">
+                        Khám phá ngay
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+            </article>
+
+            <article class="client-home-card">
+
+                <img
+                    src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=85"
+                    alt="Phòng nghỉ với thiết kế hiện đại"
+                    loading="lazy" />
+
+                <div class="client-home-card-content">
+                    <span>YOUR NEXT JOURNEY</span>
+
+                    <h3>Lên kế hoạch nghỉ dưỡng</h3>
+
+                    <p>
+                        Xem giá phòng, sức chứa và lựa chọn
+                        loại phòng phù hợp.
+                    </p>
+
+                    <a asp-controller="ClientLoaiPhong"
+                       asp-action="Index"
+                       class="client-home-text-link">
+                        Tìm phòng phù hợp
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- LỜI MỜI KHÁM PHÁ -->
+<section class="client-home-cta">
+    <div class="client-container">
+
+        <span class="client-home-section-label">
+            YOUR NEXT STAY STARTS HERE
+        </span>
+
+        <h2>Sẵn sàng cho một kỳ nghỉ mới?</h2>
+
+        <p>
+            Khám phá các loại phòng và tìm không gian
+            phù hợp với chuyến đi của bạn.
+        </p>
+
+        <a class="client-btn client-btn-gold"
+           asp-controller="ClientLoaiPhong"
+           asp-action="Index">
+            Khám phá phòng ngay
+            <i class="bi bi-arrow-right"></i>
+        </a>
+
+    </div>
+</section>

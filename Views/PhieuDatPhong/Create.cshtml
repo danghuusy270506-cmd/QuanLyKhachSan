@@ -44,11 +44,23 @@
                                 <span asp-validation-for="SoNguoi" class="text-danger small"></span>
                             </div>
 
-                            <div class="col-md-6">
-                                <label asp-for="TienCoc" class="form-label fw-semibold">Tiền Đặt Cọc (VNĐ)</label>
-                                <input asp-for="TienCoc" type="number" step="50000" class="form-control" placeholder="Nhập tiền cọc..." />
-                                <span asp-validation-for="TienCoc" class="text-danger small"></span>
-                            </div>
+                            @if (User.IsInRole("Admin") ||
+                                         User.IsInRole("ADMIN") ||
+                                         User.IsInRole("NhanVien"))
+                            {
+                                <div class="col-md-6">
+                                    <label asp-for="TienCoc" class="form-label fw-semibold">
+                                        Tiền Đặt Cọc (VNĐ)
+                                    </label>
+                                    <input asp-for="TienCoc"
+                                           type="number"
+                                           step="50000"
+                                           class="form-control"
+                                           placeholder="Nhập tiền cọc..." />
+                                    <span asp-validation-for="TienCoc"
+                                          class="text-danger small"></span>
+                                </div>
+                            }
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">

@@ -1,37 +1,99 @@
-﻿<form asp-controller="DangNhap" asp-action="Authentication" method="post">
+﻿
+@{
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    ViewData["Title"] = "Đăng nhập";
+}
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger py-2 mb-3">@ViewBag.Error</div>
-    }
+<section class="container py-5"
+         style="max-width: 640px; min-height: 60vh;">
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show py-2 mb-3" role="alert">
-            @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold">Đăng nhập</h1>
+
+                <p class="text-muted">
+                    Đăng nhập để đặt phòng và quản lý kỳ lưu trú của bạn.
+                </p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-controller="DangNhap"
+                  asp-action="Authentication"
+                  method="post">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Tên đăng nhập
+                    </label>
+
+                    <input type="text"
+                           name="username"
+                           class="form-control"
+                           value="@Context.Request.Cookies["SavedUsername"]"
+                           required
+                           placeholder="Nhập tên đăng nhập" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Mật khẩu
+                    </label>
+
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           required
+                           placeholder="Nhập mật khẩu" />
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="rememberMe"
+                           value="true"
+                           id="rememberMeCheck"
+                           @(string.IsNullOrEmpty(
+                               Context.Request.Cookies["SavedUsername"])
+                               ? "" : "checked") />
+
+                    <label class="form-check-label"
+                           for="rememberMeCheck">
+                        Ghi nhớ tên đăng nhập
+                    </label>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary w-100 fw-semibold">
+                    Đăng nhập
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="mb-2">
+                    Chưa có tài khoản?
+                    <a asp-controller="TaiKhoan"
+                       asp-action="Create"
+                       class="fw-semibold text-decoration-none">
+                        Đăng ký ngay
+                    </a>
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="ClientIndex"
+                   class="text-decoration-none">
+                    Quay lại trang chủ
+                </a>
+            </div>
+
         </div>
-    }
-
-    <div class="mb-3">
-        <label class="form-label fw-bold">Tên đăng nhập</label>
-        <input type="text" name="username" class="form-control"
-               value="@Context.Request.Cookies["SavedUsername"]" required placeholder="Nhập username..." />
     </div>
 
-    <div class="mb-3">
-        <label class="form-label fw-bold">Mật khẩu</label>
-        <input type="password" name="password" class="form-control" required placeholder="Nhập mật khẩu..." />
-    </div>
-
-    <!-- Checkbox Cookies Remember Me -->
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="rememberMe" value="true" id="rememberMeCheck"
-        @(string.IsNullOrEmpty(Context.Request.Cookies["SavedUsername"]) ? "" : "checked") />
-        <label class="form-check-label" for="rememberMeCheck">
-            Ghi nhớ tên đăng nhập
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100 fw-bold">Đăng Nhập</button>
-</form>
+</section>

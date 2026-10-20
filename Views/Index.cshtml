@@ -1,0 +1,177 @@
+﻿@using System.Globalization
+@model IEnumerable<QuanLyKhachSan.Models.Entities.LoaiPhong>
+
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Khám phá loại phòng";
+    var viCulture = CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<!-- PHẦN GIỚI THIỆU DANH SÁCH PHÒNG -->
+<section class="client-catalog-hero">
+    <div class="client-container">
+
+        <span class="client-catalog-eyebrow">
+            DISCOVER YOUR STAY
+        </span>
+
+        <h1>Khám phá không gian lưu trú</h1>
+
+        <p>
+            Lựa chọn loại phòng phù hợp với nhu cầu nghỉ ngơi,
+            sức chứa và ngân sách của bạn.
+        </p>
+
+        <div class="client-catalog-breadcrumb">
+            <a asp-controller="Home"
+               asp-action="ClientIndex">
+                Trang chủ
+            </a>
+
+            <i class="bi bi-chevron-right"></i>
+
+            <span>Loại phòng</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- DANH SÁCH LOẠI PHÒNG -->
+<section class="client-catalog-section">
+    <div class="client-container">
+
+        <div class="client-catalog-heading">
+            <div>
+                <span class="client-catalog-section-label">
+                    OUR ACCOMMODATION
+                </span>
+
+                <h2>Các lựa chọn dành cho bạn</h2>
+            </div>
+
+            <span class="client-catalog-count">
+                @Model.Count() loại phòng
+            </span>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="client-catalog-empty">
+                <i class="bi bi-building"></i>
+
+                <h3>Chưa có loại phòng</h3>
+
+                <p>
+                    Hiện chưa có loại phòng nào được đăng tải.
+                    Vui lòng quay lại sau.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="ClientIndex"
+                   class="client-btn client-btn-primary">
+                    Quay về trang chủ
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="client-catalog-grid">
+
+                @foreach (var item in Model)
+                {
+                    var imageUrl = string.IsNullOrWhiteSpace(item.Anh)
+                        ? Url.Content("~/images/rooms/room-placeholder.jpg")
+                        : Url.Content(item.Anh);
+
+                    <article class="client-room-card">
+
+                        <div class="client-room-image-wrapper">
+
+                            <img src="@imageUrl"
+                                 alt="@item.TenLoaiPhong"
+                                 class="client-room-image"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80';" />
+
+                            <span class="client-room-image-label">
+                                HOTEL & STAY
+                            </span>
+
+                        </div>
+
+                        <div class="client-room-body">
+
+                            <span class="client-room-eyebrow">
+                                LOẠI PHÒNG
+                            </span>
+
+                            <h3>@item.TenLoaiPhong</h3>
+
+                            <p class="client-room-description">
+                                @(string.IsNullOrWhiteSpace(item.MoTa)
+                                    ? "Không gian nghỉ ngơi thoải mái cho kỳ lưu trú của bạn."
+                                    : item.MoTa)
+                            </p>
+
+                            <div class="client-room-capacity">
+                                <i class="bi bi-people"></i>
+
+                                <span>
+                                    Tối đa @item.SucChua người
+                                </span>
+                            </div>
+
+                            <div class="client-room-card-footer">
+
+                                <div class="client-room-price-block">
+                                    <span class="client-room-price-label">
+                                        Giá mỗi đêm
+                                    </span>
+
+                                    <div class="client-room-price">
+                                        @item.GiaPhong.ToString("N0", viCulture)
+                                        <small>VNĐ</small>
+                                    </div>
+                                </div>
+
+                                <span class="client-room-coming-soon">
+                                    <i class="bi bi-info-circle"></i>
+                                    Xem thông tin
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </article>
+                }
+
+            </div>
+        }
+
+    </div>
+</section>
+
+<!-- LỜI MỜI KHÁM PHÁ -->
+<section class="client-catalog-cta">
+    <div class="client-container">
+
+        <span class="client-catalog-eyebrow">
+            PLAN YOUR NEXT STAY
+        </span>
+
+        <h2>Bạn đã tìm được loại phòng phù hợp?</h2>
+
+        <p>
+            Tìm hiểu thêm thông tin trước khi lên kế hoạch
+            cho chuyến đi của bạn.
+        </p>
+
+        <a asp-controller="Home"
+           asp-action="ClientIndex"
+           class="client-btn client-btn-gold">
+            Quay lại trang chủ
+            <i class="bi bi-arrow-right"></i>
+        </a>
+
+    </div>
+</section>

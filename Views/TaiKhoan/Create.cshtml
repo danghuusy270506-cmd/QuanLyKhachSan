@@ -3,6 +3,9 @@
 @{
     bool isAdmin = ViewBag.IsAdmin ?? false;
     ViewData["Title"] = isAdmin ? "Tạo tài khoản hệ thống" : "Tạo tài khoản Khách hàng";
+    Layout = isAdmin
+        ? "~/Views/Shared/_Layout.cshtml"
+        : "~/Views/Shared/_ClientLayout.cshtml";
 }
 
 <div class="container mt-4 mb-5">

@@ -146,19 +146,33 @@ $(document).on('click', '#confirmDeleteBtn', function () {
         },
         success: function (response) {
             if (response.success) {
-                // Đóng modal xóa
-                var deleteModalEl = document.getElementById('deleteModal');
-                var modal = bootstrap.Modal.getInstance(deleteModalEl);
+                var deleteModalEl =
+                    document.getElementById('deleteModal');
+
+                var modal =
+                    bootstrap.Modal.getInstance(deleteModalEl);
+
                 if (modal) {
                     modal.hide();
                 }
 
-                // Tải lại bảng dữ liệu nhân viên (AJAX)
-                var currentPage = $('.pagination .active .page-link').text() || 1;
+                // Hiển thị kết quả thực tế của thao tác
+                if (response.message) {
+                    alert(response.message);
+                }
+
+                // Tải lại bảng nhân viên
+                var currentPage =
+                    $('.pagination .active .page-link').text() || 1;
+
                 var search = $('#searchString').val();
+
                 loadNhanVienData(currentPage, search);
             } else {
-                alert('Không thể xóa nhân viên này!');
+                alert(
+                    response.message ||
+                    'Không thể xóa nhân viên này!'
+                );
             }
         },
         error: function (xhr) {

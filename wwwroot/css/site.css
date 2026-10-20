@@ -732,3 +732,50 @@ body {
         transition: none !important;
     }
 }
+
+/* MENU TAI KHOAN TREN TOPBAR */
+
+.user-dropdown {
+    position: relative;
+}
+
+.topbar .user-avatar {
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+    .topbar .user-avatar.dropdown-toggle::after {
+        display: none;
+    }
+
+.user-dropdown-menu {
+    min-width: 190px;
+    margin-top: 10px !important;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+    .user-dropdown-menu .dropdown-header {
+        padding: 9px 12px;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+.user-dropdown-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 12px;
+    color: #dc2626;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+    .user-dropdown-item:hover {
+        color: #b91c1c;
+        background: #fef2f2;
+    }

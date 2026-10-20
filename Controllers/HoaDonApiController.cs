@@ -1,4 +1,4 @@
-﻿
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,36 @@ namespace QuanLyKhachSan.Controllers
             page = Math.Max(1, page);
             pageSize = Math.Clamp(pageSize, 1, 100);
 
-            var query = _context.HoaDons.AsNoTracking();
+            var query = _context.HoaDons
+                .AsNoTracking()
+                .AsQueryable();
+
+            // Khách hàng chỉ xem hóa đơn của mình
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await _context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(hd =>
+                    hd.PhieuDatPhong != null &&
+                    hd.PhieuDatPhong.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
 
             if (!string.IsNullOrWhiteSpace(tuKhoa))
             {
@@ -81,10 +110,41 @@ namespace QuanLyKhachSan.Controllers
 
         // GET: /api/hoadon/HD1
         [HttpGet("{maHoaDon}")]
-        public async Task<IActionResult> GetChiTiet(string maHoaDon)
+        public async Task<IActionResult> GetChiTiet(
+    string maHoaDon)
         {
-            var hoaDon = await _context.HoaDons
+            var query = _context.HoaDons
                 .AsNoTracking()
+                .AsQueryable();
+
+            // Xác định giới hạn dữ liệu theo Role
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await _context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(hd =>
+                    hd.PhieuDatPhong != null &&
+                    hd.PhieuDatPhong.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var hoaDon = await query
                 .Where(hd => hd.MaHoaDon == maHoaDon)
                 .Select(hd => new
                 {

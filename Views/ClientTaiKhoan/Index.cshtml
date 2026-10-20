@@ -1,0 +1,99 @@
+﻿
+@model QuanLyKhachSan.Models.Entities.KhachHang
+
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<section class="client-profile-page">
+    <div class="client-container">
+
+        <div class="client-profile-heading">
+            <span class="client-home-section-label">
+                MY ACCOUNT
+            </span>
+
+            <h1>Thông tin cá nhân</h1>
+
+            <p>
+                Xem thông tin hồ sơ đang liên kết
+                với tài khoản khách hàng của bạn.
+            </p>
+        </div>
+
+        <div class="client-profile-card">
+
+            <div class="client-profile-card-header">
+                <div class="client-profile-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div>
+                    <h2>@Model.HoTen</h2>
+                    <p>Khách hàng</p>
+                </div>
+            </div>
+
+            <div class="client-profile-fields">
+
+                <div class="client-profile-field">
+                    <span>Họ và tên</span>
+                    <strong>@Model.HoTen</strong>
+                </div>
+
+                <div class="client-profile-field">
+                    <span>Số điện thoại</span>
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Sdt)
+                            ? "Chưa cập nhật"
+                            : Model.Sdt)
+                    </strong>
+                </div>
+
+                <div class="client-profile-field">
+                    <span>Email</span>
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                            ? "Chưa cập nhật"
+                            : Model.Email)
+                    </strong>
+                </div>
+
+                <div class="client-profile-field">
+                    <span>CCCD</span>
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Cccd)
+                            ? "Chưa cập nhật"
+                            : Model.Cccd)
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="client-profile-actions">
+                
+                <a asp-controller="ClientTaiKhoan"
+                   asp-action="Edit"
+                   class="client-btn client-btn-primary">
+                    <i class="bi bi-pencil-square"></i>
+                    Chỉnh sửa thông tin
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="ClientIndex"
+                   class="client-btn client-btn-primary">
+                    <i class="bi bi-house"></i>
+                    Về trang chủ
+                </a>
+
+                <a asp-controller="ClientLoaiPhong"
+                   asp-action="Index"
+                   class="client-btn client-btn-gold">
+                    Khám phá loại phòng
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>

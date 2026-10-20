@@ -10,9 +10,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-controller="TaiKhoan"
+              asp-action="Edit"
+              method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MaTaiKhoan" />
+            <input type="hidden"
+                   name="mataikhoan"
+                   value="@Model.MaTaiKhoan" />
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />

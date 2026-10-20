@@ -1,8 +1,13 @@
 ﻿@model QuanLyKhachSan.Models.Entities.TaiKhoan
 
-<form id="editTaiKhoanForm" asp-action="Edit">
+<form id="editTaiKhoanForm" asp-controller="TaiKhoan" asp-action="Edit"
+      method="post">
+    @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
     <input type="hidden" asp-for="MaTaiKhoan" />
+    <input type="hidden"
+           name="mataikhoan"
+           value="@Model.MaTaiKhoan" />
 
     <!-- Tên đăng nhập -->
     <div class="form-group mb-3">

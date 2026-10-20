@@ -5,6 +5,8 @@ using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
@@ -73,6 +75,12 @@ namespace QuanLyKhachSan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TenLoaiPhong,GiaPhong,SucChua,MoTa")] LoaiPhong loaiphong, IFormFile? anhFile)
         {
+            var imageError = await ValidateImageFileAsync(anhFile);
+
+            if (imageError != null)
+            {
+                ModelState.AddModelError(string.Empty, imageError);
+            }
             if (ModelState.IsValid)
             {
                 // Xử lý Upload Ảnh nếu người dùng có chọn file
@@ -84,7 +92,9 @@ namespace QuanLyKhachSan.Controllers
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(anhFile.FileName);
+                    string extension = Path.GetExtension(anhFile.FileName).ToLowerInvariant();
+
+                    string uniqueFileName = $"{Guid.NewGuid():N}{extension}";
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -136,7 +146,12 @@ namespace QuanLyKhachSan.Controllers
         public async Task<IActionResult> Edit(int maloaiphong, [Bind("MaLoaiPhong,TenLoaiPhong,GiaPhong,SucChua,MoTa,Anh")] LoaiPhong loaiphong, IFormFile? anhFile)
         {
             if (maloaiphong != loaiphong.MaLoaiPhong) return NotFound();
+            var imageError = await ValidateImageFileAsync(anhFile);
 
+            if (imageError != null)
+            {
+                ModelState.AddModelError(string.Empty, imageError);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -241,6 +256,86 @@ namespace QuanLyKhachSan.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<string?> ValidateImageFileAsync(
+            IFormFile? file)
+        {
+            // Không bắt buộc phải tải ảnh lên
+            if (file == null)
+                return null;
+
+            if (file.Length == 0)
+                return "File ảnh không có dữ liệu.";
+
+            // Giới hạn kích thước 5 MB
+            const long maxSize = 5 * 1024 * 1024;
+
+            if (file.Length > maxSize)
+                return "Ảnh không được vượt quá 5 MB.";
+
+            string extension =
+                Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            // Chỉ chấp nhận JPEG, PNG và WebP
+            string expectedContentType = extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".webp" => "image/webp",
+                _ => string.Empty
+            };
+
+            if (string.IsNullOrEmpty(expectedContentType))
+                return "Chỉ chấp nhận ảnh JPG, JPEG, PNG hoặc WebP.";
+
+            if (!string.Equals(
+                file.ContentType,
+                expectedContentType,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return "Định dạng nội dung file không hợp lệ.";
+            }
+
+            // Kiểm tra chữ ký file, không chỉ dựa vào tên và MIME type
+            byte[] header = new byte[12];
+
+            using var stream = file.OpenReadStream();
+
+            int bytesRead = await stream.ReadAsync(
+                header, 0, header.Length);
+
+            bool validSignature = extension switch
+            {
+                ".jpg" or ".jpeg" =>
+                    bytesRead >= 3 &&
+                    header[0] == 0xFF &&
+                    header[1] == 0xD8 &&
+                    header[2] == 0xFF,
+
+                ".png" =>
+                    bytesRead >= 8 &&
+                    header[0] == 0x89 &&
+                    header[1] == 0x50 &&
+                    header[2] == 0x4E &&
+                    header[3] == 0x47 &&
+                    header[4] == 0x0D &&
+                    header[5] == 0x0A &&
+                    header[6] == 0x1A &&
+                    header[7] == 0x0A,
+
+                ".webp" =>
+                    bytesRead >= 12 &&
+                    Encoding.ASCII.GetString(header, 0, 4) == "RIFF" &&
+                    Encoding.ASCII.GetString(header, 8, 4) == "WEBP",
+
+                _ => false
+            };
+
+            if (!validSignature)
+                return "Nội dung file không đúng định dạng ảnh đã chọn.";
+
+            return null;
         }
 
         private bool LoaiPhongExists(int maloaiphong)

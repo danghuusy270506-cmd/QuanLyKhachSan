@@ -167,7 +167,42 @@ namespace QuanLyKhachSan.Controllers
             }
 
             // 3. Phân quyền thiết lập Role: Nếu không phải Admin thì ép cố định là "KhachHang"
-            string assignedRole = isAdmin ? (model.Role ?? "KhachHang") : "KhachHang";
+            string assignedRole;
+
+            if (!isAdmin)
+            {
+                // Khách tự đăng ký chỉ được tạo tài khoản khách hàng
+                assignedRole = "KhachHang";
+            }
+            else
+            {
+                assignedRole = (model.Role ?? string.Empty).Trim();
+
+                // Chỉ cho phép Admin tạo KhachHang hoặc NhanVien
+                if (assignedRole != "KhachHang" &&
+                    assignedRole != "NhanVien")
+                {
+                    ModelState.AddModelError(
+                        nameof(model.Role),
+                        "Vai trò tài khoản không hợp lệ.");
+
+                    ViewBag.RoleList = new List<SelectListItem>
+                    {
+                        new SelectListItem
+                        {
+                            Value = "KhachHang",
+                            Text = "Khách hàng"
+                        },
+                        new SelectListItem
+                        {
+                            Value = "NhanVien",
+                            Text = "Nhân viên"
+                        }
+                    };
+
+                    return View(model);
+                }
+            }
 
             // 4. Mở Transaction để lưu 2 bảng Atomic
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -185,17 +220,34 @@ namespace QuanLyKhachSan.Controllers
                 _context.TaiKhoans.Add(taiKhoan);
                 await _context.SaveChangesAsync(); // SQL sinh MaTaiKhoan
 
-                // BƯỚC B: Tạo và lưu KhachHang kết nối MaTaiKhoan
-                var khachHang = new KhachHang
+                // BƯỚC B: Tạo hồ sơ đúng theo Role đã chọn
+                if (assignedRole == "KhachHang")
                 {
-                    HoTen = model.HoTen,
-                    Sdt = model.Sdt,
-                    Email = model.Email,
-                    Cccd = model.Cccd,
-                    MaTaiKhoan = taiKhoan.MaTaiKhoan
-                };
+                    var khachHang = new KhachHang
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        Cccd = model.Cccd,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                    };
 
-                _context.KhachHangs.Add(khachHang);
+                    _context.KhachHangs.Add(khachHang);
+                }
+                else if (assignedRole == "NhanVien")
+                {
+                    var nhanVien = new NhanVien
+                    {
+                        HoTen = model.HoTen,
+                        Sdt = model.Sdt,
+                        Email = model.Email,
+                        Cccd = model.Cccd,
+                        MaTaiKhoan = taiKhoan.MaTaiKhoan
+                    };
+
+                    _context.NhanViens.Add(nhanVien);
+                }
+
                 await _context.SaveChangesAsync();
 
                 // BƯỚC C: Commit Transaction
@@ -269,7 +321,56 @@ namespace QuanLyKhachSan.Controllers
             var existingAccount = await _context.TaiKhoans.AsNoTracking().FirstOrDefaultAsync(t => t.MaTaiKhoan == mataikhoan);
             if (existingAccount == null)
                 return NotFound();
+            // Chỉ chấp nhận các Role hợp lệ
+            string? roleInput = taikhoan.Role?.Trim();
 
+            string? normalizedRole = new[]
+            {
+                "Admin",
+                "NhanVien",
+                "KhachHang"
+            }.FirstOrDefault(r =>
+                string.Equals(
+                    r,
+                    roleInput,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (normalizedRole == null)
+            {
+                ModelState.AddModelError(
+                    nameof(taikhoan.Role),
+                    "Vai trò tài khoản không hợp lệ.");
+            }
+            else
+            {
+                // Chuẩn hóa Role theo đúng giá trị dùng trong ứng dụng
+                taikhoan.Role = normalizedRole;
+            }
+            // Chuẩn hóa tên đăng nhập
+            taikhoan.Username = taikhoan.Username?.Trim();
+
+            // Không cho phép tên đăng nhập trống
+            if (string.IsNullOrWhiteSpace(taikhoan.Username))
+            {
+                ModelState.AddModelError(
+                    nameof(taikhoan.Username),
+                    "Tên đăng nhập không được để trống.");
+            }
+            else
+            {
+                // Kiểm tra tên đăng nhập đã được tài khoản khác sử dụng chưa
+                bool usernameExists = await _context.TaiKhoans
+                    .AnyAsync(t =>
+                        t.Username == taikhoan.Username &&
+                        t.MaTaiKhoan != taikhoan.MaTaiKhoan);
+
+                if (usernameExists)
+                {
+                    ModelState.AddModelError(
+                        nameof(taikhoan.Username),
+                        "Tên đăng nhập này đã được tài khoản khác sử dụng.");
+                }
+            }
             // Nếu người dùng không nhập mật khẩu mới, giữ nguyên mật khẩu cũ
             if (string.IsNullOrWhiteSpace(taikhoan.Password))
             {
@@ -284,23 +385,201 @@ namespace QuanLyKhachSan.Controllers
 
             if (ModelState.IsValid)
             {
+                using var transaction =
+                    await _context.Database.BeginTransactionAsync();
+
                 try
                 {
-                    _context.Update(taikhoan);
-                    await _context.SaveChangesAsync();
+                    // Lấy tài khoản cần sửa ở trạng thái tracking
+                    var accountToUpdate = await _context.TaiKhoans
+                        .FirstOrDefaultAsync(
+                            t => t.MaTaiKhoan == mataikhoan);
 
-                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    if (accountToUpdate == null)
+                        return NotFound();
+
+                    // Tìm hồ sơ hiện tại của tài khoản
+                    var khachHang = await _context.KhachHangs
+                        .FirstOrDefaultAsync(
+                            k => k.MaTaiKhoan == mataikhoan);
+
+                    var nhanVien = await _context.NhanViens
+                        .FirstOrDefaultAsync(
+                            n => n.MaTaiKhoan == mataikhoan);
+
+                    // Một tài khoản không được gắn đồng thời hai hồ sơ
+                    if (khachHang != null && nhanVien != null)
                     {
-                        return Json(new { success = true, message = "Cập nhật tài khoản thành công!" });
+                        await transaction.RollbackAsync();
+
+                        ModelState.AddModelError(
+                            nameof(taikhoan.Role),
+                            "Tài khoản đang liên kết với cả hồ sơ khách hàng " +
+                            "và nhân viên. Cần kiểm tra dữ liệu trước khi sửa.");
+
+                        if (Request.Headers["X-Requested-With"]
+                            == "XMLHttpRequest")
+                            return PartialView("_EditPartial", taikhoan);
+
+                        return View(taikhoan);
+                    }
+
+                    bool roleChanged = !string.Equals(
+                        existingAccount.Role,
+                        taikhoan.Role,
+                        StringComparison.OrdinalIgnoreCase);
+
+                    // Chỉ chuyển đổi hồ sơ khi Role thực sự thay đổi
+                    if (roleChanged)
+                    {
+                        // Chuyển sang vai trò KhachHang
+                        if (taikhoan.Role == "KhachHang")
+                        {
+                            // Không có hồ sơ nguồn để chuyển đổi
+                            if (khachHang == null && nhanVien == null)
+                            {
+                                await transaction.RollbackAsync();
+
+                                ModelState.AddModelError(
+                                    nameof(taikhoan.Role),
+                                    "Tài khoản chưa có hồ sơ cá nhân. " +
+                                    "Không thể tự động chuyển vai trò.");
+
+                                if (Request.Headers["X-Requested-With"]
+                                    == "XMLHttpRequest")
+                                    return PartialView("_EditPartial", taikhoan);
+
+                                return View(taikhoan);
+                            }
+
+                            // Chuyển hồ sơ nhân viên sang khách hàng
+                            if (khachHang == null && nhanVien != null)
+                            {
+                                bool coLichSu = await _context.PhieuDatPhongs
+                                    .AnyAsync(p =>
+                                        p.MaNhanVien == nhanVien.MaNhanVien);
+
+                                if (coLichSu)
+                                {
+                                    await transaction.RollbackAsync();
+
+                                    ModelState.AddModelError(
+                                        nameof(taikhoan.Role),
+                                        "Nhân viên đã có lịch sử xử lý phiếu đặt. " +
+                                        "Không thể chuyển sang vai trò khách hàng.");
+
+                                    if (Request.Headers["X-Requested-With"]
+                                        == "XMLHttpRequest")
+                                        return PartialView("_EditPartial", taikhoan);
+
+                                    return View(taikhoan);
+                                }
+
+                                _context.NhanViens.Remove(nhanVien);
+
+                                _context.KhachHangs.Add(new KhachHang
+                                {
+                                    HoTen = nhanVien.HoTen,
+                                    Cccd = nhanVien.Cccd,
+                                    Sdt = nhanVien.Sdt,
+                                    Email = nhanVien.Email,
+                                    MaTaiKhoan = nhanVien.MaTaiKhoan
+                                });
+                            }
+                        }
+                        // Chuyển sang vai trò NhanVien hoặc Admin
+                        else
+                        {
+                            // Không có hồ sơ nguồn để chuyển đổi
+                            if (khachHang == null && nhanVien == null)
+                            {
+                                await transaction.RollbackAsync();
+
+                                ModelState.AddModelError(
+                                    nameof(taikhoan.Role),
+                                    "Tài khoản chưa có hồ sơ nhân viên hoặc " +
+                                    "khách hàng để chuyển đổi.");
+
+                                if (Request.Headers["X-Requested-With"]
+                                    == "XMLHttpRequest")
+                                    return PartialView("_EditPartial", taikhoan);
+
+                                return View(taikhoan);
+                            }
+
+                            // Chuyển hồ sơ khách hàng sang nhân viên
+                            if (nhanVien == null && khachHang != null)
+                            {
+                                bool coLichSu = await _context.PhieuDatPhongs
+                                    .AnyAsync(p =>
+                                        p.MaKhachHang == khachHang.MaKhachHang);
+
+                                if (coLichSu)
+                                {
+                                    await transaction.RollbackAsync();
+
+                                    ModelState.AddModelError(
+                                        nameof(taikhoan.Role),
+                                        "Khách hàng đã có lịch sử đặt phòng. " +
+                                        "Không thể chuyển sang vai trò nhân viên.");
+
+                                    if (Request.Headers["X-Requested-With"]
+                                        == "XMLHttpRequest")
+                                        return PartialView("_EditPartial", taikhoan);
+
+                                    return View(taikhoan);
+                                }
+
+                                _context.KhachHangs.Remove(khachHang);
+
+                                _context.NhanViens.Add(new NhanVien
+                                {
+                                    HoTen = khachHang.HoTen,
+                                    Cccd = khachHang.Cccd,
+                                    Sdt = khachHang.Sdt,
+                                    Email = khachHang.Email,
+                                    MaTaiKhoan = khachHang.MaTaiKhoan
+                                });
+                            }
+                        }
+                    }
+
+                    // Cập nhật tài khoản hiện có
+                    accountToUpdate.Username = taikhoan.Username;
+                    accountToUpdate.Password = taikhoan.Password;
+                    accountToUpdate.Role = taikhoan.Role;
+                    accountToUpdate.TrangThai = taikhoan.TrangThai;
+
+                    // Lưu thay đổi tài khoản và hồ sơ trong cùng transaction
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    if (Request.Headers["X-Requested-With"]
+                        == "XMLHttpRequest")
+                    {
+                        return Json(new
+                        {
+                            success = true,
+                            message = "Cập nhật tài khoản thành công!"
+                        });
                     }
 
                     return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
-                    if (!TaiKhoanExists(taikhoan.MaTaiKhoan))
-                        return NotFound();
-                    throw;
+                    await transaction.RollbackAsync();
+
+                    ModelState.AddModelError(
+                        string.Empty,
+                        "Không thể cập nhật tài khoản. " +
+                        "Hãy kiểm tra dữ liệu liên quan rồi thử lại.");
+
+                    if (Request.Headers["X-Requested-With"]
+                        == "XMLHttpRequest")
+                        return PartialView("_EditPartial", taikhoan);
+
+                    return View(taikhoan);
                 }
             }
 
@@ -345,55 +624,134 @@ namespace QuanLyKhachSan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? mataikhoan)
         {
-            if (mataikhoan == null)
-            {
-                return Json(new { success = false, message = "Không tìm thấy tài khoản cần xóa." });
-            }
+            bool isAjax =
+                Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            if (!mataikhoan.HasValue)
             {
-                var taikhoan = await _context.TaiKhoans.FindAsync(mataikhoan);
-                if (taikhoan == null)
+                if (isAjax)
                 {
-                    return Json(new { success = false, message = "Tài khoản không tồn tại trong hệ thống." });
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Không tìm thấy tài khoản cần xóa."
+                    });
                 }
 
-                // 1. Kiểm tra và xóa dữ liệu liên quan ở bảng KhachHang trước (tránh lỗi khóa ngoại)
-                var khachHang = await _context.KhachHangs.FirstOrDefaultAsync(k => k.MaTaiKhoan == mataikhoan);
+                return NotFound();
+            }
+
+            var taiKhoan = await _context.TaiKhoans
+                .FirstOrDefaultAsync(t => t.MaTaiKhoan == mataikhoan.Value);
+
+            if (taiKhoan == null)
+            {
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Tài khoản không tồn tại."
+                    });
+                }
+
+                return NotFound();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(k => k.MaTaiKhoan == taiKhoan.MaTaiKhoan);
+
+            var nhanVien = await _context.NhanViens
+                .FirstOrDefaultAsync(n => n.MaTaiKhoan == taiKhoan.MaTaiKhoan);
+
+            // Kiểm tra lịch sử đặt phòng của khách hàng
+            bool khachHangCoLichSu = khachHang != null &&
+                await _context.PhieuDatPhongs.AnyAsync(
+                    p => p.MaKhachHang == khachHang.MaKhachHang);
+
+            // Kiểm tra lịch sử nghiệp vụ của nhân viên
+            bool nhanVienCoLichSu = nhanVien != null &&
+                await _context.PhieuDatPhongs.AnyAsync(
+                    p => p.MaNhanVien == nhanVien.MaNhanVien);
+
+            // Nếu có lịch sử nghiệp vụ thì không xóa dữ liệu
+            if (khachHangCoLichSu || nhanVienCoLichSu)
+            {
+                taiKhoan.TrangThai = "Khoa";
+
+                await _context.SaveChangesAsync();
+
+                const string message =
+                    "Tài khoản có lịch sử nghiệp vụ nên không thể xóa. " +
+                    "Hệ thống đã khóa tài khoản và giữ nguyên hồ sơ liên quan.";
+
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        deleted = false,
+                        message
+                    });
+                }
+
+                TempData["SuccessMessage"] = message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Chỉ xóa khi không có lịch sử nghiệp vụ
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync();
+
+            try
+            {
                 if (khachHang != null)
                 {
                     _context.KhachHangs.Remove(khachHang);
                 }
 
-                var nhanVien = await _context.NhanViens.FirstOrDefaultAsync(n => n.MaTaiKhoan == mataikhoan);
-                if (nhanVien != null) { _context.NhanViens.Remove(nhanVien); }
+                if (nhanVien != null)
+                {
+                    _context.NhanViens.Remove(nhanVien);
+                }
 
-                // 2. Tiến hành xóa tài khoản
-                _context.TaiKhoans.Remove(taikhoan);
+                _context.TaiKhoans.Remove(taiKhoan);
+
                 await _context.SaveChangesAsync();
-
-                // 3. Xác nhận hoàn tất transaction
                 await transaction.CommitAsync();
 
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                if (isAjax)
                 {
-                    return Json(new { success = true, message = "Xóa tài khoản thành công!" });
+                    return Json(new
+                    {
+                        success = true,
+                        deleted = true,
+                        message = "Đã xóa tài khoản và hồ sơ liên quan."
+                    });
                 }
+
+                TempData["SuccessMessage"] =
+                    "Đã xóa tài khoản và hồ sơ liên quan.";
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
-                string errorMsg = "Không thể xóa: " + (ex.InnerException?.Message ?? ex.Message);
 
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                const string message =
+                    "Không thể xóa tài khoản. Hãy kiểm tra các dữ liệu liên quan.";
+
+                if (isAjax)
                 {
-                    return Json(new { success = false, message = errorMsg });
+                    return Json(new
+                    {
+                        success = false,
+                        message
+                    });
                 }
 
-                TempData["Error"] = errorMsg;
+                TempData["Error"] = message;
                 return RedirectToAction(nameof(Index));
             }
         }

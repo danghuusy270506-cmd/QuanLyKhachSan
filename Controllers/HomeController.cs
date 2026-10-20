@@ -28,7 +28,7 @@ namespace QuanLyKhachSan.Controllers
             // Nếu người đăng nhập là Khách hàng -> Chuyển hướng sang trang đặt phòng/loại phòng
             if (User.IsInRole("KhachHang"))
             {
-                return RedirectToAction("Index", "LoaiPhong");
+                return RedirectToAction("Index", "ClientLoaiPhong");
             }
 
             var homNay = DateTime.Today;
@@ -122,14 +122,18 @@ namespace QuanLyKhachSan.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult ClientIndex()
         {
             return View();
         }
+
         public IActionResult StaffIndex()
         {
-            return View();
+            return RedirectToAction(nameof(Index));
         }
+
 
 
         [AllowAnonymous] // Ai cũng có thể xem trang chính sách bảo mật

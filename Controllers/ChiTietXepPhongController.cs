@@ -184,9 +184,11 @@ namespace QuanLyKhachSan.Controllers
             bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
             // Tìm phiếu đặt phòng và các phòng đã xếp
+
             var phieu = await context.PhieuDatPhongs
-                        .Include(p => p.ChiTietXepPhongs)
-                        .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
+                .Include(p => p.ChiTietXepPhongs)
+                    .ThenInclude(ct => ct.Phong)
+                .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
 
             if (phieu == null)
             {
@@ -242,9 +244,15 @@ namespace QuanLyKhachSan.Controllers
             DateTime thoiGianTra = DateTime.Now;
             foreach (var ct in phongChuaTra)
             {
+                // Ghi nhận thời điểm khách trả phòng
                 ct.NgayTra = thoiGianTra;
+                // Chuyển phòng sang trạng thái chờ dọn
+                if (ct.Phong != null)
+                {
+                    ct.Phong.TrangThai = "Đang dọn dẹp";
+                }
             }
-
+            phieu.TrangThai = "Chờ thanh toán";
             await context.SaveChangesAsync();
 
             // Trả về JSON cho AJAX (JS sẽ tiếp tục load form Create hóa đơn)

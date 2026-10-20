@@ -1,0 +1,146 @@
+﻿
+@model IEnumerable<QuanLyKhachSan.Models.Entities.HoaDon>
+
+@{
+    ViewData["Title"] = "Hóa đơn của tôi";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <a asp-controller="ClientTaiKhoan"
+           asp-action="Index"
+           class="text-decoration-none">
+            &larr; Quay lại tài khoản
+        </a>
+
+        <h2 class="fw-bold mt-3">Hóa đơn của tôi</h2>
+
+        <p class="text-muted">
+            Xem tổng tiền, phương thức và trạng thái thanh toán
+            của các hóa đơn thuộc những lần đặt phòng của bạn.
+        </p>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <h5 class="fw-bold">Bạn chưa có hóa đơn</h5>
+
+                <p class="text-muted mt-2">
+                    Hóa đơn sẽ xuất hiện tại đây khi được lập
+                    cho phiếu đặt phòng của bạn.
+                </p>
+
+                <a asp-controller="ClientPhieuDatPhong"
+                   asp-action="Index"
+                   class="btn btn-primary mt-2">
+                    Xem phiếu đặt phòng
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã hóa đơn</th>
+                                <th>Mã phiếu</th>
+                                <th>Loại phòng</th>
+                                <th>Tổng tiền</th>
+                                <th>Phương thức thanh toán</th>
+                                <th>Thời gian thanh toán</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var hd in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@hd.MaHoaDon</strong>
+                                    </td>
+
+                                    <td>#@hd.MaPhieu</td>
+
+                                    <td>
+                                        @(hd.PhieuDatPhong?.LoaiPhong?.TenLoaiPhong
+                                            ?? "Không có thông tin")
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        @hd.TongTien.ToString("N0") đ
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(hd.KieuThanhToan)
+                                            ? "Chưa xác định"
+                                            : hd.KieuThanhToan)
+                                    </td>
+
+                                    <td>
+                                        @if (hd.ThoiGianThanhToan == DateTime.MinValue)
+                                        {
+                                            <span class="text-muted">Chưa thanh toán</span>
+                                        }
+                                        else
+                                        {
+                                            @hd.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (hd.TrangThai == "DaThanhToan")
+                                        {
+                                            <span class="badge bg-success">
+                                                Đã thanh toán
+                                            </span>
+                                        }
+                                        else if (hd.TrangThai == "DaHoanTien")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Đã hoàn tiền
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Chưa thanh toán
+                                            </span>
+                                        }
+                                    </td>
+                                    
+                                    <td>
+                                        <a asp-controller="ClientHoaDon"
+                                           asp-action="Details"
+                                           asp-route-maHoaDon="@hd.MaHoaDon"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                            Xem chi tiết
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="ClientPhieuDatPhong"
+           asp-action="Index"
+           class="btn btn-outline-primary">
+            Xem phiếu đặt phòng
+        </a>
+    </div>
+</div>

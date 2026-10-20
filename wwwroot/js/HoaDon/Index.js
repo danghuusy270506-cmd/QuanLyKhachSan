@@ -219,9 +219,16 @@
                     location.reload();
                 }
             },
-            error: function () {
-                alert('Có lỗi xảy ra khi xóa hóa đơn!');
+            
+            error: function (xhr) {
+                var message =
+                    xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'Không thể xóa hóa đơn. Vui lòng thử lại!';
+
+                alert(message);
             }
+
         });
     });
 

@@ -5,6 +5,7 @@ using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
 using QuanLyKhachSan.Models.ViewModels;
 using System;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +61,25 @@ namespace QuanLyKhachSan.Controllers
                 return NotFound();
             }
 
+            // Chỉ mở form lập hóa đơn khi phiếu đã trả phòng
+            if (phieu.TrangThai != "Chờ thanh toán")
+            {
+                const string thongBao =
+                    "Chỉ có thể lập hóa đơn khi phiếu đã trả phòng " +
+                    "và đang chờ thanh toán.";
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Content(
+                        $"<div class='alert alert-warning' role='alert'>{thongBao}</div>");
+                }
+
+                TempData["ThongBao"] = thongBao;
+
+                return RedirectToAction(
+                    "Index", "PhieuDatPhong");
+            }
+
             if (await context.HoaDons.AnyAsync(hd => hd.MaPhieu == maPhieu))
             {
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -109,6 +129,15 @@ namespace QuanLyKhachSan.Controllers
         {
             var phieu = await LayPhieu(maPhieu);
             if (phieu == null) return NotFound();
+
+            // Chỉ lập hóa đơn sau khi phiếu đã check-out
+            // và chuyển sang trạng thái chờ thanh toán
+            if (phieu.TrangThai != "Chờ thanh toán")
+            {
+                return BadRequest(
+                    "Chỉ có thể lập hóa đơn khi phiếu đã trả phòng " +
+                    "và đang chờ thanh toán.");
+            }
 
             if (await context.HoaDons.AnyAsync(hd => hd.MaPhieu == maPhieu)) 
                 return BadRequest("Phiếu này đã có hóa đơn.");
@@ -171,11 +200,41 @@ namespace QuanLyKhachSan.Controllers
         public async Task<IActionResult> Index(string tuKhoa, int? ngay, int? thang, int? nam,string trangThai, int page = 1)
         {
             int pageSize = 10;
-            var hoaDons = await context.HoaDons
-                          .Include(hd => hd.PhieuDatPhong)
-                          .ThenInclude(p => p!.ChiTietXepPhongs)
-                          .ThenInclude(ct => ct.ChiTietXepPhong_DichVus)
-                          .ToListAsync();
+
+            var query = context.HoaDons
+                .Include(hd => hd.PhieuDatPhong)
+                .ThenInclude(p => p!.ChiTietXepPhongs)
+                .ThenInclude(ct => ct.ChiTietXepPhong_DichVus)
+                .AsQueryable();
+
+            // Khách hàng chỉ được xem hóa đơn của mình
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(hd =>
+                    hd.PhieuDatPhong != null &&
+                    hd.PhieuDatPhong.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var hoaDons = await query.ToListAsync();
 
             //Tìm kiếm theo mã hóa đơn hoặc mã phiếu
             if (!string.IsNullOrWhiteSpace(tuKhoa))
@@ -264,23 +323,60 @@ namespace QuanLyKhachSan.Controllers
         [HttpGet]
         public async Task<IActionResult> ChiTietHoaDon(string maHoaDon)
         {
-            var hoaDon = await context.HoaDons
-                         .Include(hd => hd.PhieuDatPhong)
-                         .ThenInclude(p => p!.ChiTietXepPhongs)
-                         .ThenInclude(ct => ct.ChiTietXepPhong_DichVus)
-                         .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
+            var query = context.HoaDons
+                .Include(hd => hd.PhieuDatPhong)
+                .ThenInclude(p => p!.ChiTietXepPhongs)
+                .ThenInclude(ct => ct.ChiTietXepPhong_DichVus)
+                .AsQueryable();
 
-            if (hoaDon == null) return NotFound();
+            // Kiểm tra quyền xem hóa đơn
+            if (User.IsInRole("KhachHang"))
+            {
+                var userIdStr =
+                    User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!int.TryParse(userIdStr, out int maTaiKhoan))
+                    return Forbid();
+
+                var maKhachHang = await context.KhachHangs
+                    .Where(k => k.MaTaiKhoan == maTaiKhoan)
+                    .Select(k => (int?)k.MaKhachHang)
+                    .FirstOrDefaultAsync();
+
+                if (!maKhachHang.HasValue)
+                    return Forbid();
+
+                query = query.Where(hd =>
+                    hd.PhieuDatPhong != null &&
+                    hd.PhieuDatPhong.MaKhachHang == maKhachHang.Value);
+            }
+            else if (!User.IsInRole("NhanVien") &&
+                     !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var hoaDon = await query.FirstOrDefaultAsync(
+                hd => hd.MaHoaDon == maHoaDon);
+
+            // Không tiết lộ hóa đơn của khách hàng khác
+            if (hoaDon == null)
+                return NotFound();
 
             if (hoaDon.PhieuDatPhong != null)
             {
-                ViewBag.TienPhong = TinhTienPhong(hoaDon.PhieuDatPhong);
-                ViewBag.TienDichVu = TinhTienDichVu(hoaDon.PhieuDatPhong);
+                ViewBag.TienPhong =
+                    TinhTienPhong(hoaDon.PhieuDatPhong);
+
+                ViewBag.TienDichVu =
+                    TinhTienDichVu(hoaDon.PhieuDatPhong);
             }
 
-            if(Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-    {
-                return PartialView("_ChiTietHoaDonPartial", hoaDon);
+            if (Request.Headers["X-Requested-With"]
+                == "XMLHttpRequest")
+            {
+                return PartialView(
+                    "_ChiTietHoaDonPartial", hoaDon);
             }
 
             return View("ChiTietHoaDon", hoaDon);
@@ -312,6 +408,19 @@ namespace QuanLyKhachSan.Controllers
             var hoaDon = await context.HoaDons.FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
             if (hoaDon == null) return NotFound();
 
+            // Không cho xóa hóa đơn đã thanh toán hoặc đã hoàn tiền
+            if (hoaDon.TrangThai == "DaThanhToan" ||
+                hoaDon.TrangThai == "DaHoanTien")
+            {
+                return Conflict(new
+                {
+                    success = false,
+                    message =
+                        "Không thể xóa hóa đơn đã thanh toán hoặc đã hoàn tiền. " +
+                        "Vui lòng giữ lại để đảm bảo lịch sử giao dịch."
+                });
+            }
+
             context.HoaDons.Remove(hoaDon);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -334,6 +443,18 @@ namespace QuanLyKhachSan.Controllers
                 return Json(new { success = false, message = "Không tìm thấy hóa đơn." });
             }
 
+            // Chỉ cho phép thanh toán hóa đơn chưa thanh toán
+            if (hoaDon.TrangThai != "ChuaThanhToan")
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = hoaDon.TrangThai == "DaThanhToan"
+                        ? "Hóa đơn này đã được thanh toán trước đó."
+                        : "Hóa đơn không ở trạng thái có thể thanh toán."
+                });
+            }
+
             if (hoaDon.TrangThai != "DaThanhToan")
             {
                 hoaDon.TrangThai = "DaThanhToan";
@@ -346,7 +467,7 @@ namespace QuanLyKhachSan.Controllers
                     foreach (var ct in hoaDon.PhieuDatPhong.ChiTietXepPhongs)
                     {
                         if (ct.Phong != null && ct.NgayTra != null)
-                            ct.Phong.TrangThai = "Đang dọn";
+                            ct.Phong.TrangThai = "Đang dọn dẹp";
                     }
                 }
 

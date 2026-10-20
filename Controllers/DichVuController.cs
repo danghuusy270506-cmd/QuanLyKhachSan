@@ -70,6 +70,7 @@ namespace QuanLyKhachSan.Controllers
         [Authorize(Roles = "Admin,NhanVien")]
         public async Task<IActionResult> Create([Bind("TenDichVu,MoTa,DonGia")] DichVu dichVu)
         {
+            ModelState.Remove(nameof(DichVu.MaDichVu));
             if (!ModelState.IsValid) return View(dichVu);
 
             // Sinh mã DVxxx dựa trên mã lớn nhất hiện có.

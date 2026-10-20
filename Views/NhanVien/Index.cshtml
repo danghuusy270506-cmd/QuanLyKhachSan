@@ -14,7 +14,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
-
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
     <!-- BỘ LỌC TÌM KIẾM -->
     <div class="card shadow-sm mb-3">
         <div class="card-body">

@@ -1,6 +1,83 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+﻿
+@{
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    ViewData["Title"] = "Chính sách bảo mật";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<section class="container py-5" style="max-width: 960px;">
+
+    <div class="mb-5">
+        <span class="text-uppercase small text-muted">
+            HOTEL &amp; STAY
+        </span>
+
+        <h1 class="fw-bold mt-2">Chính sách bảo mật</h1>
+
+        <p class="text-muted mt-3">
+            Chúng tôi hướng đến việc sử dụng thông tin của khách hàng
+            phù hợp với mục đích quản lý đặt phòng và cung cấp dịch vụ
+            lưu trú.
+        </p>
+    </div>
+
+    <section class="mb-4">
+        <h2 class="h4 fw-bold">1. Thông tin được sử dụng</h2>
+
+        <p>
+            Trong quá trình sử dụng website, khách hàng có thể cung cấp
+            thông tin cá nhân như họ tên, số điện thoại, email và thông
+            tin cần thiết cho việc đặt phòng.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 fw-bold">2. Mục đích sử dụng thông tin</h2>
+
+        <p>
+            Thông tin được sử dụng để xử lý yêu cầu đặt phòng, quản lý
+            thông tin lưu trú, hỗ trợ khách hàng và thực hiện các nghiệp
+            vụ liên quan đến hóa đơn, thanh toán.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 fw-bold">3. Quản lý thông tin tài khoản</h2>
+
+        <p>
+            Khách hàng có thể xem và cập nhật các thông tin cá nhân
+            được hỗ trợ trong mục Tài khoản. Vui lòng bảo vệ thông tin
+            đăng nhập và đăng xuất sau khi sử dụng tài khoản trên
+            thiết bị dùng chung.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 fw-bold">4. Bảo vệ thông tin</h2>
+
+        <p>
+            Việc truy cập và sử dụng thông tin khách hàng cần tuân theo
+            chức năng được cấp quyền trong hệ thống. Nếu phát hiện thông
+            tin không chính xác hoặc cần hỗ trợ, khách hàng nên liên hệ
+            với bộ phận phụ trách của khách sạn.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 fw-bold">5. Cập nhật chính sách</h2>
+
+        <p>
+            Nội dung chính sách có thể được cập nhật khi quy trình
+            hoạt động hoặc chức năng của website thay đổi.
+        </p>
+    </section>
+
+    <div class="border-top pt-4 mt-5">
+        <a asp-controller="Home"
+           asp-action="ClientIndex"
+           class="btn btn-primary">
+            <i class="bi bi-house me-1"></i>
+            Quay lại trang chủ
+        </a>
+    </div>
+
+</section>

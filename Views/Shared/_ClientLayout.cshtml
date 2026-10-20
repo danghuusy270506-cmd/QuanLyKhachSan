@@ -1,0 +1,370 @@
+﻿
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Hotel & Stay</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/client.css"
+          asp-append-version="true" />
+</head>
+
+<body class="client-site">
+
+    <!-- HEADER WEBSITE KHÁCH HÀNG -->
+    <header class="client-header">
+        <div class="client-container client-header-inner">
+
+            <a class="client-brand"
+               asp-controller="Home"
+               asp-action="ClientIndex">
+
+                <span class="client-brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </span>
+
+                <span class="client-brand-text">
+                    <strong>HOTEL & STAY</strong>
+                    <small>YOUR COMFORT, OUR CARE</small>
+                </span>
+            </a>
+
+            <button class="client-mobile-toggle"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#clientNavigation"
+                    aria-controls="clientNavigation"
+                    aria-expanded="false"
+                    aria-label="Mở menu">
+
+                <i class="bi bi-list"></i>
+            </button>
+
+            <nav class="client-navigation collapse"
+                 id="clientNavigation">
+
+                <div class="client-nav-links">
+
+                    <a asp-controller="Home"
+                       asp-action="ClientIndex">
+                        Trang chủ
+                    </a>
+
+                    <a asp-controller="ClientLoaiPhong"
+                       asp-action="Index">
+                        Loại phòng
+                    </a>
+
+                    <a asp-controller="ClientDichVu"
+                       asp-action="Index">
+                        Dịch vụ
+                    </a>
+                    <a asp-controller="Home"
+                       asp-action="Privacy">
+                        Chính sách
+                    </a>
+
+                </div>
+
+                
+                <div class="client-nav-actions">
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        if (User.IsInRole("Admin") ||
+                            User.IsInRole("ADMIN") ||
+                            User.IsInRole("NhanVien"))
+                        {
+                            <a class="client-btn client-btn-primary"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                <i class="bi bi-speedometer2"></i>
+                                Quản trị
+                            </a>
+
+                            <form asp-controller="DangNhap"
+                                  asp-action="DangXuat"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="client-btn client-btn-outline-light"
+                                        style="color: var(--client-navy); border-color: var(--client-border);">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    Đăng xuất
+                                </button>
+                            </form>
+                        }
+                        else if (User.IsInRole("KhachHang"))
+                        {
+                            <div class="dropdown client-account-dropdown">
+
+                                <button type="button"
+                                        class="client-account-button dropdown-toggle"
+                                        id="clientAccountDropdown"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>Tài khoản</span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end client-account-menu"
+                                    aria-labelledby="clientAccountDropdown">
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="ClientTaiKhoan"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-person"></i>
+                                            Thông tin cá nhân
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="ClientLoaiPhong"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-buildings"></i>
+                                            Khám phá loại phòng
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="ClientPhieuDatPhong"
+                                           asp-action="Index">
+                                            Phiếu đặt phòng của tôi
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="ClientHoaDon"
+                                           asp-action="Index">
+                                            Hóa đơn của tôi
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <li>
+                                        <form asp-controller="DangNhap"
+                                              asp-action="DangXuat"
+                                              method="post"
+                                              class="m-0">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="dropdown-item client-account-logout">
+
+                                                <i class="bi bi-box-arrow-right"></i>
+                                                Đăng xuất
+                                            </button>
+
+                                        </form>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <a class="client-login-link"
+                           asp-controller="DangNhap"
+                           asp-action="Authentication">
+                            Đăng nhập
+                        </a>
+
+                        <a class="client-btn client-btn-primary"
+                           asp-controller="TaiKhoan"
+                           asp-action="Create">
+                            Đăng ký
+                        </a>
+                    }
+
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- NỘI DUNG CỦA TỪNG TRANG KHÁCH HÀNG -->
+    <main class="client-main">
+        
+        @if (TempData["SuccessMessage"] is string successMessage)
+        {
+            <div class="container pt-3">
+                <div class="alert alert-success" role="alert">
+                    <strong>Thành công!</strong>
+                    @successMessage
+                </div>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    
+    <!-- FOOTER WEBSITE KHÁCH HÀNG -->
+    <footer class="client-footer">
+        <div class="client-container">
+
+            <div class="client-footer-grid">
+
+                <!-- CỘT 1: GIỚI THIỆU -->
+                <section class="client-footer-column client-footer-about">
+                    <a class="client-footer-brand"
+                       asp-controller="Home"
+                       asp-action="ClientIndex">
+                        HOTEL &amp; STAY
+                    </a>
+
+                    <p>
+                        Không gian nghỉ ngơi thoải mái,
+                        dịch vụ chu đáo và trải nghiệm lưu trú
+                        phù hợp cho mỗi hành trình.
+                    </p>
+                </section>
+
+                <!-- CỘT 2: KHÁM PHÁ -->
+                <section class="client-footer-column">
+                    <h2>Khám phá</h2>
+
+                    <ul>
+                        <li>
+                            <a asp-controller="Home"
+                               asp-action="ClientIndex">
+                                Trang chủ
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="ClientLoaiPhong"
+                               asp-action="Index">
+                                Các loại phòng
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="ClientDichVu"
+                               asp-action="Index">
+                                Dịch vụ khách sạn
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- CỘT 3: TÀI KHOẢN VÀ ĐẶT PHÒNG -->
+                <section class="client-footer-column">
+                    <h2>Tài khoản &amp; đặt phòng</h2>
+
+                    <ul>
+                        @if (User.IsInRole("KhachHang"))
+                        {
+                            <li>
+                                <a asp-controller="ClientTaiKhoan"
+                                   asp-action="Index">
+                                    Thông tin cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="ClientPhieuDatPhong"
+                                   asp-action="Index">
+                                    Phiếu đặt phòng của tôi
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="ClientHoaDon"
+                                   asp-action="Index">
+                                    Hóa đơn của tôi
+                                </a>
+                            </li>
+                        }
+                        else if (User.Identity?.IsAuthenticated != true)
+                        {
+                            <li>
+                                <a asp-controller="DangNhap"
+                                   asp-action="Authentication">
+                                    Đăng nhập
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="TaiKhoan"
+                                   asp-action="Create">
+                                    Đăng ký tài khoản
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-controller="Home"
+                                   asp-action="Index">
+                                    Khu vực quản lý
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </section>
+
+                <!-- CỘT 4: CHÍNH SÁCH -->
+                <section class="client-footer-column">
+                    <h2>Chính sách &amp; lưu ý</h2>
+
+                    <ul>
+                        <li>
+                            <a asp-controller="Home"
+                               asp-action="Privacy">
+                                Chính sách bảo mật
+                            </a>
+                        </li>
+                    </ul>
+
+                    <p>
+                        Vui lòng kiểm tra thông tin loại phòng,
+                        giá phòng và sức chứa trước khi gửi
+                        yêu cầu đặt phòng.
+                    </p>
+                </section>
+
+            </div>
+
+            <!-- ĐƯỜNG PHÂN CÁCH -->
+            <div class="client-footer-divider"></div>
+
+            <!-- BẢN QUYỀN -->
+            <div class="client-footer-bottom">
+                <div class="client-footer-bottom-brand">
+                    <span>HOTEL &amp; STAY</span>
+                    <small>YOUR COMFORT, OUR CARE</small>
+                </div>
+
+                <div class="client-copyright">
+                    © @DateTime.Now.Year Hotel &amp; Stay.
+                    Bảo lưu mọi quyền.
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

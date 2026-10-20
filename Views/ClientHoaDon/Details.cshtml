@@ -1,0 +1,162 @@
+﻿
+@model QuanLyKhachSan.Models.Entities.HoaDon
+
+@{
+    ViewData["Title"] = "Chi tiết hóa đơn";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+
+    var trangThaiText = Model.TrangThai switch
+    {
+        "DaThanhToan" => "Đã thanh toán",
+        "DaHoanTien" => "Đã hoàn tiền",
+        "ChuaThanhToan" => "Chưa thanh toán",
+        _ => Model.TrangThai
+    };
+
+    var trangThaiClass = Model.TrangThai switch
+    {
+        "DaThanhToan" => "bg-success",
+        "DaHoanTien" => "bg-warning text-dark",
+        "ChuaThanhToan" => "bg-secondary",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="container py-5" style="max-width: 900px;">
+
+    <div class="mb-4">
+        <a asp-controller="ClientHoaDon"
+           asp-action="Index"
+           class="text-decoration-none">
+            &larr; Quay lại danh sách hóa đơn
+        </a>
+
+        <h2 class="fw-bold mt-3">Chi tiết hóa đơn</h2>
+
+        <p class="text-muted">
+            Xem thông tin thanh toán của lần đặt phòng.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex flex-wrap justify-content-between
+                        align-items-start gap-3 mb-4">
+                <div>
+                    <div class="text-muted small">Mã hóa đơn</div>
+
+                    <h3 class="fw-bold mt-1">
+                        @Model.MaHoaDon
+                    </h3>
+                </div>
+
+                <span class="badge @trangThaiClass fs-6">
+                    @trangThaiText
+                </span>
+            </div>
+
+            <hr />
+
+            <h5 class="fw-bold mb-3">Thông tin đặt phòng</h5>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="text-muted small">Mã phiếu đặt phòng</div>
+                    <div class="fw-semibold">#@Model.MaPhieu</div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text-muted small">Loại phòng</div>
+                    <div class="fw-semibold">
+                        @(Model.PhieuDatPhong?.LoaiPhong?.TenLoaiPhong
+                            ?? "Không có thông tin")
+                    </div>
+                </div>
+
+                @if (Model.PhieuDatPhong != null)
+                {
+                    <div class="col-md-6">
+                        <div class="text-muted small">Ngày nhận phòng</div>
+                        <div class="fw-semibold">
+                            @Model.PhieuDatPhong.NgayDen.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="text-muted small">Ngày trả phòng</div>
+                        <div class="fw-semibold">
+                            @Model.PhieuDatPhong.NgayDi.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <hr />
+
+            <h5 class="fw-bold mb-3">Thông tin thanh toán</h5>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="text-muted small">Tiền đặt cọc</div>
+                    <div class="fw-semibold">
+                        @Model.TienCoc.ToString("N0") đ
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text-muted small">Giảm giá</div>
+                    <div class="fw-semibold">
+                        @Model.GiamGia.ToString("N0") đ
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text-muted small">Phương thức thanh toán</div>
+                    <div class="fw-semibold">
+                        @(string.IsNullOrWhiteSpace(Model.KieuThanhToan)
+                            ? "Chưa xác định"
+                            : Model.KieuThanhToan)
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="text-muted small">Thời gian thanh toán</div>
+                    <div class="fw-semibold">
+                        @if (Model.ThoiGianThanhToan == DateTime.MinValue)
+                        {
+                            <span>Chưa thanh toán</span>
+                        }
+                        else
+                        {
+                            @Model.ThoiGianThanhToan.ToString("dd/MM/yyyy HH:mm")
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-3 bg-light p-4">
+                <div class="text-muted">Tổng tiền phải thanh toán</div>
+
+                <div class="fs-3 fw-bold text-primary mt-1">
+                    @Model.TongTien.ToString("N0") đ
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <a asp-controller="ClientHoaDon"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Quay lại
+                </a>
+
+                <a asp-controller="ClientPhieuDatPhong"
+                   asp-action="Index"
+                   class="btn btn-primary">
+                    Xem phiếu đặt phòng
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

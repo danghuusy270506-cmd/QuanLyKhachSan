@@ -1,0 +1,164 @@
+﻿
+@model IEnumerable<QuanLyKhachSan.Models.Entities.PhieuDatPhong>
+
+@{
+    ViewData["Title"] = "Phiếu đặt phòng của tôi";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @errorMessage
+    </div>
+}
+
+
+<div class="container py-5">
+    <div class="mb-4">
+        <a asp-controller="Home"
+           asp-action="ClientIndex"
+           class="text-decoration-none">
+            &larr; Về trang chủ
+        </a>
+
+        <h2 class="fw-bold mt-3">Phiếu đặt phòng của tôi</h2>
+
+        <p class="text-muted">
+            Theo dõi thông tin và trạng thái các yêu cầu đặt phòng của bạn.
+        </p>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <h5 class="fw-bold">Bạn chưa có phiếu đặt phòng nào</h5>
+
+                <p class="text-muted mt-2">
+                    Hãy chọn loại phòng phù hợp để bắt đầu đặt phòng.
+                </p>
+
+                <a asp-controller="ClientLoaiPhong"
+                   asp-action="Index"
+                   class="btn btn-primary mt-2">
+                    Xem loại phòng
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã phiếu</th>
+                                <th>Loại phòng</th>
+                                <th>Ngày đặt</th>
+                                <th>Ngày nhận</th>
+                                <th>Ngày trả</th>
+                                <th>Số khách</th>
+                                <th>Tiền cọc</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var phieu in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>#@phieu.MaPhieu</strong>
+                                    </td>
+
+                                    <td>
+                                        @(phieu.LoaiPhong?.TenLoaiPhong
+                                            ?? "Không có thông tin")
+                                    </td>
+
+                                    <td>
+                                        @phieu.NgayDat.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+
+                                    <td>
+                                        @phieu.NgayDen.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td>
+                                        @phieu.NgayDi.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td>@phieu.SoNguoi người</td>
+
+                                    <td>
+                                        @phieu.TienCoc.ToString("N0") đ
+                                    </td>
+
+                                    <td>
+                                        
+                                        <span class="badge rounded-pill
+                                            @(phieu.TrangThai == "Chờ xác nhận"
+                                                ? "bg-warning text-dark"
+                                                : phieu.TrangThai == "Đã xác nhận"
+                                                    ? "bg-success"
+                                                    : phieu.TrangThai == "Đang ở"
+                                                        ? "bg-primary"
+                                                        : phieu.TrangThai == "Chờ thanh toán"
+                                                            ? "bg-warning text-dark"
+                                                            : phieu.TrangThai == "Hoàn thành"
+                                                                ? "bg-success"
+                                                                : phieu.TrangThai == "Đã hủy"
+                                                                    ? "bg-danger"
+                                                                    : "bg-secondary")">
+                                            @phieu.TrangThai
+                                        </span>
+
+                                    </td>
+                                    
+                                    <td>
+                                        @if (phieu.TrangThai == "Chờ xác nhận")
+                                        {
+                                            <form asp-controller="ClientPhieuDatPhong"
+                                                  asp-action="Huy"
+                                                  method="post"
+                                                  onsubmit="return confirm('Bạn có chắc chắn muốn hủy phiếu đặt phòng này?');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="maPhieu"
+                                                       value="@phieu.MaPhieu" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger">
+                                                    Hủy phiếu
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="ClientLoaiPhong"
+           asp-action="Index"
+           class="btn btn-outline-primary">
+            Tiếp tục xem loại phòng
+        </a>
+    </div>
+</div>

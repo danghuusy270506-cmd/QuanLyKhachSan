@@ -1,0 +1,141 @@
+﻿
+@using System.Globalization
+@model IEnumerable<QuanLyKhachSan.Models.Entities.DichVu>
+
+@{
+    Layout = "_ClientLayout";
+    ViewData["Title"] = "Dịch vụ khách sạn";
+
+    var culture = CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<!-- HEADER TRANG DỊCH VỤ -->
+<section class="client-catalog-hero">
+    <div class="client-container">
+
+        <span class="client-catalog-eyebrow">
+            SERVICES & EXPERIENCES
+        </span>
+
+        <h1>Trải nghiệm dịch vụ khách sạn</h1>
+
+        <p>
+            Khám phá các dịch vụ hiện có và lựa chọn
+            những tiện ích phù hợp với kỳ lưu trú của bạn.
+        </p>
+
+        <div class="client-catalog-breadcrumb">
+            <a asp-controller="Home"
+               asp-action="ClientIndex">
+                Trang chủ
+            </a>
+
+            <i class="bi bi-chevron-right"></i>
+
+            <span>Dịch vụ</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- DANH SÁCH DỊCH VỤ -->
+<section class="client-catalog-section client-service-section">
+    <div class="client-container">
+
+        <div class="client-catalog-heading">
+            <div>
+                <span class="client-catalog-section-label">
+                    OUR SERVICES
+                </span>
+
+                <h2>Dịch vụ dành cho bạn</h2>
+            </div>
+
+            <span class="client-catalog-count">
+                @Model.Count() dịch vụ
+            </span>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="client-catalog-empty">
+                <i class="bi bi-stars"></i>
+
+                <h3>Chưa có dịch vụ</h3>
+
+                <p>
+                    Hiện chưa có dịch vụ nào được công khai.
+                    Vui lòng quay lại sau.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="ClientIndex"
+                   class="client-btn client-btn-primary">
+                    Về trang chủ
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="client-service-grid">
+
+                @foreach (var item in Model)
+                {
+                    <article class="client-service-card">
+
+                        <div class="client-service-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+
+                        <div class="client-service-content">
+
+                            <span class="client-service-label">
+                                HOTEL SERVICE
+                            </span>
+
+                            <h3>@item.TenDichVu</h3>
+
+                            <p class="client-service-description">
+                                @(string.IsNullOrWhiteSpace(item.MoTa)
+                                    ? "Thông tin chi tiết về dịch vụ sẽ được nhân viên khách sạn tư vấn."
+                                    : item.MoTa)
+                            </p>
+
+                            <div class="client-service-footer">
+
+                                <div>
+                                    <span class="client-service-price-label">
+                                        Đơn giá
+                                    </span>
+
+                                    <div class="client-service-price">
+                                        @item.DonGia.ToString("N0", culture)
+                                        <small>VNĐ</small>
+                                    </div>
+                                </div>
+
+                                <span class="client-service-code">
+                                    @item.MaDichVu
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </article>
+                }
+
+            </div>
+        }
+
+        <div class="client-service-note">
+            <i class="bi bi-info-circle"></i>
+
+            <p>
+                Giá dịch vụ được tham khảo từ thông tin hiện có
+                của khách sạn. Vui lòng liên hệ nhân viên để xác nhận
+                cách sử dụng và chi phí áp dụng cho kỳ lưu trú.
+            </p>
+        </div>
+
+    </div>
+</section>

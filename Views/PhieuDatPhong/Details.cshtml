@@ -27,7 +27,21 @@
                         </div>
                         <div class="col-sm-6 border-bottom pb-2">
                             <span class="text-muted d-block small">Trạng Thái</span>
-                            <span class="badge bg-success">@Model.TrangThai</span>
+                            @{
+                                var trangThaiClass = Model.TrangThai switch
+                                {
+                                    "Chờ xác nhận" => "bg-warning text-dark",
+                                    "Đã xác nhận" => "bg-success",
+                                    "Đang ở" => "bg-primary",
+                                    "Chờ thanh toán" => "bg-warning text-dark",
+                                    "Hoàn thành" => "bg-success",
+                                    "Đã hủy" => "bg-danger",
+                                    _ => "bg-secondary"
+                                };
+                            }
+                            <span class="badge @trangThaiClass">
+                                @Model.TrangThai
+                            </span>
                         </div>
                         <div class="col-sm-6 border-bottom pb-2">
                             <span class="text-muted d-block small">Thời Gian Nhận / Trả Phòng</span>
