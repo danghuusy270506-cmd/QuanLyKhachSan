@@ -7,7 +7,7 @@
     <!-- Header của Modal làm nổi bật nghiệp vụ Check-in -->
     <div class="modal-header text-white px-4 py-3" style="background-color: #1a1d20; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;">
         <h5 class="modal-title fs-6 fw-semibold d-flex align-items-center gap-2 m-0" id="xepPhongModalLabel">
-            <i class="bi bi-door-open text-primary fs-5"></i> Check-in — Phiếu đặt phòng <span class="text-primary">#@Model.MaPhieu</span>
+            <i class="bi bi-door-open text-primary fs-5"></i> Xếp phòng — Phiếu đặt phòng <span class="text-primary">#@Model.MaPhieu</span>
         </h5>
         <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
@@ -117,7 +117,12 @@
         <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-medium bg-white" data-bs-dismiss="modal">
             <i class="bi bi-x-lg me-1"></i> Đóng
         </button>
-        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill fw-medium shadow-sm" id="btnSubmitCheckIn" style="background-color: #2563eb; border: none;" disabled>
-            <i class="bi bi-check-lg me-1"></i> Xác nhận Check-in        </button>
+        <button type="submit"
+                class="btn btn-primary px-4 py-2 rounded-pill fw-medium shadow-sm"
+                id="btnSubmitXepPhong"
+                style="background-color: #198754; border: none;"
+                disabled>
+            <i class="bi bi-house-check me-1"></i> Xếp phòng
+        </button>
     </div>
 </form>

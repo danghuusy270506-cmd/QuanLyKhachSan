@@ -35,7 +35,7 @@ namespace QuanLyKhachSan.Models.Data
                         GiaPhong = 1300000m,
                         SucChua = 2,
                         MoTa = "Không gian rộng rãi, phù hợp cho kỳ nghỉ thư giãn.",
-                        Anh = "/Images/rooms/99ae9c28-05c1-4269-9022-0012ce315e89_Sang%20Tr%23U1ecdng.jpg"
+                        Anh = "/Images/rooms/99ae9c28-05c1-4269-9022-0012ce315e89_Sang%20Tr%E1%BB%8Dng.jpg"
                     },
                     new LoaiPhong
                     {
@@ -43,7 +43,7 @@ namespace QuanLyKhachSan.Models.Data
                         GiaPhong = 1500000m,
                         SucChua = 4,
                         MoTa = "Phòng dành cho gia đình hoặc nhóm bạn nhỏ.",
-                        Anh = "/Images/rooms/3f6024d8-4876-4602-9357-44ead06c08c4_Ph%23U00f2ng%20Family%20(Gia%20%23U0111%23U00ecnh).jpg"
+                        Anh = "/Images/rooms/3f6024d8-4876-4602-9357-44ead06c08c4_Ph%C3%B2ng%20Family%20(Gia%20%C4%91%C3%ACnh).jpg"
                     },
                     new LoaiPhong
                     {
@@ -51,7 +51,7 @@ namespace QuanLyKhachSan.Models.Data
                         GiaPhong = 2000000m,
                         SucChua = 4,
                         MoTa = "Không gian thượng hạng dành cho trải nghiệm lưu trú cao cấp.",
-                        Anh = "/Images/rooms/8d166555-0b3e-4fce-bb5d-06835baea5b9_Ph%23U00f2ng%20Suite%20(Th%23U01b0%23U1ee3ng%20h%23U1ea1ng).jpg"
+                        Anh = "/Images/rooms/8d166555-0b3e-4fce-bb5d-06835baea5b9_Ph%C3%B2ng%20Suite%20(Th%C6%B0%E1%BB%A3ng%20h%E1%BA%A1ng).jpg"
                     }
                 );
 

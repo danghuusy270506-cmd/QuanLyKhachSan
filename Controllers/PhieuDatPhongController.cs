@@ -34,6 +34,8 @@ namespace QuanLyKhachSan.Controllers
                 .Include(p => p.KhachHang)
                 .Include(p => p.LoaiPhong)
                 .Include(p => p.NhanVien)
+                .Include(p => p.ChiTietXepPhongs)
+                    .ThenInclude(ct => ct.Phong)
                 .AsQueryable();
             // Giới hạn dữ liệu theo vai trò
             if (User.IsInRole("KhachHang"))

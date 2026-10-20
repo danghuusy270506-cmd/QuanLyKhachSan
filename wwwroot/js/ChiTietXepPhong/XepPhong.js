@@ -1,116 +1,180 @@
-﻿// wwwroot/js/ChiTietXepPhong/XepPhong.js
-
-// 1. Mở Modal Check-in khi ấn nút
-$(document).on('click', '.btn-checkin-ajax', function (e) {
+﻿
+$(document).on('click', '.btn-xepphong-ajax', function (e) {
     e.preventDefault();
-    var maPhieu = $(this).data('id');
 
-    // Kiểm tra modal tồn tại
-    var myModalEl = document.getElementById('xepPhongModal');
-    if (!myModalEl) {
-        alert('Không tìm thấy modal xếp phòng. Vui lòng kiểm tra lại Index.cshtml.');
-        console.error('Missing #xepPhongModal');
+    const maPhieu = $(this).data('id');
+    const modalElement = document.getElementById('xepPhongModal');
+
+    if (!modalElement) {
+        alert('Không tìm thấy cửa sổ xếp phòng.');
         return;
     }
 
-    // Loading
     $('#xepPhongModalBody').html(`
         <div class="text-center py-4">
             <div class="spinner-border text-primary" role="status"></div>
-            <p class="text-muted mt-2">Đang tải dữ liệu...</p>
+            <p class="text-muted mt-2">Đang tải danh sách phòng...</p>
         </div>
     `);
 
-    var modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
     modal.show();
 
-    // AJAX lấy Partial View Xếp phòng
     $.ajax({
         url: '/ChiTietXepPhong/XepPhong',
         type: 'GET',
         data: { maPhieu: maPhieu },
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        success: function (htmlContent) {
-            $('#xepPhongModalBody').html(htmlContent);
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function (html) {
+            $('#xepPhongModalBody').html(html);
         },
         error: function (xhr) {
-            console.error('XepPhong error:', xhr);
-            alert(xhr.responseText || "Có lỗi xảy ra khi tải dữ liệu từ máy chủ.");
+            const message = xhr.responseText ||
+                'Không thể tải danh sách phòng phù hợp.';
+
+            alert(message);
             modal.hide();
         }
     });
 });
 
-// 2. Bật/tắt nút Xác nhận Check-in khi chọn phòng
+// Chỉ bật nút lưu xếp phòng khi đã chọn phòng
 $(document).on('change', '#maPhong', function () {
-    var selectedVal = $(this).val();
-    var submitBtn = $('#btnSubmitCheckIn');
-    submitBtn.prop('disabled', !selectedVal);
+    $('#btnSubmitXepPhong').prop('disabled', !$(this).val());
 });
 
-// 3. Submit form xếp phòng qua AJAX
+// Lưu phòng được phân, không thực hiện check-in
 $(document).on('submit', '#formXepPhongAjax', function (e) {
     e.preventDefault();
 
-    var $form = $(this);
-    var submitBtn = $('#btnSubmitCheckIn');
+    const form = $(this);
+    const submitButton = $('#btnSubmitXepPhong');
 
-    submitBtn.prop('disabled', true).html(
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...'
-    );
+    submitButton.prop('disabled', true).text('Đang xếp phòng...');
 
     $.ajax({
-        url: $form.attr('action'),
+        url: form.attr('action'),
         type: 'POST',
-        data: $form.serialize(),
-        success: function (response) {
-            if (response.success) {
-                var myModalEl = document.getElementById('xepPhongModal');
-                var modal = bootstrap.Modal.getInstance(myModalEl);
-                if (modal) modal.hide();
+        data: form.serialize(),
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
 
-                updateRowAfterCheckIn(response.maPhieu);
-            } else {
-                alert(response.message);
-                submitBtn.prop('disabled', false).html('<i class="bi bi-check-lg me-1"></i> Xác nhận Check-in');
+        success: function (response) {
+            if (!response || !response.success) {
+                alert((response && response.message) ||
+                    'Không thể xếp phòng.');
+                submitButton.prop('disabled', false).text('Xếp phòng');
+                return;
             }
+
+            const modalElement = document.getElementById('xepPhongModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+
+            if (modal) modal.hide();
+
+            updateRowAfterXepPhong(
+                response.maPhieu,
+                response.soPhong
+            );
+
+            alert(response.message || 'Xếp phòng thành công.');
         },
+
         error: function (xhr) {
-            console.error('Check-in error:', xhr);
-            alert(xhr.responseText || "Đã xảy ra lỗi trong quá trình kết nối tới máy chủ.");
-            submitBtn.prop('disabled', false).html('<i class="bi bi-check-lg me-1"></i> Xác nhận Check-in');
+            const message = xhr.responseJSON?.message ||
+                'Có lỗi xảy ra khi lưu thông tin xếp phòng.';
+
+            alert(message);
+            submitButton.prop('disabled', false).text('Xếp phòng');
         }
     });
 });
 
-// 4. Cập nhật dòng sau khi Check-in thành công
-function updateRowAfterCheckIn(maPhieu) {
-    var targetRow = $('tr[data-maphieu="' + maPhieu + '"]');
+// Sau khi xếp phòng: giữ nguyên trạng thái Đã xác nhận
+function updateRowAfterXepPhong(maPhieu, soPhong) {
+    const row = $('tr[data-maphieu="' + maPhieu + '"]');
 
-    if (targetRow.length > 0) {
-        var statusCell = targetRow.find('td').eq(5);
-        var statusBadge = targetRow.find('.badge-status, .badge-trangthai');
-
-        if (statusBadge.length > 0) {
-            statusBadge
-                .removeClass('badge-cho-xac-nhan badge-da-xac-nhan badge-hoan-thanh badge-da-huy bg-primary bg-success bg-warning')
-                .addClass('badge-status badge-dang-o')
-                .text('Đang ở')
-                .removeAttr('style');
-        } else {
-            statusCell.html('<span class="badge-status badge-dang-o">Đang ở</span>');
-        }
-
-        var actionTd = targetRow.find('.td-thao-tac');
-        var checkoutHtml = `
-            <button type="button"
-                    class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"
-                    data-id="${maPhieu}">
-                Check-out
-            </button>
-        `;
-        actionTd.html(checkoutHtml);
-    } else {
+    if (!row.length) {
         location.reload();
+        return;
     }
+
+    row.find('.td-so-phong-da-xep').html(`
+        <span class="badge bg-light text-dark border">
+            ${soPhong || 1}
+        </span>
+    `);
+
+    row.find('.td-thao-tac').html(`
+        <button type="button"
+                class="btn btn-primary btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkin-confirmed-ajax"
+                data-id="${maPhieu}">
+            Check-in
+        </button>
+    `);
+}
+
+// Check-in là thao tác riêng sau khi đã xếp phòng
+$(document).on('click', '.btn-checkin-confirmed-ajax', function (e) {
+    e.preventDefault();
+
+    const button = $(this);
+    const maPhieu = button.data('id');
+    const token = $('input[name="__RequestVerificationToken"]')
+        .first().val() || '';
+
+    button.prop('disabled', true).text('Đang check-in...');
+
+    $.ajax({
+        url: '/ChiTietXepPhong/CheckIn',
+        type: 'POST',
+        data: {
+            maPhieu: maPhieu,
+            __RequestVerificationToken: token
+        },
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+
+        success: function (response) {
+            if (!response || !response.success) {
+                alert((response && response.message) ||
+                    'Check-in thất bại.');
+                button.prop('disabled', false).text('Check-in');
+                return;
+            }
+
+            updateRowAfterCheckIn(maPhieu);
+            alert(response.message || 'Check-in thành công.');
+        },
+
+        error: function (xhr) {
+            const message = xhr.responseJSON?.message ||
+                'Không thể thực hiện check-in. Vui lòng thử lại.';
+
+            alert(message);
+            button.prop('disabled', false).text('Check-in');
+        }
+    });
+});
+
+// Sau khi check-in mới đổi trạng thái phiếu sang Đang ở
+function updateRowAfterCheckIn(maPhieu) {
+    const row = $('tr[data-maphieu="' + maPhieu + '"]');
+
+    if (!row.length) {
+        location.reload();
+        return;
+    }
+
+    const statusCell = row.find('.td-trang-thai');
+
+    statusCell.html(`
+        <span class="badge-status badge-dang-o">Đang ở</span>
+    `);
+
+    row.find('.td-thao-tac').html(`
+        <button type="button"
+                class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"
+                data-id="${maPhieu}">
+            Check-out
+        </button>
+    `);
 }

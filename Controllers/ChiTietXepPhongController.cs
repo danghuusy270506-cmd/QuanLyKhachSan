@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
+using QuanLyKhachSan.Models.ViewModels;
 
 namespace QuanLyKhachSan.Controllers
 {
@@ -81,46 +82,96 @@ namespace QuanLyKhachSan.Controllers
             return View(phieu);
         }
 
-        // Xác nhận xếp phòng và check-in
+
+        // POST: Xếp phòng cho phiếu, chưa thực hiện check-in
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> XepPhong(int maPhieu, int maPhong)
+        public async Task<IActionResult> XepPhong(
+            int maPhieu,
+            int maPhong)
         {
-            // Lấy phiếu đặt phòng và loại phòng
+            // Lấy phiếu và loại phòng
             var phieu = await context.PhieuDatPhongs
-                        .Include(p => p.LoaiPhong)
-                        .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
+                .Include(p => p.LoaiPhong)
+                .Include(p => p.ChiTietXepPhongs)
+                .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
 
             if (phieu == null)
-                return Json(new { success = false, message = "Không tìm thấy phiếu đặt phòng." });
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Không tìm thấy phiếu đặt phòng."
+                });
+            }
 
+            // Chỉ được xếp phòng cho phiếu đã xác nhận
             if (phieu.TrangThai != "Đã xác nhận")
-                return Json(new { success = false, message = "Phiếu không ở trạng thái có thể check-in." });
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Chỉ được xếp phòng cho phiếu đã xác nhận."
+                });
+            }
 
-            bool daXepPhong = await context.ChiTietXepPhongs.AnyAsync(ct => ct.MaPhieu == maPhieu);
-            if (daXepPhong)
-                return Json(new { success = false, message = "Phiếu này đã được xếp phòng." });
+            // Mỗi phiếu hiện chỉ được xếp một phòng
+            if (phieu.ChiTietXepPhongs.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Phiếu này đã được xếp phòng."
+                });
+            }
 
+            if (phieu.LoaiPhong == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Không tìm thấy thông tin loại phòng."
+                });
+            }
+
+            // Kiểm tra lại phòng trong database:
+            // phải đúng loại và còn khả dụng theo lịch lưu trú
             var phongPhuHop = await LayPhongTrong(phieu);
-            var phong = phongPhuHop.FirstOrDefault(p => p.MaPhong == maPhong);
+
+            var phong = phongPhuHop.FirstOrDefault(
+                p => p.MaPhong == maPhong);
+
             if (phong == null)
-                return Json(new { success = false, message = "Phòng không còn khả dụng hoặc không đúng loại phòng." });
+            {
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Phòng đã được sử dụng, không còn khả dụng " +
+                        "hoặc không đúng loại phòng đã đặt."
+                });
+            }
 
             int donGia = (int)phieu.LoaiPhong.GiaPhong;
-            if (donGia <= 0)
-                return Json(new { success = false, message = "Giá loại phòng không hợp lệ." });
 
+            if (donGia <= 0)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Giá loại phòng không hợp lệ."
+                });
+            }
+
+            // Chỉ lưu phòng được phân, chưa ghi nhận check-in
             var chiTiet = new ChiTietXepPhong
             {
                 MaPhieu = maPhieu,
-                MaPhong = maPhong,
+                MaPhong = phong.MaPhong,
                 DonGia = donGia,
-                NgayNhanPhongThucTe = DateTime.Now,
+                NgayNhanPhongThucTe = null,
                 NgayTra = null
             };
-
-            phieu.TrangThai = "Đang ở";
-            phong.TrangThai = "Đang ở";
 
             context.ChiTietXepPhongs.Add(chiTiet);
 
@@ -130,15 +181,220 @@ namespace QuanLyKhachSan.Controllers
             }
             catch (DbUpdateException)
             {
-                return Json(new { success = false, message = "Không thể lưu thông tin xếp phòng. Vui lòng kiểm tra lại dữ liệu." });
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Không thể lưu thông tin xếp phòng. " +
+                        "Vui lòng tải lại dữ liệu và thử lại."
+                });
+            }
+
+            // Không thay đổi trạng thái phiếu hoặc phòng tại đây.
+            // Check-in sẽ do action CheckIn xử lý riêng.
+            return Json(new
+            {
+                success = true,
+                message =
+                    $"Đã xếp phòng {phong.SoPhong} cho phiếu " +
+                    $"#{phieu.MaPhieu}. Khách chưa được check-in.",
+                maPhieu = maPhieu,
+                maPhong = phong.MaPhong,
+                soPhong = phong.SoPhong
+            });
+        }
+
+
+        // POST: Check-in các phòng đã được xếp cho phiếu
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CheckIn(int maPhieu)
+        {
+            var phieu = await context.PhieuDatPhongs
+                .Include(p => p.ChiTietXepPhongs)
+                    .ThenInclude(ct => ct.Phong)
+                .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
+
+            if (phieu == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Không tìm thấy phiếu đặt phòng."
+                });
+            }
+
+            // Chỉ check-in phiếu đã được xác nhận
+            if (phieu.TrangThai != "Đã xác nhận")
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Phiếu không ở trạng thái có thể check-in."
+                });
+            }
+
+            var danhSachChiTiet = phieu.ChiTietXepPhongs.ToList();
+
+            // Phải xếp phòng trước khi check-in
+            if (!danhSachChiTiet.Any())
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Vui lòng xếp phòng trước khi check-in."
+                });
+            }
+
+            // Kiểm tra các phòng được xếp đúng loại và đang trống
+            if (danhSachChiTiet.Any(ct =>
+                ct.Phong == null ||
+                ct.Phong.MaLoaiPhong != phieu.MaLoaiPhong ||
+                ct.Phong.TrangThai != "Trống"))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Có phòng không còn khả dụng hoặc không đúng loại phòng."
+                });
+            }
+
+            // Không ghi nhận check-in lần thứ hai
+            if (danhSachChiTiet.Any(ct =>
+                ct.NgayNhanPhongThucTe.HasValue ||
+                ct.NgayTra.HasValue))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Thông tin phòng đã có thời điểm nhận hoặc trả phòng."
+                });
+            }
+
+            var thoiGianNhan = DateTime.Now;
+
+            foreach (var chiTiet in danhSachChiTiet)
+            {
+                chiTiet.NgayNhanPhongThucTe = thoiGianNhan;
+                chiTiet.Phong!.TrangThai = "Đang ở";
+            }
+
+            phieu.TrangThai = "Đang ở";
+
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message =
+                        "Không thể ghi nhận check-in. Vui lòng kiểm tra lại dữ liệu."
+                });
             }
 
             return Json(new
             {
                 success = true,
-                message = $"Check-in thành công cho phòng {phong.SoPhong}!",
+                message = "Check-in thành công.",
                 maPhieu = maPhieu
             });
+        }
+
+        // GET: Mở form ghi nhận dịch vụ cho khách đang lưu trú
+        [HttpGet]
+        public async Task<IActionResult> GhiNhanDichVu(int maPhieu)
+        {
+            var phieu = await context.PhieuDatPhongs
+                .FirstOrDefaultAsync(p => p.MaPhieu == maPhieu);
+
+            if (phieu == null)
+                return NotFound();
+
+            // Chỉ ghi nhận dịch vụ khi khách đang lưu trú
+            if (phieu.TrangThai != "Đang ở")
+            {
+                TempData["Error"] =
+                    "Chỉ có thể ghi nhận dịch vụ khi khách đang lưu trú.";
+
+                return RedirectToAction("Index", "PhieuDatPhong");
+            }
+
+            // Kiểm tra còn phòng đang được khách sử dụng
+            bool coPhongDangO = await context.ChiTietXepPhongs
+                .AnyAsync(ct =>
+                    ct.MaPhieu == maPhieu &&
+                    ct.NgayNhanPhongThucTe != null &&
+                    ct.NgayTra == null);
+
+            if (!coPhongDangO)
+            {
+                TempData["Error"] =
+                    "Phiếu này không có phòng nào đang lưu trú.";
+
+                return RedirectToAction("Index", "PhieuDatPhong");
+            }
+
+            var model = new GhiNhanDichVuViewModel
+            {
+                MaPhieu = maPhieu,
+                SoLuong = 1
+            };
+
+            await NapDuLieuFormDichVuAsync(model);
+
+            return View(model);
+        }
+
+        // Chuẩn bị danh sách phòng và dịch vụ cho form
+        private async Task NapDuLieuFormDichVuAsync(
+            GhiNhanDichVuViewModel model)
+        {
+            // Chỉ cho chọn phòng thuộc phiếu này
+            // và khách chưa check-out phòng đó
+            var chiTietPhong = await context.ChiTietXepPhongs
+                .AsNoTracking()
+                .Include(ct => ct.Phong)
+                .Where(ct =>
+                    ct.MaPhieu == model.MaPhieu &&
+                    ct.NgayNhanPhongThucTe != null &&
+                    ct.NgayTra == null)
+                .OrderBy(ct => ct.Phong!.SoPhong)
+                .ToListAsync();
+
+            var danhSachPhong = chiTietPhong.Select(ct =>
+                new SelectListItem
+                {
+                    Value = ct.MaChiTiet.ToString(),
+                    Text = ct.Phong == null
+                        ? $"Mã chi tiết {ct.MaChiTiet}"
+                        : $"Phòng {ct.Phong.SoPhong} - Tầng {ct.Phong.Tang}"
+                }).ToList();
+
+            ViewBag.DanhSachPhong = new SelectList(
+                danhSachPhong,
+                "Value",
+                "Text",
+                model.MaChiTietXepPhong > 0
+                    ? model.MaChiTietXepPhong.ToString()
+                    : null);
+
+            var danhSachDichVu = await context.DichVus
+                .AsNoTracking()
+                .OrderBy(dv => dv.TenDichVu)
+                .ToListAsync();
+
+            ViewBag.DanhSachDichVu = new SelectList(
+                danhSachDichVu,
+                "MaDichVu",
+                "TenDichVu",
+                model.MaDichVu);
+
+            ViewBag.MaPhieu = model.MaPhieu;
         }
 
         // Lấy các phòng đúng loại và không bị trùng lịch

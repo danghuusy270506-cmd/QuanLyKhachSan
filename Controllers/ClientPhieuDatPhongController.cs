@@ -41,12 +41,16 @@ namespace QuanLyKhachSan.Controllers
                 return Forbid();
 
             // Chỉ lấy những phiếu thuộc khách hàng hiện tại
+
             var dsPhieuDatPhong = await _context.PhieuDatPhongs
                 .AsNoTracking()
                 .Where(p => p.MaKhachHang == khachHang.MaKhachHang)
                 .Include(p => p.LoaiPhong)
+                .Include(p => p.ChiTietXepPhongs)
+                    .ThenInclude(ct => ct.Phong)
                 .OrderByDescending(p => p.NgayDat)
                 .ToListAsync();
+
 
             return View(dsPhieuDatPhong);
         }

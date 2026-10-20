@@ -57,6 +57,7 @@
                             <tr>
                                 <th>Mã phiếu</th>
                                 <th>Loại phòng</th>
+                                <th>Phòng đã xếp</th>
                                 <th>Ngày đặt</th>
                                 <th>Ngày nhận</th>
                                 <th>Ngày trả</th>
@@ -78,6 +79,23 @@
                                     <td>
                                         @(phieu.LoaiPhong?.TenLoaiPhong
                                             ?? "Không có thông tin")
+                                    </td>
+                                    <td>
+                                        @if (phieu.ChiTietXepPhongs != null &&
+                                             phieu.ChiTietXepPhongs.Any(ct => ct.Phong != null))
+                                        {
+                                            @foreach (var chiTiet in phieu.ChiTietXepPhongs
+                                                .Where(ct => ct.Phong != null))
+                                            {
+                                                <span class="badge bg-light text-dark border me-1">
+                                                    @chiTiet.Phong!.SoPhong
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
                                     </td>
 
                                     <td>

@@ -14,6 +14,7 @@
                         <th class="ps-4">Mã phiếu</th>
                         <th>Khách hàng</th>
                         <th>Loại phòng</th>
+                        <th class="text-center">Phòng đã xếp</th>
                         <th class="text-center">Số người</th>
                         <th>Tiền cọc</th>
                         <th>Trạng thái</th>
@@ -38,9 +39,32 @@
                                 <td>
                                     <span class="badge bg-light text-dark border">@(item.LoaiPhong?.TenLoaiPhong ?? "Chưa xếp")</span>
                                 </td>
+                                
+                                <td class="text-center td-so-phong-da-xep">
+                                    @{
+                                        var danhSachSoPhong = item.ChiTietXepPhongs
+                                            .Where(ct => ct.Phong != null)
+                                            .Select(ct => ct.Phong!.SoPhong)
+                                            .ToList();
+                                    }
+
+                                    @if (danhSachSoPhong.Count == 0)
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var soPhong in danhSachSoPhong)
+                                        {
+                                            <span class="badge bg-light text-dark border me-1">
+                                                @soPhong
+                                            </span>
+                                        }
+                                    }
+                                </td>
                                 <td class="text-center">@item.SoNguoi</td>
                                 <td class="fw-bold">@item.TienCoc.ToString("N0") đ</td>
-                                <td>
+                                <td class="td-trang-thai">
                                     
                                     @if (item.TrangThai == "Chờ xác nhận")
                                     {
@@ -85,22 +109,40 @@
                                         </button>
                                     </div>
                                 </td>
+                                
                                 <td class="text-center td-thao-tac">
                                     @if (item.TrangThai == "Đã xác nhận")
                                     {
-                                        <button type="button" class="btn btn-primary btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkin-ajax" data-id="@item.MaPhieu" style="background-color: #2563eb; border: none;">
-                                            Check-in
-                                        </button>
+                                        @if (item.ChiTietXepPhongs.Any())
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-primary btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkin-confirmed-ajax"
+                                                    data-id="@item.MaPhieu">
+                                                Check-in
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-success btn-sm px-3 fw-medium rounded-pill shadow-sm btn-xepphong-ajax"
+                                                    data-id="@item.MaPhieu">
+                                                Xếp phòng
+                                            </button>
+                                        }
                                     }
                                     else if (item.TrangThai == "Đang ở")
                                     {
-                                        <button type="button" class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax" data-id="@item.MaPhieu">
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"
+                                                data-id="@item.MaPhieu">
                                             Check-out
                                         </button>
                                     }
                                     else if (item.TrangThai == "Chờ xác nhận")
                                     {
-                                        <button type="button" class="btn btn-warning btn-sm px-3 fw-medium text-dark rounded-pill shadow-sm btn-xac-nhan" data-id="@item.MaPhieu" style="background-color: #f59e0b; border: none;">
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm px-3 fw-medium text-dark rounded-pill shadow-sm btn-xac-nhan"
+                                                data-id="@item.MaPhieu">
                                             Xác nhận
                                         </button>
                                     }
@@ -109,6 +151,7 @@
                                         <span class="text-muted">—</span>
                                     }
                                 </td>
+
                             </tr>
                         }
                     }
