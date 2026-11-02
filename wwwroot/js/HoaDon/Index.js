@@ -128,8 +128,8 @@
                     <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 fw-semibold rounded-pill d-inline-flex align-items-center gap-1.5" style="font-size: 13.5px;">
                         <i class="bi bi-check-circle-fill text-success"></i> Thanh toán thành công
                     </span>
-                `);
-
+                    `);
+                    $("#modal-vietqr-section").remove();
                     // B. Cập nhật giao diện ngoài bảng danh sách chính theo đúng hàng (tr) chứa hóa đơn:
                     var $targetRow = $("button[data-id='" + maHoaDon + "'], a[data-id='" + maHoaDon + "']").closest('tr');
 

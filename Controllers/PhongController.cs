@@ -218,7 +218,93 @@ namespace QuanLyKhachSan.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        // 9. HOÀN TẤT DỌN DẸP PHÒNG
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,NhanVien")]
+        public async Task<IActionResult> HoanTatDonDep(int id)
+        {
+            bool isAjax =
+                Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
+            var phong = await _context.Phongs
+                .FirstOrDefaultAsync(p => p.MaPhong == id);
+
+            if (phong == null)
+            {
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Không tìm thấy phòng."
+                    });
+                }
+
+                return NotFound();
+            }
+
+            // Chỉ phòng đang dọn dẹp mới được hoàn tất
+            if (phong.TrangThai != "Đang dọn dẹp")
+            {
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Phòng không ở trạng thái đang dọn dẹp."
+                    });
+                }
+
+                TempData["ThongBao"] =
+                    "Phòng không ở trạng thái đang dọn dẹp.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Kiểm tra phòng có còn lượt lưu trú chưa Check-out hay không
+            bool conKhachDangO = await _context.ChiTietXepPhongs
+                .AnyAsync(ct =>
+                    ct.MaPhong == id &&
+                    ct.NgayNhanPhongThucTe != null &&
+                    ct.NgayTra == null);
+
+            if (conKhachDangO)
+            {
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Phòng vẫn còn khách đang lưu trú."
+                    });
+                }
+
+                TempData["ThongBao"] =
+                    "Không thể hoàn tất dọn dẹp khi phòng vẫn còn khách.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Chuyển phòng về trạng thái Trống
+            phong.TrangThai = "Trống";
+
+            await _context.SaveChangesAsync();
+
+            if (isAjax)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = $"Phòng {phong.SoPhong} đã được dọn dẹp hoàn tất."
+                });
+            }
+
+            TempData["ThongBao"] =
+                $"Phòng {phong.SoPhong} đã được dọn dẹp hoàn tất.";
+
+            return RedirectToAction(nameof(Index));
+        }
         private bool PhongExists(int id)
         {
             return _context.Phongs.Any(e => e.MaPhong == id);

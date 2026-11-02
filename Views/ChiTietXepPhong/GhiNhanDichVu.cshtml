@@ -1,0 +1,144 @@
+﻿@model QuanLyKhachSan.Models.ViewModels.GhiNhanDichVuViewModel
+
+@{
+    ViewData["Title"] = "Ghi nhận dịch vụ";
+}
+
+<div class="container-fluid py-3">
+    @if (TempData["ThongBao"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["ThongBao"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+    <div class="mb-4">
+        <h1 class="h3 fw-bold">Ghi nhận dịch vụ</h1>
+        <p class="text-muted">
+            Ghi nhận các dịch vụ khách sử dụng trong thời gian lưu trú.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm"
+         style="max-width: 750px; border-radius: 14px;">
+
+        <div class="card-header bg-primary text-white">
+            <strong>Thông tin sử dụng dịch vụ</strong>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-controller="ChiTietXepPhong"
+                  asp-action="GhiNhanDichVu"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="MaPhieu" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Mã phiếu đặt phòng
+                    </label>
+
+                    <input value="@Model.MaPhieu"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="MaChiTietXepPhong"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <select asp-for="MaChiTietXepPhong"
+                            class="form-select"
+                            asp-items="ViewBag.DanhSachPhong">
+
+                        <option value="">
+                            -- Chọn phòng đang lưu trú --
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="MaChiTietXepPhong"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="MaDichVu"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <select asp-for="MaDichVu"
+                            class="form-select"
+                            asp-items="ViewBag.DanhSachDichVu">
+
+                        <option value="">
+                            -- Chọn dịch vụ --
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="MaDichVu"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="SoLuong"
+                           class="form-label fw-semibold">
+                    </label>
+
+                    <input asp-for="SoLuong"
+                           type="number"
+                           min="1"
+                           max="100"
+                           class="form-control" />
+
+                    <span asp-validation-for="SoLuong"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Lưu dịch vụ
+                    </button>
+
+                    <a asp-controller="ChiTietXepPhong"
+                       asp-action="DanhSachDichVu"
+                       asp-route-maChiTietXepPhong="@Model.MaChiTietXepPhong"
+                       class="btn btn-outline-secondary">
+                        Quay lại
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

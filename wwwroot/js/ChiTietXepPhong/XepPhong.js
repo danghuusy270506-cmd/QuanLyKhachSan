@@ -141,7 +141,10 @@ $(document).on('click', '.btn-checkin-confirmed-ajax', function (e) {
                 return;
             }
 
-            updateRowAfterCheckIn(maPhieu);
+            updateRowAfterCheckIn(
+                maPhieu,
+                response.danhSachPhong
+            );
             alert(response.message || 'Check-in thành công.');
         },
 
@@ -156,7 +159,7 @@ $(document).on('click', '.btn-checkin-confirmed-ajax', function (e) {
 });
 
 // Sau khi check-in mới đổi trạng thái phiếu sang Đang ở
-function updateRowAfterCheckIn(maPhieu) {
+function updateRowAfterCheckIn(maPhieu, danhSachPhong) {
     const row = $('tr[data-maphieu="' + maPhieu + '"]');
 
     if (!row.length) {
@@ -164,12 +167,49 @@ function updateRowAfterCheckIn(maPhieu) {
         return;
     }
 
-    const statusCell = row.find('.td-trang-thai');
-
-    statusCell.html(`
-        <span class="badge-status badge-dang-o">Đang ở</span>
+    // 1. Cập nhật trạng thái phiếu
+    row.find('.td-trang-thai').html(`
+        <span class="badge-status badge-dang-o">
+            Đang ở
+        </span>
     `);
 
+    // 2. Tạo nút dịch vụ cho từng phòng
+    const htmlPhong = (danhSachPhong || []).map(phong => {
+
+        const soPhong = $('<span>')
+            .text(phong.soPhong)
+            .html();
+
+        const url =
+            `/ChiTietXepPhong/DanhSachDichVu` +
+            `?maChiTietXepPhong=${encodeURIComponent(phong.maChiTietXepPhong)}`;
+
+        return `
+            <div class="d-inline-flex align-items-center gap-1 me-2 mb-1">
+
+                <span class="badge bg-light text-dark border">
+                    ${soPhong}
+                </span>
+
+                <a href="${url}"
+                   class="btn btn-sm btn-outline-info rounded-pill px-2 py-1">
+
+                    <i class="bi bi-cup-hot"></i>
+                    Dịch vụ
+
+                </a>
+
+            </div>
+        `;
+    }).join('');
+
+    // 3. Cập nhật cột phòng đã xếp
+    row.find('.td-so-phong-da-xep').html(
+        htmlPhong || '<span class="text-muted">—</span>'
+    );
+
+    // 4. Cập nhật nút Check-out
     row.find('.td-thao-tac').html(`
         <button type="button"
                 class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"

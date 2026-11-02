@@ -242,3 +242,58 @@ $(document).off('click', '#btnSubmitCreate').on('click', '#btnSubmitCreate', fun
         }
     });
 });
+// Hoàn tất dọn dẹp phòng bằng AJAX
+$(document).on('submit', '.form-hoan-tat-don-dep', function (e) {
+    e.preventDefault();
+
+    const form = $(this);
+    const button = form.find('button[type="submit"]');
+
+    if (!confirm('Bạn xác nhận phòng đã được dọn dẹp hoàn tất?')) {
+        return;
+    }
+
+    button.prop('disabled', true);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        },
+
+        success: function (response) {
+
+            if (response && response.success === true) {
+
+                alert(response.message);
+
+                // Lấy trang hiện tại
+                const currentPage =
+                    $('.custom-pagination .page-item.active .page-link')
+                    .data('page') || 1;
+
+                // Tải lại danh sách phòng
+                loadPhongData(currentPage);
+
+            } else {
+
+                alert(response?.message || 'Không thể hoàn tất dọn phòng.');
+
+                button.prop('disabled', false);
+            }
+        },
+
+        error: function (xhr) {
+
+            const message =
+                xhr.responseJSON?.message ||
+                'Có lỗi xảy ra khi cập nhật trạng thái phòng.';
+
+            alert(message);
+
+            button.prop('disabled', false);
+        }
+    });
+});

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
 using QuanLyKhachSan.Models.ViewModels;
@@ -16,10 +17,11 @@ namespace QuanLyKhachSan.Controllers
     public class HoaDonController : Controller
     {
         private readonly QLKhachSanContext context;
-
-        public HoaDonController(QLKhachSanContext context)
+        private readonly IConfiguration _configuration;
+        public HoaDonController(QLKhachSanContext context,IConfiguration configuration)
         {
             this.context = context;
+            _configuration = configuration;
         }
 
         //Tính số đêm theo ngày đặt phòng
@@ -40,7 +42,31 @@ namespace QuanLyKhachSan.Controllers
         {
             return phieu.ChiTietXepPhongs.SelectMany(ct => ct.ChiTietXepPhong_DichVus).Sum(dv => (decimal)dv.SoLuong * dv.DonGia);
         }
+        // Tạo đường dẫn VietQR theo hóa đơn
+        private string TaoVietQrUrl(HoaDon hoaDon)
+        {
+            var bankBin = _configuration["BankTransfer:BankBin"];
+            var accountNumber = _configuration["BankTransfer:AccountNumber"];
+            var accountName = _configuration["BankTransfer:AccountName"];
 
+            if (string.IsNullOrWhiteSpace(bankBin) ||
+                string.IsNullOrWhiteSpace(accountNumber) ||
+                string.IsNullOrWhiteSpace(accountName))
+            {
+                return string.Empty;
+            }
+
+            // Nội dung chuyển khoản riêng cho từng hóa đơn
+            string noiDung = $"THANHTOAN {hoaDon.MaHoaDon}";
+
+            string url =
+                $"https://img.vietqr.io/image/{bankBin}-{accountNumber}-compact2.png" +
+                $"?amount={hoaDon.TongTien}" +
+                $"&addInfo={Uri.EscapeDataString(noiDung)}" +
+                $"&accountName={Uri.EscapeDataString(accountName)}";
+
+            return url;
+        }
         //Lấy phiếu và toàn bộ dữ liệu cần tính tiền
         private async Task<PhieuDatPhong?> LayPhieu(int maPhieu)
         {
@@ -362,6 +388,25 @@ namespace QuanLyKhachSan.Controllers
             // Không tiết lộ hóa đơn của khách hàng khác
             if (hoaDon == null)
                 return NotFound();
+            // Tạo thông tin chuyển khoản nếu hóa đơn chưa thanh toán
+            if (hoaDon.KieuThanhToan == "Chuyển khoản"
+                && hoaDon.TrangThai == "ChuaThanhToan"
+                && hoaDon.TongTien > 0)
+            {
+                ViewBag.VietQrUrl = TaoVietQrUrl(hoaDon);
+
+                ViewBag.NganHang =
+                    _configuration["BankTransfer:BankName"];
+
+                ViewBag.SoTaiKhoan =
+                    _configuration["BankTransfer:AccountNumber"];
+
+                ViewBag.TenChuTaiKhoan =
+                    _configuration["BankTransfer:AccountName"];
+
+                ViewBag.NoiDungChuyenKhoan =
+                    $"THANHTOAN {hoaDon.MaHoaDon}";
+            }
 
             if (hoaDon.PhieuDatPhong != null)
             {
@@ -432,49 +477,79 @@ namespace QuanLyKhachSan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> XacNhanThanhToan(string maHoaDon)
         {
+            bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
             var hoaDon = await context.HoaDons
-                         .Include(hd => hd.PhieuDatPhong)
-                         .ThenInclude(p => p!.ChiTietXepPhongs)
-                         .ThenInclude(ct => ct.Phong)
-                         .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
+                .Include(hd => hd.PhieuDatPhong)
+                    .ThenInclude(p => p!.ChiTietXepPhongs)
+                        .ThenInclude(ct => ct.Phong)
+                .FirstOrDefaultAsync(hd => hd.MaHoaDon == maHoaDon);
 
             if (hoaDon == null)
             {
-                return Json(new { success = false, message = "Không tìm thấy hóa đơn." });
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Không tìm thấy hóa đơn."
+                    });
+                }
+
+                return NotFound();
             }
 
-            // Chỉ cho phép thanh toán hóa đơn chưa thanh toán
+            // Chỉ thanh toán hóa đơn chưa thanh toán
             if (hoaDon.TrangThai != "ChuaThanhToan")
+            {
+                string message = hoaDon.TrangThai == "DaThanhToan"
+                    ? "Hóa đơn này đã được thanh toán trước đó."
+                    : "Hóa đơn không ở trạng thái có thể thanh toán.";
+
+                if (isAjax)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = message
+                    });
+                }
+
+                TempData["Error"] = message;
+
+                return RedirectToAction(
+                    nameof(ChiTietHoaDon),
+                    new { maHoaDon = maHoaDon });
+            }
+
+            // Cập nhật trạng thái hóa đơn
+            hoaDon.TrangThai = "DaThanhToan";
+            hoaDon.ThoiGianThanhToan = DateTime.Now;
+
+            if (hoaDon.PhieuDatPhong != null)
+            {
+                hoaDon.PhieuDatPhong.TrangThai = "Hoàn thành";
+            }
+
+            await context.SaveChangesAsync();
+
+            // Nếu gọi bằng AJAX từ modal thì trả JSON
+            if (isAjax)
             {
                 return Json(new
                 {
-                    success = false,
-                    message = hoaDon.TrangThai == "DaThanhToan"
-                        ? "Hóa đơn này đã được thanh toán trước đó."
-                        : "Hóa đơn không ở trạng thái có thể thanh toán."
+                    success = true,
+                    message = "Xác nhận thanh toán thành công!"
                 });
             }
 
-            if (hoaDon.TrangThai != "DaThanhToan")
-            {
-                hoaDon.TrangThai = "DaThanhToan";
-                hoaDon.ThoiGianThanhToan = DateTime.Now;
+            // Nếu gọi từ trang chi tiết riêng thì quay lại trang đó
+            TempData["ThongBaoThanhCong"] =
+                "Xác nhận thanh toán thành công!";
 
-                if (hoaDon.PhieuDatPhong != null)
-                {
-                    hoaDon.PhieuDatPhong.TrangThai = "Hoàn thành";
-
-                    foreach (var ct in hoaDon.PhieuDatPhong.ChiTietXepPhongs)
-                    {
-                        if (ct.Phong != null && ct.NgayTra != null)
-                            ct.Phong.TrangThai = "Đang dọn dẹp";
-                    }
-                }
-
-                await context.SaveChangesAsync();
-            }
-
-            return Json(new { success = true, message = "Xác nhận thanh toán thành công!" });
+            return RedirectToAction(
+                nameof(ChiTietHoaDon),
+                new { maHoaDon = maHoaDon });
         }
     }
 }

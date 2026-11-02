@@ -6,7 +6,31 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">Chi tiết hóa đơn</h2>
+    @if (TempData["ThongBaoThanhCong"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["ThongBaoThanhCong"]
 
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
     <div class="card shadow-sm">
         <div class="card-header bg-dark text-white">Thông tin hóa đơn</div>
         <div class="card-body">
@@ -94,7 +118,66 @@
                 </table>
             </div>
         </div>
+        @if (Model.KieuThanhToan == "Chuyển khoản"
+    && Model.TrangThai == "ChuaThanhToan"
+    && !string.IsNullOrEmpty(ViewBag.VietQrUrl as string))
+        {
+            <div class="mt-4 p-4 border rounded-3 bg-light">
 
+                <h5 class="fw-bold text-primary mb-3">
+                    <i class="bi bi-qr-code-scan me-2"></i>
+                    Thanh toán bằng chuyển khoản
+                </h5>
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-md-5 text-center">
+                        <img src="@ViewBag.VietQrUrl"
+                             alt="QR chuyển khoản"
+                             class="img-fluid bg-white rounded-3 shadow-sm p-2"
+                             style="max-width: 260px;" />
+                    </div>
+
+                    <div class="col-md-7">
+
+                        <p>
+                            <strong>Ngân hàng:</strong>
+                            @ViewBag.NganHang
+                        </p>
+
+                        <p>
+                            <strong>Số tài khoản:</strong>
+                            @ViewBag.SoTaiKhoan
+                        </p>
+
+                        <p>
+                            <strong>Chủ tài khoản:</strong>
+                            @ViewBag.TenChuTaiKhoan
+                        </p>
+
+                        <p>
+                            <strong>Số tiền:</strong>
+                            <span class="text-danger fw-bold">
+                                @Model.TongTien.ToString("N0") VNĐ
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>Nội dung:</strong>
+                            <span class="text-primary fw-bold">
+                                @ViewBag.NoiDungChuyenKhoan
+                            </span>
+                        </p>
+
+                        <div class="alert alert-info small mb-0">
+                            Quý khách vui lòng kiểm tra đúng người nhận,
+                            số tiền và nội dung trước khi chuyển khoản.
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
         <div class="card-footer d-flex flex-wrap gap-2">
             <a asp-controller="HoaDon" asp-action="Index" class="btn btn-secondary">Quay lại</a>
 

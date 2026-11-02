@@ -34,6 +34,7 @@ namespace QuanLyKhachSan.Controllers
                 .Include(p => p.KhachHang)
                 .Include(p => p.LoaiPhong)
                 .Include(p => p.NhanVien)
+                .Include(p => p.HoaDon)
                 .Include(p => p.ChiTietXepPhongs)
                     .ThenInclude(ct => ct.Phong)
                 .AsQueryable();
