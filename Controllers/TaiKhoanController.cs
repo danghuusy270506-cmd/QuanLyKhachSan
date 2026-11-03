@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyKhachSan.Models.Data;
 using QuanLyKhachSan.Models.Entities;
 using QuanLyKhachSan.Models.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Security.Claims;
-using System.Threading.Tasks;
+
 
 namespace QuanLyKhachSan.Controllers
 {
@@ -69,9 +67,7 @@ namespace QuanLyKhachSan.Controllers
             return View(taiKhoans);
         }
 
-        // ==========================================
-        // GET: TaiKhoan/Details/5 (Admin xem mọi TK, Người dùng chỉ xem TK của chính mình)
-        // ==========================================
+        
         [HttpGet]
         public async Task<IActionResult> Details(int? mataikhoan)
         {
@@ -109,9 +105,7 @@ namespace QuanLyKhachSan.Controllers
             return View(taikhoan);
         }
 
-        // ==========================================
-        // GET: TaiKhoan/Create (Cho phép tự đăng ký hoặc Admin tạo)
-        // ==========================================
+        //cho phép tạo hoặc admin thêm
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Create()
@@ -133,9 +127,7 @@ namespace QuanLyKhachSan.Controllers
             return View();
         }
 
-        // ==========================================
-        // POST: TaiKhoan/Create
-        // ==========================================
+       
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -146,13 +138,13 @@ namespace QuanLyKhachSan.Controllers
 
             ViewBag.IsAdmin = isAdmin;
 
-            // 1. Kiểm tra trùng Username trong DB
+            
             if (await _context.TaiKhoans.AnyAsync(t => t.Username == model.Username))
             {
                 ModelState.AddModelError("Username", "Tên đăng nhập này đã tồn tại.");
             }
 
-            // 2. Validate Data Annotations từ ViewModel
+            
             if (!ModelState.IsValid)
             {
                 if (isAdmin)
@@ -166,19 +158,19 @@ namespace QuanLyKhachSan.Controllers
                 return View(model);
             }
 
-            // 3. Phân quyền thiết lập Role: Nếu không phải Admin thì ép cố định là "KhachHang"
+            
             string assignedRole;
 
             if (!isAdmin)
             {
-                // Khách tự đăng ký chỉ được tạo tài khoản khách hàng
+                
                 assignedRole = "KhachHang";
             }
             else
             {
                 assignedRole = (model.Role ?? string.Empty).Trim();
 
-                // Chỉ cho phép Admin tạo KhachHang hoặc NhanVien
+                
                 if (assignedRole != "KhachHang" &&
                     assignedRole != "NhanVien")
                 {
@@ -204,11 +196,11 @@ namespace QuanLyKhachSan.Controllers
                 }
             }
 
-            // 4. Mở Transaction để lưu 2 bảng Atomic
+           
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // BƯỚC A: Tạo và lưu TaiKhoan
+                
                 var taiKhoan = new TaiKhoan
                 {
                     Username = model.Username,
@@ -218,9 +210,9 @@ namespace QuanLyKhachSan.Controllers
                 };
 
                 _context.TaiKhoans.Add(taiKhoan);
-                await _context.SaveChangesAsync(); // SQL sinh MaTaiKhoan
+                await _context.SaveChangesAsync(); 
 
-                // BƯỚC B: Tạo hồ sơ đúng theo Role đã chọn
+                
                 if (assignedRole == "KhachHang")
                 {
                     var khachHang = new KhachHang
@@ -250,7 +242,7 @@ namespace QuanLyKhachSan.Controllers
 
                 await _context.SaveChangesAsync();
 
-                // BƯỚC C: Commit Transaction
+                
                 await transaction.CommitAsync();
 
                 if (isAdmin)
@@ -281,9 +273,7 @@ namespace QuanLyKhachSan.Controllers
             }
         }
 
-        // ==========================================
-        // GET: TaiKhoan/Edit/5 (Chỉ Admin)
-        // ==========================================
+        
         [HttpGet]
         [Authorize(Roles = "Admin,ADMIN")]
         public async Task<IActionResult> Edit(int? mataikhoan)
@@ -295,7 +285,7 @@ namespace QuanLyKhachSan.Controllers
             if (taikhoan == null)
                 return NotFound();
 
-            // Nếu là gọi từ AJAX Modal, trả về PartialView riêng cho form Sửa
+            
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView("_EditPartial", taikhoan);
@@ -304,9 +294,7 @@ namespace QuanLyKhachSan.Controllers
             return View(taikhoan);
         }
 
-        // ==========================================
-        // POST: TaiKhoan/Edit/5 (Chỉ Admin)
-        // ==========================================
+        
         [HttpPost]
         [Authorize(Roles = "Admin,ADMIN")]
         [ValidateAntiForgeryToken]
@@ -317,11 +305,11 @@ namespace QuanLyKhachSan.Controllers
             if (mataikhoan != taikhoan.MaTaiKhoan)
                 return NotFound();
 
-            // Lấy thông tin tài khoản hiện tại từ database
+            
             var existingAccount = await _context.TaiKhoans.AsNoTracking().FirstOrDefaultAsync(t => t.MaTaiKhoan == mataikhoan);
             if (existingAccount == null)
                 return NotFound();
-            // Chỉ chấp nhận các Role hợp lệ
+            
             string? roleInput = taikhoan.Role?.Trim();
 
             string? normalizedRole = new[]
@@ -371,7 +359,7 @@ namespace QuanLyKhachSan.Controllers
                         "Tên đăng nhập này đã được tài khoản khác sử dụng.");
                 }
             }
-            // Nếu người dùng không nhập mật khẩu mới, giữ nguyên mật khẩu cũ
+            
             if (string.IsNullOrWhiteSpace(taikhoan.Password))
             {
                 taikhoan.Password = existingAccount.Password;
@@ -452,7 +440,7 @@ namespace QuanLyKhachSan.Controllers
                                 return View(taikhoan);
                             }
 
-                            // Chuyển hồ sơ nhân viên sang khách hàng
+                            
                             if (khachHang == null && nhanVien != null)
                             {
                                 bool coLichSu = await _context.PhieuDatPhongs
@@ -591,9 +579,7 @@ namespace QuanLyKhachSan.Controllers
             return View(taikhoan);
         }
 
-        // ==========================================
-        // GET: TaiKhoan/Delete/5 (Chỉ Admin)
-        // ==========================================
+        //xóa
         [HttpGet]
         [Authorize(Roles = "Admin,ADMIN")]
         public async Task<IActionResult> Delete(int? mataikhoan)
@@ -616,9 +602,7 @@ namespace QuanLyKhachSan.Controllers
             return View(taikhoan);
         }
 
-        // ==========================================
-        // POST: TaiKhoan/Delete/5 (Chỉ Admin)
-        // ==========================================
+        
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin,ADMIN")]
         [ValidateAntiForgeryToken]
@@ -756,9 +740,7 @@ namespace QuanLyKhachSan.Controllers
             }
         }
 
-        // ==========================================
-        // Helper
-        // ==========================================
+        
         private bool TaiKhoanExists(int? mataikhoan)
         {
             return _context.TaiKhoans.Any(e => e.MaTaiKhoan == mataikhoan);

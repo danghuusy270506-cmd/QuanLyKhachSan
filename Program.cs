@@ -37,6 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = "QuanLyKhachSanClient",
             ValidateIssuer = true,
             ValidateAudience = true,
+            ValidateLifetime = true,// kiểm tra thời gian hết hạn
             NameClaimType = ClaimTypes.Name,
             RoleClaimType = ClaimTypes.Role,
             ClockSkew = TimeSpan.Zero

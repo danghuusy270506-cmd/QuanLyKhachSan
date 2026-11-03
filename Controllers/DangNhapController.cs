@@ -112,16 +112,16 @@ namespace QuanLyKhachSan.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // A. TẠO MÃ JWT TOKEN TỪ SERVICE AUTHENTICATION
+            
             string token = _jwtAuth.GenerateToken(user);
 
-            // B. LƯU TOKEN VÀO HTTPONLY COOKIE
+            
             CookieOptions tokenCookieOptions = new CookieOptions
             {
-                HttpOnly = true,                  // Chống tấn công XSS
+                HttpOnly = true,                  
                 Secure = true,                    // chỉ truyền qua https
                 SameSite = SameSiteMode.Strict,   // chông csrs
-                Expires = rememberMe ? DateTime.Now.AddDays(7) : DateTime.Now.AddHours(2)
+                Expires = rememberMe ? DateTime.Now.AddDays(7) : DateTime.Now.AddMinutes(1)
             };
             Response.Cookies.Append("AccessToken", token, tokenCookieOptions);
 
