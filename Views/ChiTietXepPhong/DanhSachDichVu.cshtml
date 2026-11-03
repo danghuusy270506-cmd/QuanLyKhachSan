@@ -1,0 +1,232 @@
+﻿@model QuanLyKhachSan.Models.Entities.ChiTietXepPhong
+
+@{
+    ViewData["Title"] = "Danh sách dịch vụ";
+
+    bool choPhepChinhSua = ViewBag.ChoPhepChinhSua ?? false;
+
+    var danhSachDichVu = Model.ChiTietXepPhong_DichVus
+        .OrderByDescending(x => x.ThoiGian)
+        .ToList();
+
+    decimal tongTien = danhSachDichVu.Sum(x =>
+        (decimal)x.SoLuong * x.DonGia);
+}
+
+<div class="container-fluid py-4">
+    @if (TempData["ThongBaoThanhCong"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["ThongBaoThanhCong"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["Error"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Dịch vụ đã sử dụng</h3>
+            <p class="text-muted mb-0">
+                Quản lý dịch vụ theo từng phòng lưu trú.
+            </p>
+        </div>
+
+        <a asp-controller="PhieuDatPhong"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <!-- Thông tin phòng -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <small class="text-muted">Mã phiếu</small>
+                    <div class="fw-bold">
+                        #@Model.MaPhieu
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <small class="text-muted">Khách hàng</small>
+                    <div class="fw-bold">
+                        @(Model.PhieuDatPhong?.KhachHang?.HoTen ?? "N/A")
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <small class="text-muted">Phòng</small>
+                    <div class="fw-bold text-primary">
+                        @(Model.Phong?.SoPhong ?? "N/A")
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <small class="text-muted">Trạng thái</small>
+                    <div>
+                        @if (choPhepChinhSua)
+                        {
+                            <span class="badge bg-success">Đang lưu trú</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Chỉ xem</span>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Danh sách dịch vụ -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+
+            <h5 class="fw-bold mb-0">
+                Chi tiết sử dụng dịch vụ
+            </h5>
+
+            @if (choPhepChinhSua)
+            {
+                <a asp-controller="ChiTietXepPhong"
+                   asp-action="GhiNhanDichVu"
+                   asp-route-maPhieu="@Model.MaPhieu"
+                   asp-route-maChiTietXepPhong="@Model.MaChiTiet"
+                   class="btn btn-primary btn-sm">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Thêm dịch vụ
+
+                </a>
+            }
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">STT</th>
+                        <th>Tên dịch vụ</th>
+                        <th>Thời gian</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-end">Đơn giá</th>
+                        <th class="text-end">Thành tiền</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (!danhSachDichVu.Any())
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="text-center py-5 text-muted">
+
+                                Chưa có dịch vụ nào được ghi nhận.
+
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        int stt = 1;
+
+                        @foreach (var item in danhSachDichVu)
+                        {
+                            <tr>
+                                <td class="ps-3">@stt</td>
+
+                                <td class="fw-semibold">
+                                    @(item.DichVu?.TenDichVu ?? "Dịch vụ không tồn tại")
+                                </td>
+
+                                <td>
+                                    @item.ThoiGian.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+
+                                <td class="text-center">
+                                    @item.SoLuong
+                                </td>
+
+                                <td class="text-end">
+                                    @item.DonGia.ToString("N0") đ
+                                </td>
+
+                                <td class="text-end fw-semibold">
+                                    @(((decimal)item.SoLuong * item.DonGia).ToString("N0")) đ
+                                </td>
+                                <td class="text-center">
+                                    @if (choPhepChinhSua)
+                                    {
+                                        <a asp-controller="ChiTietXepPhong"
+                                           asp-action="SuaDichVu"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-warning me-1">
+                                            <i class="bi bi-pencil-square"></i> Sửa
+                                        </a>
+
+                                        <form asp-controller="ChiTietXepPhong"
+                                              asp-action="XoaDichVu"
+                                              asp-route-id="@item.Id"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?');">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                            </tr>
+
+                            stt++;
+                        }
+                    }
+
+                </tbody>
+
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="6" class="text-end fw-bold">
+                            Tổng tiền dịch vụ:
+                        </td>
+
+                        <td class="text-end fw-bold text-primary">
+                            @tongTien.ToString("N0") đ
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>

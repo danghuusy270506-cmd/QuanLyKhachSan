@@ -42,23 +42,43 @@
                                 
                                 <td class="text-center td-so-phong-da-xep">
                                     @{
-                                        var danhSachSoPhong = item.ChiTietXepPhongs
+                                        var danhSachChiTietPhong = item.ChiTietXepPhongs
                                             .Where(ct => ct.Phong != null)
-                                            .Select(ct => ct.Phong!.SoPhong)
+                                            .OrderBy(ct => ct.Phong!.SoPhong)
                                             .ToList();
                                     }
 
-                                    @if (danhSachSoPhong.Count == 0)
+                                    @if (danhSachChiTietPhong.Count == 0)
                                     {
                                         <span class="text-muted">—</span>
                                     }
                                     else
                                     {
-                                        @foreach (var soPhong in danhSachSoPhong)
+                                        @foreach (var ct in danhSachChiTietPhong)
                                         {
-                                            <span class="badge bg-light text-dark border me-1">
-                                                @soPhong
-                                            </span>
+                                            <div class="d-inline-flex align-items-center gap-1 me-2 mb-1">
+
+                                                <span class="badge bg-light text-dark border">
+                                                    @ct.Phong!.SoPhong
+                                                </span>
+
+                                                @if (ct.NgayNhanPhongThucTe != null &&
+                                                    (item.TrangThai == "Đang ở"
+                                                    || item.TrangThai == "Chờ thanh toán"
+                                                    || item.TrangThai == "Hoàn thành"))
+                                                {
+                                                    <a asp-controller="ChiTietXepPhong"
+                                                       asp-action="DanhSachDichVu"
+                                                       asp-route-maChiTietXepPhong="@ct.MaChiTiet"
+                                                       class="btn btn-sm btn-outline-info rounded-pill px-2 py-1">
+
+                                                        <i class="bi bi-cup-hot"></i>
+                                                        Dịch vụ
+
+                                                    </a>
+                                                }
+
+                                            </div>
                                         }
                                     }
                                 </td>
@@ -132,11 +152,56 @@
                                     }
                                     else if (item.TrangThai == "Đang ở")
                                     {
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"
-                                                data-id="@item.MaPhieu">
-                                            Check-out
-                                        </button>
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+
+                                            
+
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm px-3 fw-medium rounded-pill shadow-sm btn-checkout-ajax"
+                                                    data-id="@item.MaPhieu">
+                                                Check-out
+                                            </button>
+
+                                        </div>
+                                    }
+                                    else if (item.TrangThai == "Chờ thanh toán")
+                                    {
+                                        if (item.HoaDon == null)
+                                        {
+                                            <a asp-controller="HoaDon"
+                                               asp-action="Create"
+                                               asp-route-maPhieu="@item.MaPhieu"
+                                               class="btn btn-warning btn-sm px-3 fw-medium rounded-pill shadow-sm">
+
+                                                <i class="bi bi-receipt"></i>
+                                                Lập hóa đơn
+
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="HoaDon"
+                                               asp-action="Index"
+                                               asp-route-tuKhoa="@item.MaPhieu"
+                                               class="btn btn-info btn-sm px-3 fw-medium rounded-pill shadow-sm">
+
+                                                <i class="bi bi-eye"></i>
+                                                Xem hóa đơn
+
+                                            </a>
+                                        }
+                                    }
+                                    else if (item.TrangThai == "Hoàn thành" && item.HoaDon != null)
+                                    {
+                                        <a asp-controller="HoaDon"
+                                           asp-action="Index"
+                                           asp-route-tuKhoa="@item.MaPhieu"
+                                           class="btn btn-outline-info btn-sm px-3 rounded-pill">
+
+                                            <i class="bi bi-receipt"></i>
+                                            Xem hóa đơn
+
+                                        </a>
                                     }
                                     else if (item.TrangThai == "Chờ xác nhận")
                                     {

@@ -51,6 +51,35 @@
                                     {
                                         <span class="badge bg-warning text-dark px-2 py-1">Bảo trì</span>
                                     }
+                                    else if (item.TrangThai == "Đang dọn dẹp")
+                                    {
+                                        <div class="d-flex flex-column align-items-start gap-2">
+
+                                            <span class="badge bg-info text-dark px-2 py-1">
+                                                Đang dọn dẹp
+                                            </span>
+
+                                            <form asp-controller="Phong"
+                                                  asp-action="HoanTatDonDep"
+                                                  method="post"
+                                                  class="form-hoan-tat-don-dep">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@item.MaPhong" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-success">
+                                                    <i class="bi bi-check-circle me-1"></i>
+                                                    Hoàn tất dọn
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                    }
                                     else
                                     {
                                         <span class="badge bg-info text-dark px-2 py-1">@item.TrangThai</span>

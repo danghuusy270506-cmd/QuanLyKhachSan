@@ -1,0 +1,95 @@
+﻿@model QuanLyKhachSan.Models.Entities.ChiTietXepPhong_DichVu
+
+@{
+    ViewData["Title"] = "Sửa dịch vụ";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="mb-4">
+        <h3 class="fw-bold">Sửa dịch vụ đã sử dụng</h3>
+        <p class="text-muted">
+            Điều chỉnh số lượng dịch vụ của khách hàng.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm"
+         style="max-width: 650px;">
+
+        <div class="card-header bg-warning">
+            <strong>Thông tin dịch vụ</strong>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="SuaDichVu"
+                  asp-controller="ChiTietXepPhong"
+                  asp-route-id="@Model.Id"
+                  method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div asp-validation-summary="All"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Tên dịch vụ
+                    </label>
+
+                    <input value="@Model.DichVu?.TenDichVu"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Đơn giá
+                    </label>
+
+                    <input value="@Model.DonGia.ToString("N0") đ"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Số lượng
+                    </label>
+
+                    <input asp-for="SoLuong"
+                           type="number"
+                           min="1"
+                           max="100"
+                           class="form-control"
+                           required />
+
+                    <small class="text-muted">
+                        Số lượng phải từ 1 đến 100.
+                    </small>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        <i class="bi bi-check-lg"></i>
+                        Lưu thay đổi
+                    </button>
+
+                    <a asp-action="DanhSachDichVu"
+                       asp-controller="ChiTietXepPhong"
+                       asp-route-maChiTietXepPhong="@Model.MaChiTietXepPhong"
+                       class="btn btn-outline-secondary">
+                        Quay lại
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
