@@ -80,7 +80,7 @@ using (var scope = app.Services.CreateScope())
 
     await context.Database.EnsureCreatedAsync();
     await SeedData.SeedCatalogAsync(context);
-    // Kiểm tra đã có Admin chưa
+    
 
     // Kiểm tra đã có Admin chưa
     bool adminExists = await context.TaiKhoans

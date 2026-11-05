@@ -33,7 +33,7 @@ namespace QuanLyKhachSan.Controllers
                 .AsNoTracking()
                 .AsQueryable();
 
-            // ===== BỔ SUNG: Tìm kiếm theo Họ tên (và SĐT, Email, CCCD) =====
+            //  BỔ SUNG: Tìm kiếm theo Họ tên (và SĐT, Email, CCCD) 
             if (!string.IsNullOrWhiteSpace(tuKhoa))
             {
                 string searchKey = tuKhoa.Trim().ToLower();

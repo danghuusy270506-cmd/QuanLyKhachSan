@@ -22,11 +22,11 @@ namespace QuanLyKhachSan.Controllers
             _jwtAuth = new Authentication();
         }
 
-        // 1. Hiển thị trang đăng nhập
+       
         [HttpGet]
         public IActionResult Authentication()
         {
-            // Nếu đã đăng nhập (Cookie AccessToken hợp lệ) -> Tự nhảy về trang theo Role
+           
             if (User.Identity?.IsAuthenticated == true)
             {
                 if (User.IsInRole("Admin")) return RedirectToAction("Index", "Home");
@@ -37,7 +37,7 @@ namespace QuanLyKhachSan.Controllers
             return View();
         }
 
-        // 2. Xử lý đăng nhập
+        /
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Authentication(string username, string password, bool rememberMe = false)
@@ -47,7 +47,7 @@ namespace QuanLyKhachSan.Controllers
                 ViewBag.Error = "Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!";
                 return View();
             }
-            // Tìm tài khoản theo Username
+            
             var user = await _context.TaiKhoans
                 .FirstOrDefaultAsync(u => u.Username == username);
 
@@ -69,7 +69,7 @@ namespace QuanLyKhachSan.Controllers
 
             if (isBcryptHash)
             {
-                // Xác minh mật khẩu BCrypt
+                
                 try
                 {
                     passwordValid = BCrypt.Net.BCrypt.Verify(
@@ -77,28 +77,27 @@ namespace QuanLyKhachSan.Controllers
                 }
                 catch (BCrypt.Net.SaltParseException)
                 {
-                    // Hash bị sai định dạng: không cho đăng nhập
+                    
                     passwordValid = false;
                 }
             }
             else
             {
-                // Tương thích tạm thời với tài khoản cũ
-                // có mật khẩu lưu dạng văn bản thường
+                
                 passwordValid = string.Equals(
                     password,
                     storedPassword,
                     StringComparison.Ordinal);
             }
 
-            // Mật khẩu không đúng hoặc hash không hợp lệ
+            
             if (!passwordValid)
             {
                 ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác!";
                 return View();
             }
 
-            // Kiểm tra trạng thái tài khoản
+            
             if (user.TrangThai == "Locked" || user.TrangThai == "Khoa")
             {
                 ViewBag.Error = "Tài khoản của bạn đã bị khóa!";
@@ -119,13 +118,13 @@ namespace QuanLyKhachSan.Controllers
             CookieOptions tokenCookieOptions = new CookieOptions
             {
                 HttpOnly = true,                  
-                Secure = true,                    // chỉ truyền qua https
-                SameSite = SameSiteMode.Strict,   // chông csrs
-                Expires = rememberMe ? DateTime.Now.AddDays(7) : DateTime.Now.AddMinutes(1)
+                Secure = true,                    
+                SameSite = SameSiteMode.Strict,   
+                Expires = rememberMe ? DateTime.Now.AddDays(7) : DateTime.Now.AddMinutes(10)
             };
             Response.Cookies.Append("AccessToken", token, tokenCookieOptions);
 
-            // C. GHI NHỚ USERNAME ĐỂ RE-FILL FORM ĐĂNG NHẬP (Nếu chọn Remember Me)
+            
             if (rememberMe)
             {
                 CookieOptions savedUserOption = new CookieOptions
@@ -141,10 +140,10 @@ namespace QuanLyKhachSan.Controllers
                 Response.Cookies.Delete("SavedUsername");
             }
 
-            // D. TẠO THÔNG BÁO FLASH MESSAGE
+            /
             TempData["SuccessMessage"] = "Đăng nhập thành công!";
 
-            // E. ĐIỀU HƯỚNG TỚI TRANG HOME TƯƠNG ỨNG VỚI ROLE
+            
             if (user.Role == "Admin")
             {
                 return RedirectToAction("Index", "Home");
@@ -159,12 +158,12 @@ namespace QuanLyKhachSan.Controllers
             }
         }
 
-        // 3. Đăng xuất
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DangXuat()
         {
-            // Xóa JWT cookie
+            
             Response.Cookies.Delete(
                 "AccessToken",
                 new CookieOptions
@@ -177,7 +176,7 @@ namespace QuanLyKhachSan.Controllers
 
             TempData["SuccessMessage"] = "Đăng xuất thành công!";
 
-            // Trở về website công khai sau khi đăng xuất
+            
             return RedirectToAction("ClientIndex", "Home");
         }
 
